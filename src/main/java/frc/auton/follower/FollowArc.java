@@ -11,6 +11,7 @@ import frc.auton.trajectory.SrxMotionProfile;
 import frc.auton.trajectory.SrxTrajectory;
 
 public class FollowArc {
+    // Test
     private int distancePidSlot = 0;
     private int rotationPidSlot = 1;
     private int kMinPointsInTalon = 5;
