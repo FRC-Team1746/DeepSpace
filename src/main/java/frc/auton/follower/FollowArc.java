@@ -4,11 +4,13 @@ import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
 import frc.auton.trajectory.SrxMotionProfile;
-import frc.auton.trajectory.SrxTrajectory;
+import frc.robot.DriveTrain;
 
 public class FollowArc {
     // Test
@@ -66,16 +68,77 @@ public class FollowArc {
     }
 
     private Notifier buffer;
-    private FollowsArc drivetrain;
+    private AutonDriveTrain drivetrain;
     private TalonSRX rightTalon;
     private TalonSRX leftTalon;
 
-    public FollowArc(FollowsArc drivetrain, SrxTrajectory trajectoryToFollow) {
+    public FollowArc(AutonDriveTrain drivetrain, SrxTrajectory trajectoryToFollow) {
         this.drivetrain = drivetrain;
         this.trajectoryToFollow = trajectoryToFollow;
 
-        rightTalon = drivetrain.getRight();
-        leftTalon = drivetrain.getLeft();
+        rightTalon = drivetrain.rightTalon;
+        leftTalon = drivetrain.leftTalon;
     }
+
+    public void init() {
+        setUpTalon(rightTalon);
+        setUpTalon(leftTalon);
+
+        setValue = SetValueMotionProfile.Disable;
+
+        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
+        leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
+        buffer = new Notifier(new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance()));
+
+        buffer.startPeriodic(0.05);
+    }
+
+    public void run() {
+        rightTalon.getMotionProfileStatus(status);
+
+        if (status.isUnderrun) {
+            // The MP has underrun 
+            setValue = SetValueMotionProfile.Disable;
+        } else if (status.btmBufferCnt > kMinPointsInTalon) {
+            // If there are enough waypoints, go
+            setValue = SetValueMotionProfile.Enable;
+        } else if (status.activePointValid && status.isLast) {
+            // If the point is valid and last, hold
+            setValue = SetValueMotionProfile.Hold;
+        }
+
+        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
+        if (isFinished()) {
+            end();
+        }
+    }
+
+    public boolean isFinished() {
+        if (!hasPathStarted) {
+            return false;
+        }
+        boolean leftComplete = status.activePointValid && status.isLast;
+        boolean trajectoryComplete = leftComplete;
+        return trajectoryComplete || isFinished;
+    }
+
+    public void end() {
+        buffer.stop();
+        resetTalon(rightTalon, ControlMode.PercentOutput, 0);
+        resetTalon(leftTalon, ControlMode.PercentOutput, 0);
+    }
+
+    private void setUpTalon(TalonSRX talon) {
+        talon.clearMotionProfileTrajectories();
+        talon.changeMotionControlFramePeriod(5);
+        talon.clearMotionProfileHasUnderrun(10);
+    }
+
+    private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
+		talon.clearMotionProfileTrajectories();
+		talon.clearMotionProfileHasUnderrun(10);
+		talon.changeMotionControlFramePeriod(10);
+		talon.set(controlMode, setValue);
+	}
 
 }
