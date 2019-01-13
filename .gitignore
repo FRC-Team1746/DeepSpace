@@ -124,9 +124,6 @@ ehthumbs_vista.db
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Git Files
-*.orig
-
 # Windows Installer files
 *.cab
 *.msi
@@ -158,5 +155,6 @@ gradle-app.setting
 .project
 .settings/
 bin/
+
 
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
