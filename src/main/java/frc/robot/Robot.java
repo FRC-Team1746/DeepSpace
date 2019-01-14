@@ -10,6 +10,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.auton.OttoPathCreator;
+import frc.auton.follower.AutonDriveTrain;
+import frc.auton.follower.FollowArc;
+import frc.auton.follower.SrxTrajectory;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +27,8 @@ public class Robot extends IterativeRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private FollowArc auton;
+  private OttoPathCreator opc = new OttoPathCreator();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -30,9 +36,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.addDefault("Default Auto", kDefaultAuto);
-    m_chooser.addObject("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    opc.generatePaths();
   }
 
   /**
@@ -60,10 +64,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // autoSelected = SmartDashboard.getString("Auto Selector",
-    // defaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    auton = new FollowArc(new AutonDriveTrain(), new SrxTrajectory());
   }
 
   /**
@@ -71,16 +72,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    auton.run();
   }
+  
 
   /**
    * This function is called periodically during operator control.

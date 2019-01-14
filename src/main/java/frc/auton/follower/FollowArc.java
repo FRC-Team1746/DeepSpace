@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
 import frc.auton.trajectory.SrxMotionProfile;
-import frc.robot.DriveTrain;
 
 public class FollowArc {
     // Test

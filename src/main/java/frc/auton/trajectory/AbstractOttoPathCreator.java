@@ -7,7 +7,7 @@ import java.util.List;
  * @author Ayush Panda
  */
 public abstract class AbstractOttoPathCreator {
-    protected void generatePaths() {
+    public void generatePaths() {
         generateArcFiles(getArcs());
     }
 
