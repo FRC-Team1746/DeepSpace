@@ -11,9 +11,6 @@ import frc.auton.trajectory.OttoPath;
 import frc.auton.trajectory.SrxTranslatorConfig;
 
 public class OttoPathCreator extends AbstractOttoPathCreator {
-    private static double robotWidthInFeet = 0;
-    private static double robotLengthInFeet = 0;
-    private static Waypoint startingPoint = new Waypoint(robotLengthInFeet / 2.0, 45.5 / 12.0, 0, 0, 0);
     private SrxTranslatorConfig config = new SrxTranslatorConfig();
 
     public OttoPathCreator() {

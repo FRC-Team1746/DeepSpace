@@ -8,8 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auton.OttoPathCreator;
 import frc.auton.follower.AutonDriveTrain;
 import frc.auton.follower.FollowArc;
@@ -23,10 +21,6 @@ import frc.auton.follower.SrxTrajectory;
  * project.
  */
 public class Robot extends IterativeRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private FollowArc auton;
   private OttoPathCreator opc = new OttoPathCreator();
 
