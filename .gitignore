@@ -49,6 +49,7 @@
 
 # Package Files #
 *.jar
+vendordeps/*
 *.war
 *.nar
 *.ear
