@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import frc.auton.OttoPathCreator;
 import frc.auton.follower.AutonDriveTrain;
 import frc.auton.follower.FollowArc;
@@ -20,7 +20,7 @@ import frc.auton.follower.SrxTrajectory;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
   private FollowArc auton;
   private OttoPathCreator opc = new OttoPathCreator();
 

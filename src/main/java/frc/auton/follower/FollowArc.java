@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
-import frc.auton.team254.lib.trajectory.Trajectory;
 import frc.auton.trajectory.SrxMotionProfile;
 
 public class FollowArc {
