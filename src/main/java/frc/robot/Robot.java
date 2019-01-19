@@ -19,7 +19,7 @@ import frc.robot.commands.driveTrain.DriveToEncoderSetpoint;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -37,7 +37,7 @@ import team1746.motion_profiling.PathFollower;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
