@@ -14,13 +14,13 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
     private SrxTranslatorConfig config = new SrxTranslatorConfig();
 
     public OttoPathCreator() {
-        config.max_acc = 8.0; // Acceleration In FPS
-        config.max_vel = 10.0; // In FPS
-        config.wheelDiaInch = 0;
+        config.max_acc = 1; // Acceleration In FPS
+        config.max_vel = 6; // In FPS
+        config.wheelDiaInch = 6;
         config.scaleFactor = 1.0;
         config.encoderTicksPerRev = 4096;
-        config.robotLength = 0;
-        config.robotWidth = 0;
+        config.robotLength = 34;
+        config.robotWidth = 34;
         config.highGear = false;
     }
   
