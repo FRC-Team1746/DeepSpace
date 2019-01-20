@@ -7,7 +7,10 @@
 
 package frc.robot;
 
+import java.io.InputStream;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.auton.OttoPathCreator;
 import frc.auton.follower.AutonDriveTrain;
 import frc.auton.follower.FollowArc;
@@ -22,7 +25,6 @@ import frc.auton.follower.SrxTrajectory;
  */
 public class Robot extends TimedRobot {
   private FollowArc auton;
-  private OttoPathCreator opc = new OttoPathCreator();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -30,7 +32,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    opc.generatePaths();
+
   }
 
   /**

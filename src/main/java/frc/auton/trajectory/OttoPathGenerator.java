@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.auton.team254.lib.trajectory.Path;
 import frc.auton.team254.lib.trajectory.PathGenerator;
 import frc.auton.team254.lib.trajectory.Trajectory;
@@ -59,7 +60,7 @@ public class OttoPathGenerator extends PathGenerator {
     }
 
     public static void exportArcToJavaFile(OttoPath path) {
-        exportArcToJavaFile("src\\main\\java\\frc\\arcs", path);
+        exportArcToJavaFile("src\\main\\java\\frc\\auton\\arcs", path);
     }
 
     public static void exportRotationToJavaFile(String relativeDirectoryName, OttoRotation bobRotation) {

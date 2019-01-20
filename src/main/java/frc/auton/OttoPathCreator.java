@@ -23,6 +23,10 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
         config.robotWidth = 34;
         config.highGear = false;
     }
+
+    public static void main(String[] args) {
+        new OttoPathCreator().generatePaths();
+    }
   
     @Override
     protected List<OttoPath> getArcs() {
@@ -32,15 +36,15 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
     }   
 
     private List<OttoPath> getConfigArcs() {
-        OttoPath distanceScaling = new OttoPath(config, "Distance Scaling");
+        OttoPath distanceScaling = new OttoPath(config, "DistanceScaling");
         distanceScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));
         distanceScaling.addWaypointRelative(3, 0, 0, 0, 3);
 
-        OttoPath turnScaling = new OttoPath(config, "Turn Scaling");
+        OttoPath turnScaling = new OttoPath(config, "TurnScaling");
         turnScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));
         turnScaling.addWaypointRelative(3, 3, 89.99, 0, 3);
 
-        OttoPath speedScaling = new OttoPath(config, "Speed Scaling");
+        OttoPath speedScaling = new OttoPath(config, "SpeedScaling");
         speedScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));
         speedScaling.addWaypointRelative(3, 3, 89.99, 1, 3);
         speedScaling.addWaypointRelative(-3, 3, 89.99, 0, 1);

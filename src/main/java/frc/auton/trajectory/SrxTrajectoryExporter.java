@@ -14,23 +14,23 @@ public class SrxTrajectoryExporter {
     }
 
     public boolean exportSrxArcAsJavaFile(SrxTrajectory combined, SrxTranslatorConfig config, WaypointSequence waypoints) {
-        String combinedPath = joinFilePaths(directory, config.name + "Arc.java");
+        String combinedPath = joinFilePaths(directory, config.name+"Arc.java");
         StringBuilder sb = new StringBuilder();
         // package and imports
-        sb.append("package frc.arcs;\r\n" + "\r\n"
-        + "import com.team1746.follower.SrxMotionProfile;\r\n"
-        + "import com.team1746.follower.SrxTrajectory;\r\n\r\n");
+        sb.append("package frc.auton.arcs;\r\n" + "\r\n"
+        + "import frc.auton.follower.SrxMotionProfile;\r\n"
+        + "import frc.auton.follower.SrxTrajectory;\r\n\r\n");
         // beginning of the class
         sb.append("public class " + config.name + "Arc extends SrxTrajectory {");
         sb.append("\r\n" + "	\r\n" + "	// WAYPOINTS:\r\n" + "	// (X,Y,degrees)\r\n");
         sb.append(serializeWaypoints(waypoints));
         sb.append("	\r\n" + " public " + config.name + "Arc() {\r\n" + "	super();\r\n"
         + "	this.highGear = " + config.highGear + ";\r\n"
-        + "	centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);\r\n" + "	}\r\n"
+        + "	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);\r\n" + "	}\r\n"
         + "\r\n");
         sb.append("	\r\n" + " public " + config.name + "Arc(boolean flipped) {\r\n" + "	super();\r\n"
         + "	this.highGear = " + config.highGear + ";\r\n" + "	this.flipped = flipped;\r\n"
-        + "	centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);\r\n" + "	}\r\n"
+        + "	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);\r\n" + "	}\r\n"
         + "\r\n");
         sb.append("	public boolean highGear = " + config.highGear + ";\r\n" + "\r\n");
         sb.append("	double[][] centerPoints = {\r\n");
@@ -72,11 +72,12 @@ public class SrxTrajectoryExporter {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            FileWriter fw = new FileWriter(filePath);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(data);
             bw.close();
         } catch (IOException e) {
+            System.out.println(e);
             return false;
         }
             return true;
