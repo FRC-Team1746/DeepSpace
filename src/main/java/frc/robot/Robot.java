@@ -7,14 +7,10 @@
 
 package frc.robot;
 
-import java.io.InputStream;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Filesystem;
-import frc.auton.OttoPathCreator;
+import frc.auton.arcs.DistanceScalingArc;
 import frc.auton.follower.AutonDriveTrain;
 import frc.auton.follower.FollowArc;
-import frc.auton.follower.SrxTrajectory;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -60,7 +56,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    auton = new FollowArc(new AutonDriveTrain(), new SrxTrajectory());
+    auton = new FollowArc(new AutonDriveTrain(), new DistanceScalingArc());
+    auton.init();
   }
 
   /**
