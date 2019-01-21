@@ -13,6 +13,9 @@ public class ElectricalConstants {
 	public int MOTOR_DRIVE_RIGHT_MASTER = 10;
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_A = 11;
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_B = 12;
+
+	public int ELEVATOR_LEFT = 30;
+	public int ELEVATOR_RIGHT = 31;
 	
 	// MoreBoard
 	public int EMPTY1 = 10;
@@ -27,7 +30,7 @@ public class ElectricalConstants {
 	public int EMPTY10 = 19;
 	
 	// DIOs
-	public int DIO0 = 0;
+	public int LIFT_BOTTOM = 0;
 	public int DIO1 = 1;
 	public int DIO2 = 2; 
 	public int DIO3 = 3;

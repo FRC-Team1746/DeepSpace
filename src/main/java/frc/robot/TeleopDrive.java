@@ -61,7 +61,7 @@ public TeleopDrive(Controls controls) {
 
 public void teleopArcadeDrive(){
     // if (!m_controls.driver_A_Button()) {
-    myRobot.arcadeDrive(-m_controls.driver_Y_Axis(), m_controls.driver_X_Axis()/10*6);
+    myRobot.arcadeDrive(-m_controls.driver_YL_Axis(), m_controls.driver_XL_Axis()/10*6);
     // }else {
     // myRobot.arcadeDrive(-m_controls.driver_Y_Axis(), m_controls.driver_X_Axis());
     // }
@@ -121,8 +121,6 @@ public void setBrakeMode(boolean brake) {
         m_LeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
         m_RightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
     }
-    
-    
 }
 
 }
