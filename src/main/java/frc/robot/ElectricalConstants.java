@@ -46,7 +46,7 @@ public class ElectricalConstants {
 	//PCM
 	public int pcm0 = 0;
 	public int pcm1 = 1;
-	public int pcm2= 2;
+	public int pcm2 = 2;
 	public int pcm3 = 3;
 	public int pcm4 = 4;
 	public int pcm5 = 5;
