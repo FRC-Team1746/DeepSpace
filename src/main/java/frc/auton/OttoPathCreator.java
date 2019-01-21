@@ -15,7 +15,7 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
 
     public OttoPathCreator() {
         config.max_acc = 1; // Acceleration In FPS
-        config.max_vel = 6; // In FPS
+        config.max_vel = 3; // In FPS
         config.wheelDiaInch = 6;
         config.scaleFactor = 1.0;
         config.encoderTicksPerRev = 4096;

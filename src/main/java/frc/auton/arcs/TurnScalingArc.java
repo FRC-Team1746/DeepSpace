@@ -13,16 +13,16 @@ public class TurnScalingArc extends SrxTrajectory {
  public TurnScalingArc() {
 	super();
 	this.highGear = false;
-	this.centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
-}
+	 centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	}
 
 	
  public TurnScalingArc(boolean flipped) {
 	super();
 	this.highGear = false;
 	this.flipped = flipped;
-	this.centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
-}
+	 centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	}
 
 	public boolean highGear = false;
 
