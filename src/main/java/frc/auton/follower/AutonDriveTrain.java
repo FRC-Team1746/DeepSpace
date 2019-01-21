@@ -1,5 +1,6 @@
 package frc.auton.follower;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -23,7 +24,9 @@ public class AutonDriveTrain {
         leftTalon = new TalonSRX(eConstants.MOTOR_DRIVE_LEFT_MASTER);
         leftFollowerA = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_A);
         leftFollowerB = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_B);
-
+        rightTalon.setInverted(InvertType.InvertMotorOutput);
+        rightFollowerA.setInverted(InvertType.InvertMotorOutput);
+        rightFollowerB.setInverted(InvertType.InvertMotorOutput);
         rightFollowerA.follow(rightTalon);
         rightFollowerB.follow(rightTalon);
         leftFollowerA.follow(leftTalon);

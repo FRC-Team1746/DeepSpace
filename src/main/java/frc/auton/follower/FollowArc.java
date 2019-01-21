@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Notifier;
 import frc.auton.follower.SrxMotionProfile;;
 
 public class FollowArc {
-    // Test
     private int distancePidSlot = 0;
     private int rotationPidSlot = 1;
     private int kMinPointsInTalon = 5;
@@ -83,7 +82,6 @@ public class FollowArc {
         setUpTalon(leftTalon);
 
         setValue = SetValueMotionProfile.Disable;
-
         rightTalon.set(ControlMode.MotionProfile, setValue.value);
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
         buffer = new Notifier(new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance()));
