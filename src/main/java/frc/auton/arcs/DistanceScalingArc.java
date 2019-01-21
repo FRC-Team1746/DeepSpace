@@ -13,7 +13,7 @@ public class DistanceScalingArc extends SrxTrajectory {
  public DistanceScalingArc() {
 	super();
 	this.highGear = false;
-	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
 	}
 
 	
@@ -21,7 +21,7 @@ public class DistanceScalingArc extends SrxTrajectory {
 	super();
 	this.highGear = false;
 	this.flipped = flipped;
-	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
 	}
 
 	public boolean highGear = false;

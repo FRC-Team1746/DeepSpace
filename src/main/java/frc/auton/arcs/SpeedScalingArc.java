@@ -14,7 +14,7 @@ public class SpeedScalingArc extends SrxTrajectory {
  public SpeedScalingArc() {
 	super();
 	this.highGear = false;
-	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	this.centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
 	}
 
 	
@@ -22,7 +22,7 @@ public class SpeedScalingArc extends SrxTrajectory {
 	super();
 	this.highGear = false;
 	this.flipped = flipped;
-	SrxMotionProfile centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
+	this.centerProfile = new SrxMotionProfile(centerPoints.length, centerPoints);
 	}
 
 	public boolean highGear = false;

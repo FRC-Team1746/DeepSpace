@@ -7,12 +7,11 @@ import frc.robot.ElectricalConstants;;
 
 public class AutonDriveTrain {
     private ElectricalConstants eConstants;
-
-    public  TalonSRX rightTalon;
-    private  VictorSPX rightFollowerA;
-	private  VictorSPX rightFollowerB;
-	public  TalonSRX leftTalon;
-	private  VictorSPX leftFollowerA;
+    public TalonSRX rightTalon;
+    private VictorSPX rightFollowerA;
+	private VictorSPX rightFollowerB;
+	public TalonSRX leftTalon;
+	private VictorSPX leftFollowerA;
     private VictorSPX leftFollowerB;
     
     public AutonDriveTrain() {
@@ -33,6 +32,14 @@ public class AutonDriveTrain {
     }
 
     public double getDistance() {
-        return rightTalon.getSelectedSensorPosition(0);
+        return 0;
+    }
+
+    public TalonSRX getRightTalon() {
+        return rightTalon;
+    }
+
+    public TalonSRX getLeftTalon() {
+        return leftTalon;
     }
 }

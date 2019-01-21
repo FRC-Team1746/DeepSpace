@@ -2,7 +2,6 @@ package frc.auton.trajectory;
 
 public class SrxMotionProfile {
     public int numPoints;
-
     public double[][] points;
 
     public SrxMotionProfile() {

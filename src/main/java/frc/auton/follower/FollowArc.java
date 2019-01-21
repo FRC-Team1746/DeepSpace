@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
-import frc.auton.trajectory.SrxMotionProfile;
+import frc.auton.follower.SrxMotionProfile;;
 
 public class FollowArc {
     // Test
@@ -19,7 +19,7 @@ public class FollowArc {
     private SrxTrajectory trajectoryToFollow = null;
     private MotionProfileStatus status = new MotionProfileStatus();
     private boolean hasPathStarted;
-    private SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
+    private SetValueMotionProfile setValue = SetValueMotionProfile.Enable;
 
     private class BufferLoader implements java.lang.Runnable {
         private int lastPointSent = 0;
@@ -74,41 +74,38 @@ public class FollowArc {
         this.drivetrain = drivetrain;
         this.trajectoryToFollow = trajectoryToFollow;
 
-        rightTalon = drivetrain.rightTalon;
-        leftTalon = drivetrain.leftTalon;
+        rightTalon = drivetrain.getRightTalon();
+        leftTalon = drivetrain.getLeftTalon();
     }
 
     public void init() {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
 
-        setValue = SetValueMotionProfile.Disable;
+        setValue = SetValueMotionProfile.Enable;
 
         rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
         buffer = new Notifier(new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance()));
-
-        buffer.startPeriodic(0.05);
+        buffer.startPeriodic(0.005);
     }
 
     public void run() {
         rightTalon.getMotionProfileStatus(status);
 
-        if (status.isUnderrun) {
-            // The MP has underrun 
-            setValue = SetValueMotionProfile.Disable;
-        } else if (status.btmBufferCnt > kMinPointsInTalon) {
-            // If there are enough waypoints, go
-            setValue = SetValueMotionProfile.Enable;
-        } else if (status.activePointValid && status.isLast) {
-            // If the point is valid and last, hold
-            setValue = SetValueMotionProfile.Hold;
-        }
-
+        // if (status.isUnderrun) {
+        //     // The MP has underrun 
+        //     setValue = SetValueMotionProfile.Disable;
+        // } else if (status.btmBufferCnt > kMinPointsInTalon) {
+        //     // If there are enough waypoints, go
+        //     setValue = SetValueMotionProfile.Enable;
+        // } else if (status.activePointValid && status.isLast) {
+        //     // If the point is valid and last, hold
+        //     setValue = SetValueMotionProfile.Hold;
+        // }
+        System.out.println("Status of Talon: " + setValue.value);
         rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
-        if (isFinished()) {
-            end();
-        }
+
     }
 
     public boolean isFinished() {
