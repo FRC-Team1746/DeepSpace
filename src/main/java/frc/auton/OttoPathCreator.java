@@ -35,6 +35,14 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
         return paths;
     }   
 
+    /**
+     * Configuation Arcs relating to Distance, Turning, and Speed
+     * DistanceScaling- Robot will run 3 feet, adjust scaling to get exact distance
+     * TurnScaling- Robot will run 3 feet, then turn and go 3 feet to the left, adjusting heading loop to get exact angle
+     * SpeedScaling- Robot will run 3 feet and 3 feet to the left at 3 FPS. Run another 3 feet forward and 3 feet to the left.
+     * End 6 feet away from starting position facing opposite direction  
+     * @return List of Configuration Arcs
+     */
     private List<OttoPath> getConfigArcs() {
         OttoPath distanceScaling = new OttoPath(config, "DistanceScaling");
         distanceScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));
@@ -51,8 +59,4 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
 
         return asList(distanceScaling, turnScaling, speedScaling);
     }
-
-
-
-    
 }

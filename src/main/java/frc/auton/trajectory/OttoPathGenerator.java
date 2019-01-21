@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import frc.auton.team254.lib.trajectory.Path;
 import frc.auton.team254.lib.trajectory.PathGenerator;
 import frc.auton.team254.lib.trajectory.Trajectory;
