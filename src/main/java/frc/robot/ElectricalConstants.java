@@ -31,7 +31,7 @@ public class ElectricalConstants {
 	
 	// DIOs
 	public int LIFT_BOTTOM = 0;
-	public int DIO1 = 1;
+	public int LIFT_TOP = 1;
 	public int DIO2 = 2; 
 	public int DIO3 = 3;
 	public int DIO4 = 4;
