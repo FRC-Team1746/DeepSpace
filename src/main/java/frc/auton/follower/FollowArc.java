@@ -1,26 +1,23 @@
 package frc.auton.follower;
 
+import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
 import com.ctre.phoenix.motion.MotionProfileStatus;
-import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Notifier;
 import frc.auton.follower.SrxMotionProfile;;
 
 public class FollowArc {
     private int distancePidSlot = 0;
     private int rotationPidSlot = 1;
-    private int kMinPointsInTalon = 5;
     private boolean isFinished = false;
     private SrxTrajectory trajectoryToFollow = null;
     private MotionProfileStatus status = new MotionProfileStatus();
     private boolean hasPathStarted;
-    private SetValueMotionProfile setValue = SetValueMotionProfile.Enable;
-
-    private class BufferLoader implements java.lang.Runnable {
+    BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
+    private class BufferLoader {
         private int lastPointSent = 0;
         private boolean flipped;
         private TalonSRX talon;
@@ -34,8 +31,8 @@ public class FollowArc {
             this.startPosition = startPosition;
         }
 
-        public void run() {
-            talon.processMotionProfileBuffer();
+        public void init() {
+            bufferedStream.Clear();
 
             if(lastPointSent >= prof.numPoints) {
                 return;
@@ -57,15 +54,14 @@ public class FollowArc {
                     point.isLastPoint = true;
                 }
 
-                talon.pushMotionProfileTrajectory(point);
+                bufferedStream.Write(point);
                 lastPointSent++;
-                hasPathStarted = true;
             }
         }
 
     }
 
-    private Notifier buffer;
+    private BufferLoader buffer;
     private AutonDriveTrain drivetrain;
     private TalonSRX rightTalon;
     private TalonSRX leftTalon;
@@ -82,29 +78,20 @@ public class FollowArc {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
 
-        setValue = SetValueMotionProfile.Disable;
-
-        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
+        rightTalon.set(ControlMode.PercentOutput, 0);
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
-        buffer = new Notifier(new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance()));
-        buffer.startPeriodic(0.005);
+        buffer = new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
+        buffer.init();
     }
 
     public void run() {
+        rightTalon.startMotionProfile(bufferedStream, 5, ControlMode.MotionProfileArc);
+
         rightTalon.getMotionProfileStatus(status);
 
-        if (status.isUnderrun) {
-            // The MP has underrun 
-            setValue = SetValueMotionProfile.Disable;
-        } else if (status.btmBufferCnt > kMinPointsInTalon) {
-            // If there are enough waypoints, go
-            setValue = SetValueMotionProfile.Enable;
-        } else if (status.activePointValid && status.isLast) {
-            // If the point is valid and last, hold
-            setValue = SetValueMotionProfile.Hold;
+        if(rightTalon.isMotionProfileFinished() && isFinished()) {
+            end();
         }
-        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
-
     }
 
     public boolean isFinished() {
@@ -117,7 +104,6 @@ public class FollowArc {
     }
 
     public void end() {
-        buffer.stop();
         resetTalon(rightTalon, ControlMode.PercentOutput, 0);
         resetTalon(leftTalon, ControlMode.PercentOutput, 0);
     }
