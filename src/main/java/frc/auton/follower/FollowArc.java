@@ -52,6 +52,7 @@ public class FollowArc {
                 point.profileSlotSelect1 = rotationPidSlot;
                 point.zeroPos = false;
                 point.isLastPoint = false;
+                point.useAuxPID = true;
                 if ((lastPointSent + 1) == prof.numPoints) {
                     point.isLastPoint = true;
                 }
@@ -82,7 +83,8 @@ public class FollowArc {
         setUpTalon(leftTalon);
 
         setValue = SetValueMotionProfile.Disable;
-        rightTalon.set(ControlMode.MotionProfile, setValue.value);
+
+        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
         buffer = new Notifier(new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance()));
         buffer.startPeriodic(0.005);
@@ -101,8 +103,7 @@ public class FollowArc {
             // If the point is valid and last, hold
             setValue = SetValueMotionProfile.Hold;
         }
-        System.out.println("Status of Talon: " + setValue.value);
-        rightTalon.set(ControlMode.MotionProfile, setValue.value);
+        rightTalon.set(ControlMode.MotionProfileArc, setValue.value);
 
     }
 
