@@ -10,22 +10,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.auton.follower.SrxMotionProfile;;
 
 public class FollowArc {
-    private int distancePidSlot = 0;
-    private int rotationPidSlot = 1;
     private boolean isFinished = false;
     private SrxTrajectory trajectoryToFollow = null;
     private MotionProfileStatus status = new MotionProfileStatus();
     private boolean hasPathStarted;
+    public int i = 0;
     BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
     private class BufferLoader {
         private int lastPointSent = 0;
         private boolean flipped;
-        private TalonSRX talon;
-        private SrxMotionProfile prof;
         private double startPosition = 0;
+        private SrxMotionProfile prof;
 
-        public BufferLoader(TalonSRX talon, SrxMotionProfile prof, boolean flipped, double startPosition) {
-            this.talon = talon;
+        public BufferLoader(SrxMotionProfile prof, boolean flipped, double startPosition) {
             this.prof = prof;
             this.flipped = flipped;
             this.startPosition = startPosition;
@@ -38,15 +35,15 @@ public class FollowArc {
                 return;
             }
 
-            if(!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
+            if(lastPointSent < prof.numPoints) {
                 TrajectoryPoint point = new TrajectoryPoint();
                 /* Fill out point based on Talon API */
                 point.position = prof.points[lastPointSent][0] + startPosition;
                 point.velocity = prof.points[lastPointSent][1];
                 point.timeDur = 10;
                 point.auxiliaryPos = (flipped ? -1 : 1) * 10 * (prof.points[lastPointSent][3]);
-                point.profileSlotSelect0 = distancePidSlot;
-                point.profileSlotSelect1 = rotationPidSlot;
+                point.profileSlotSelect0 = Constants.kPrimaryPIDSlot;
+                point.profileSlotSelect1 = Constants.kAuxPIDSlot;
                 point.zeroPos = false;
                 point.isLastPoint = false;
                 point.useAuxPID = true;
@@ -78,15 +75,13 @@ public class FollowArc {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
 
-        rightTalon.set(ControlMode.PercentOutput, 0);
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
-        buffer = new BufferLoader(rightTalon, trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
+        buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
         buffer.init();
     }
 
     public void run() {
-        rightTalon.startMotionProfile(bufferedStream, 5, ControlMode.MotionProfileArc);
-
+        rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfile);
         rightTalon.getMotionProfileStatus(status);
 
         if(rightTalon.isMotionProfileFinished() && isFinished()) {

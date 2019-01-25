@@ -28,7 +28,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    auton = new FollowArc(new AutonDriveTrain(), new DistanceScalingArc());
+    auton.init();
   }
 
   /**
@@ -56,8 +57,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    auton = new FollowArc(new AutonDriveTrain(), new DistanceScalingArc());
-    auton.init();
+    
   }
 
   /**
