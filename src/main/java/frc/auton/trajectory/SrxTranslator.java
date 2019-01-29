@@ -88,7 +88,7 @@ public class SrxTranslator {
         // rpm to encoder rpm
         double encoderRpm = rpm * scaleFactor;
         // ticks for each millisecond
-        double ticksPer100ms = encoderRpm * encoderTicksPerRev / 600;
+        double ticksPer100ms = encoderRpm * encoderTicksPerRev / 600.0;
 
         return ticksPer100ms;
     }
