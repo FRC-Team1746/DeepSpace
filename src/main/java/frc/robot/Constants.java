@@ -1,16 +1,16 @@
 package frc.robot;
 
-class Constants {
+public class Constants {
 	public static final double liftEncoderPerInch = 914;
 	public static final double liftBottomFromFloor = 6;
 	public static final double liftEncoderPosition0 = -6666;
-	public static final double liftEncoderPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
-	public static final double liftEncoderPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks
-	public static final double liftEncoderPosition3 = liftEncoderPerInch * (73-liftBottomFromFloor);//6 feet 60324 Ticks
-	public static final double liftEncoderPosition4 = liftEncoderPerInch * (88-liftBottomFromFloor);// 71292 Ticks
+	public static final double hatchPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
+	public static final double hatchPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks
+	public static final double hatchPosition3 = liftEncoderPerInch * (73-liftBottomFromFloor);//6 feet 60324 Ticks
+	public static final double ballPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
+	public static final double ballPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks
+	public static final double ballPosition3 = liftEncoderPerInch * (73-liftBottomFromFloor);//6 feet 60324 Ticks
 	public static final double liftAutonStartPosition = 25246;//Starting Position 
-	public static final double liftBumpUp = liftEncoderPerInch; //Unused
-	public static final double liftBumpDown = liftEncoderPerInch; //Unused
 	public static final double liftEncoderTolerance = liftEncoderPerInch/2;
 	public static final double climbingBarHeight = 81;           //In Inches ;
 

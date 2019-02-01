@@ -16,6 +16,9 @@ public class ElectricalConstants {
 
 	public int ELEVATOR_LEFT = 30;
 	public int ELEVATOR_RIGHT = 31;
+
+	public int BALL_LEFT = 40;
+	public int BALL_RIGHT = 41;
 	
 	// MoreBoard
 	public int EMPTY1 = 10;
@@ -32,8 +35,8 @@ public class ElectricalConstants {
 	// DIOs
 	public int LIFT_BOTTOM = 0;
 	public int LIFT_TOP = 1;
-	public int DIO2 = 2; 
-	public int DIO3 = 3;
+	public int HATCH = 2; 
+	public int BALL = 3;
 	public int DIO4 = 4;
 	public int DIO5 = 5;
 	public int DIO6 = 6;
@@ -44,14 +47,14 @@ public class ElectricalConstants {
 	//ANALOG
 	
 	//PCM
-	public int pcm0 = 0;
-	public int pcm1 = 1;
-	public int pcm2 = 2;
-	public int pcm3 = 3;
-	public int pcm4 = 4;
-	public int pcm5 = 5;
-	public int pcm6 = 6;
-	public int pcm7 = 7;
+	public int HATCHENIOD11 = 0;
+	public int HATCHENIOD12 = 1;
+	public int HATCHENIOD21 = 2;
+	public int HATCHENIOD22 = 3;
+	public int BALLENIOD11 = 4;
+	public int BALLENIOD12 = 5;
+	public int BALLENIOD21 = 6;
+	public int BALLENIOD22 = 7;
 	
 	//Relay
 	public int relay0 = 0;
