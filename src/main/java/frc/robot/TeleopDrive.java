@@ -43,6 +43,8 @@ public TeleopDrive(Controls controls) {
     m_RightFollowerA = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_A);
     m_RightFollowerB = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_B);
     
+    m_RightMaster.setInverted(true);
+
     m_LeftFollowerA.follow(m_LeftMaster);
     m_LeftFollowerB.follow(m_LeftMaster);
     m_RightFollowerA.follow(m_RightMaster);
@@ -62,6 +64,8 @@ public TeleopDrive(Controls controls) {
 public void teleopArcadeDrive(){
     // if (!m_controls.driver_A_Button()) {
     myRobot.arcadeDrive(-m_controls.driver_YL_Axis(), m_controls.driver_XL_Axis()/10*6);
+    System.out.println("Left Encoder: " + getEncoderLeft());
+    System.out.println("Right Encoder: " + getEncoderRight());
     // }else {
     // myRobot.arcadeDrive(-m_controls.driver_Y_Axis(), m_controls.driver_X_Axis());
     // }
