@@ -13,6 +13,7 @@ public class Robot extends TimedRobot {
     m_controls = new Controls();
     m_TeleopDrive = new TeleopDrive(m_controls);
     m_TeleopDrive.resetGyro();
+    m_TeleopDrive.resetEncoders();
   }
 
 
