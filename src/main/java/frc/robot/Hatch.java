@@ -5,11 +5,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Hatch{
 
-	ElectricalConstants eConstants;
+  ElectricalConstants eConstants;
+  
+  private DigitalInput hatch;
  
  public Hatch(){
   eConstants = new ElectricalConstants();
-
+  hatch = new DigitalInput(eConstants.HATCH);
   DoubleSolenoid hatcheniod1 = new DoubleSolenoid(eConstants.HATCHENIOD11, eConstants.HATCHENIOD12 );
   DoubleSolenoid hatcheniod2 = new DoubleSolenoid(eConstants.HATCHENIOD21, eConstants.HATCHENIOD22 );
 
@@ -32,5 +34,9 @@ public class Hatch{
 
  public void rivetIn(DoubleSolenoid hatcheniod2){
   hatcheniod2.set(DoubleSolenoid.Value.kReverse);
-}
+ }
+
+ public boolean getSensor(){
+   return hatch.get();
+ }
 }

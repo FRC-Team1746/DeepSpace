@@ -19,7 +19,8 @@ public class Ball{
   public Ball(){
     eConstants = new ElectricalConstants();
 		ballRight = new WPI_TalonSRX(eConstants.BALL_RIGHT);
-		ballLeft = new WPI_TalonSRX(eConstants.BALL_LEFT);
+    ballLeft = new WPI_TalonSRX(eConstants.BALL_LEFT);
+    ball = new DigitalInput(eConstants.BALL);
     DoubleSolenoid balleniod1 = new DoubleSolenoid(eConstants.BALLENIOD11, eConstants.BALLENIOD12 );
     DoubleSolenoid balleniod2 = new DoubleSolenoid(eConstants.BALLENIOD21, eConstants.BALLENIOD22 );
 

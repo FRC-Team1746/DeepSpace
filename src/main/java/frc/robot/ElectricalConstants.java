@@ -37,7 +37,6 @@ public class ElectricalConstants {
 	public int LIFT_TOP = 1;
 	public int HATCH = 2; 
 	public int BALL = 3;
-
 	public int DIO4 = 4;
 	public int DIO5 = 5;
 	public int DIO6 = 6;
