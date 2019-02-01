@@ -31,7 +31,7 @@ public class ElectricalConstants {
 	
 	// DIOs
 	public int LIFT_BOTTOM = 0;
-	public int DIO1 = 1;
+	public int LIFT_TOP = 1;
 	public int DIO2 = 2; 
 	public int DIO3 = 3;
 	public int DIO4 = 4;
@@ -46,7 +46,7 @@ public class ElectricalConstants {
 	//PCM
 	public int pcm0 = 0;
 	public int pcm1 = 1;
-	public int pcm2= 2;
+	public int pcm2 = 2;
 	public int pcm3 = 3;
 	public int pcm4 = 4;
 	public int pcm5 = 5;
