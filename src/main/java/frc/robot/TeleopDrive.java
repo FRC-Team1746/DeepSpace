@@ -16,10 +16,12 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 // import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 public class TeleopDrive {
     private Controls m_controls;
     public WPI_TalonSRX m_LeftMaster;
+    private PigeonIMU gyro;
     private WPI_VictorSPX m_LeftFollowerA;
     private WPI_VictorSPX m_LeftFollowerB;
     public WPI_TalonSRX m_RightMaster;
@@ -42,6 +44,7 @@ public TeleopDrive(Controls controls) {
     m_RightMaster = new WPI_TalonSRX(eConstants.MOTOR_DRIVE_RIGHT_MASTER);
     m_RightFollowerA = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_A);
     m_RightFollowerB = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_B);
+    gyro = new PigeonIMU(eConstants.GYRO);
     
     m_RightMaster.setInverted(true);
 
@@ -66,6 +69,7 @@ public void teleopArcadeDrive(){
     myRobot.arcadeDrive(-m_controls.driver_YL_Axis(), m_controls.driver_XL_Axis()/10*6);
     System.out.println("Left Encoder: " + getEncoderLeft());
     System.out.println("Right Encoder: " + getEncoderRight());
+    System.out.println("Gyro Value: " + getAngle());
     // }else {
     // myRobot.arcadeDrive(-m_controls.driver_Y_Axis(), m_controls.driver_X_Axis());
     // }
@@ -109,6 +113,12 @@ public double getHeading(){
 	
 public void resetGyro(){
     m_Gyro.reset();
+}
+
+public double getAngle() {
+    double[] ypr_deg = new double[3];
+    gyro.getYawPitchRoll(ypr_deg);
+    return ypr_deg[2];
 }
 
 public void setRampRate(double rate){
