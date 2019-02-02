@@ -25,6 +25,7 @@ public class TeleopDrive {
     private WPI_VictorSPX m_LeftFollowerA;
     private WPI_VictorSPX m_LeftFollowerB;
     public WPI_TalonSRX m_RightMaster;
+    private WPI_TalonSRX m_gyroTalon;
     private WPI_VictorSPX m_RightFollowerA;
     private WPI_VictorSPX m_RightFollowerB;
     ElectricalConstants eConstants;
@@ -44,9 +45,12 @@ public TeleopDrive(Controls controls) {
     m_RightMaster = new WPI_TalonSRX(eConstants.MOTOR_DRIVE_RIGHT_MASTER);
     m_RightFollowerA = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_A);
     m_RightFollowerB = new WPI_VictorSPX(eConstants.MOTOR_DRIVE_RIGHT_FOLLOWER_B);
-    gyro = new PigeonIMU(eConstants.GYRO);
+    m_gyroTalon = new WPI_TalonSRX(eConstants.GYRO);
+    gyro = new PigeonIMU(m_gyroTalon);
     
-    m_RightMaster.setInverted(true);
+    // m_RightMaster.setInverted(true);
+    // m_RightFollowerA.setInverted(true);
+    // m_RightFollowerB.setInverted(true);
 
     m_LeftFollowerA.follow(m_LeftMaster);
     m_LeftFollowerB.follow(m_LeftMaster);
@@ -112,13 +116,14 @@ public double getHeading(){
 }
 	
 public void resetGyro(){
-    m_Gyro.reset();
+    gyro.setYaw(0.0);
+    gyro.setFusedHeading(0.0);
 }
 
 public double getAngle() {
     double[] ypr_deg = new double[3];
     gyro.getYawPitchRoll(ypr_deg);
-    return ypr_deg[2];
+    return ypr_deg[0];
 }
 
 public void setRampRate(double rate){
