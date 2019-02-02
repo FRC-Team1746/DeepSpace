@@ -31,7 +31,7 @@ public class Lift{
 		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
     liftTop = new DigitalInput(eConstants.LIFT_TOP);
     hatchs = new DigitalInput(eConstants.HATCH);
-    balls = new DigitalInput(eConstants.BALL);
+    balls = new DigitalInput(eConstants.BALLS);
 
     liftLeft.follow(liftRight);
 

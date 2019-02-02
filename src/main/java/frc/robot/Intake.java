@@ -10,12 +10,16 @@ public class Intake{
   Constants constants;
   Hatch hatch;
   Ball ball;
+  Lift lift;
 
   public Intake(Controls Controls){
     controls = Controls;
     hatch = new Hatch();
     ball = new Ball();
+    lift = new Lift(controls);
   }
 
-
+  public void update(){
+    
+  }
 }
