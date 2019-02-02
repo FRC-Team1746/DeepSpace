@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-import java.util.function.DoubleToIntFunction;
+// import java.util.function.DoubleToIntFunction;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 
@@ -12,7 +12,6 @@ public class Ball{
 
 	ElectricalConstants eConstants;
 
-  private double liftPosition;
   private WPI_TalonSRX ballRight;
   private WPI_TalonSRX ballLeft;
   private DoubleSolenoid ballenoid1;
@@ -41,10 +40,12 @@ public class Ball{
 
   public void intakeIn(Double speed){
     ballLeft.set(speed);
+    ballRight.set(-speed);
   }
 
   public void intakeOut(Double speed){
     ballLeft.set(-speed);
+    ballRight.set(speed);
   }
 
   public boolean getSensor(){

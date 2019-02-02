@@ -15,8 +15,8 @@ public class Hatch{
  public Hatch(){
   eConstants = new ElectricalConstants();
   hatchs = new DigitalInput(eConstants.HATCH);
-  DoubleSolenoid hatchenoid1 = new DoubleSolenoid(eConstants.HATCHENOID11, eConstants.HATCHENOID12 );
-  DoubleSolenoid hatchenoid2 = new DoubleSolenoid(eConstants.HATCHENOID21, eConstants.HATCHENOID22 );
+  hatchenoid1 = new DoubleSolenoid(eConstants.HATCHENOID11, eConstants.HATCHENOID12 );
+  hatchenoid2 = new DoubleSolenoid(eConstants.HATCHENOID21, eConstants.HATCHENOID22 );
 
   hatchenoid1.set(DoubleSolenoid.Value.kOff);
   hatchenoid2.set(DoubleSolenoid.Value.kOff);
@@ -31,11 +31,11 @@ public class Hatch{
   hatchenoid1.set(DoubleSolenoid.Value.kReverse);
  }
 
- public void rivetOut(DoubleSolenoid hatchenoid2){
+ public void rivetOut(){
    hatchenoid2.set(DoubleSolenoid.Value.kForward);
  }
 
- public void rivetIn(DoubleSolenoid hatchenoid2){
+ public void rivetIn(){
   hatchenoid2.set(DoubleSolenoid.Value.kReverse);
  }
 
