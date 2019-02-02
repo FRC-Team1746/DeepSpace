@@ -12,7 +12,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import frc.robot.ElectricalConstants;
 
-public class AutonDriveTrain {
+public class AutonDriveTrain implements FollowsArc {
     private ElectricalConstants eConstants;
     private TalonSRXConfiguration srxConfig = new TalonSRXConfiguration();
     private TalonSRX rightTalon;
@@ -64,7 +64,7 @@ public class AutonDriveTrain {
         rightTalon.configRemoteFeedbackFilter(gyro.getDeviceID(), RemoteSensorSource.GadgeteerPigeon_Yaw, 1, 0);
         rightTalon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, 0);
         rightTalon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.QuadEncoder, 0);
-        rightTalon.configSelectedFeedbackSensor(FeedbackDevice.SensorDifference, 0, 0);
+        rightTalon.configSelectedFeedbackSensor(FeedbackDevice.SensorSum, 0, 0);
         rightTalon.configSelectedFeedbackCoefficient(0.5, 0, 0);
 
         rightTalon.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
@@ -77,12 +77,16 @@ public class AutonDriveTrain {
 
     }
 
-    public TalonSRX getRightTalon() {
+    public TalonSRX getRight() {
         return rightTalon;
     }
 
-    public TalonSRX getLeftTalon() {
+    public TalonSRX getLeft() {
         return leftTalon;
+    }
+
+    public PigeonIMU getGyro() {
+        return gyro;
     }
 
     public double getAngle() {

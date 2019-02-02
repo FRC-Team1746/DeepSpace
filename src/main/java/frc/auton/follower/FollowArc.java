@@ -6,25 +6,26 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import frc.auton.follower.SrxMotionProfile;;
 
 public class FollowArc {
-    private boolean isFinished = false;
     private SrxTrajectory trajectoryToFollow = null;
     private MotionProfileStatus status = new MotionProfileStatus();
-    private boolean hasPathStarted;
     public int i = 0;
     BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
     private class BufferLoader {
         private boolean flipped;
         private double startPosition = 0;
+        private double gyroPosition = 0;
         private SrxMotionProfile prof;
 
-        public BufferLoader(SrxMotionProfile prof, boolean flipped, double startPosition) {
+        public BufferLoader(SrxMotionProfile prof, boolean flipped, double startPosition, double gyroPosition) {
             this.prof = prof;
             this.flipped = flipped;
             this.startPosition = startPosition;
+            this.gyroPosition = gyroPosition;
         }
 
         public void init() {
@@ -36,12 +37,11 @@ public class FollowArc {
                 point.position = prof.points[lastPointSent][0] + startPosition;
                 point.velocity = prof.points[lastPointSent][1];
                 point.timeDur = (int) prof.points[lastPointSent][2];
-                point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3]);
+                point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3] + gyroPosition);
                 point.profileSlotSelect0 = Constants.kPrimaryPIDSlot;
                 point.profileSlotSelect1 = Constants.kAuxPIDSlot;
-                point.zeroPos = false;
                 point.isLastPoint = false;
-                point.useAuxPID = false;
+                point.useAuxPID = true;
                 if ((lastPointSent + 1) == prof.numPoints) {
                     point.isLastPoint = true;
                 }
@@ -58,18 +58,21 @@ public class FollowArc {
     private AutonDriveTrain drivetrain;
     private TalonSRX rightTalon;
     private TalonSRX leftTalon;
+    private PigeonIMU gyro;
 
     public FollowArc(AutonDriveTrain drivetrain, SrxTrajectory trajectoryToFollow) {
         this.drivetrain = drivetrain;
         this.trajectoryToFollow = trajectoryToFollow;
 
-        rightTalon = drivetrain.getRightTalon();
-        leftTalon = drivetrain.getLeftTalon();
+        rightTalon = drivetrain.getRight();
+        leftTalon = drivetrain.getLeft();
+        gyro = drivetrain.getGyro();
     }
 
     public void init() {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
+        setUpGyro(gyro);
         // if(rightTalon.getSelectedSensorPosition() != 0) {
         //     rightTalon.setSelectedSensorPosition(0, 0, 10);
         //     rightTalon.getSensorCollection().setQuadraturePosition(0, 10);
@@ -79,7 +82,7 @@ public class FollowArc {
         System.out.println("EncoderRight count: " + rightTalon.getSelectedSensorPosition());
         System.out.println("EncoderLeft count: " + leftTalon.getSelectedSensorPosition());
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
-        buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
+        buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance(), drivetrain.getAngle());
         buffer.init();
         rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfileArc);
 
@@ -121,6 +124,11 @@ public class FollowArc {
         talon.clearMotionProfileHasUnderrun(10);
         talon.getSensorCollection().setQuadraturePosition(0, 15);
         talon.setSelectedSensorPosition(0, 0, 15);
+    }
+
+    private void setUpGyro(PigeonIMU gyro) {
+        gyro.setYaw(0.0);
+        gyro.setFusedHeading(0.0);
     }
 
     private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
