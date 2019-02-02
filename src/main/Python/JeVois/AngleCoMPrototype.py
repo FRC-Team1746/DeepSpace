@@ -1,6 +1,7 @@
 #import necessary components
 import cv2
-import numpy as np 
+import numpy as np
+import math 
 class ShapeDetector:
     def __init__(self):
         pass
@@ -26,6 +27,23 @@ class ShapeDetector:
             shape = "square" if ar >= 0.95 and ar <= 1.05 else "rectangle"
         return shape
 
+def calculateTargetOffsetX(inputImage, Moment1, Moment2, Threshold):
+    height, width = inputImage.shape;
+    imCenterX = width / 2;
+    cX1 = int((Moment1["m10"] / Moment1["m00"]) * 1.0);
+    cX2 = int((Moment2["m10"] / Moment2["m00"]) * 1.0);
+    cY1 = int((Moment1["m01"] / Moment1["m00"]) * 1.0);
+    cY2 = int((Moment2["m01"] / Moment2["m00"]) * 1.0);
+
+    CenterOfTarget = (cX1 + cX2) / 2;
+    TargetPixelOffsetX = CenterOfTarget - imCenterX;
+    if(TargetPixelOffsetX < -Threshold):
+        direction = "Left";
+    elif(TargetPixelOffsetX > Threshold):
+        direction = "Right";
+    else:
+        direction = "Center";
+    return direction, TargetPixelOffsetX
 
 
 ############################
@@ -36,11 +54,12 @@ upperSat = 255
 lowerSat = 10
 upperVal = 255
 lowerVal = 100
-errode = 2
+erode = 2
 dilate = 2
 approx = 6
 area = 100
 solidity = .2
+Pxthreshold = 10
 #############################
 #############################
 
@@ -54,7 +73,7 @@ hsvImage = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 binImage = cv2.inRange(hsvImage, (lowerHue, lowerSat, lowerVal), (upperHue, upperSat, upperVal))
 
 # Erode image to remove noise if necessary.
-binImage = cv2.erode(binImage, None, iterations = errode)
+binImage = cv2.erode(binImage, None, iterations = erode)
 
 #Dilate image to fill in gaps
 binImage = cv2.dilate(binImage, None, iterations = dilate)
@@ -68,6 +87,8 @@ squares = []
 badPolys = []
 sd = ShapeDetector()
 centers = []
+Moments = []
+points = []
 counter = 0
 for c in contours:
     if (contours != None) and (len(contours) > 0):
@@ -75,23 +96,35 @@ for c in contours:
         hull = cv2.convexHull(c , 1)
         counter += 1
         hull_area = cv2.contourArea(hull)  #Used in Solidity calculation
-        p = cv2.approxPolyDP(hull, approx, 1)
-        if (cv2.isContourConvex(p) != False) and (len(p) == 4) and (cv2.contourArea(p) >= area): #p=3 triangle,4 rect,>=5 circle
-            M = cv2.moments(c)
-            cX = int((M["m10"] / M["m00"]) * 1.0)
-            cY = int((M["m01"] / M["m00"])* 1.0)
-            centers.append((cX, cY))
-            shape = sd.detect(c)
-            c = c.astype("float")
-            c = c.astype("int")
-            cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
-            cv2.putText(img, shape + str(counter) , (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-            filled = cnt_area/hull_area
-            if filled <= solidity: #Used to determine if target is hollow or not
-                squares.append(p)
-        else:
-            badPolys.append(p)
+        #p = cv2.approxPolyDP(hull, approx, 1)
+        #if (cv2.isContourConvex(p) != False) and (len(p) == 4) and (cv2.contourArea(p) >= area): #p=3 triangle,4 rect,>=5 circle
+        M = cv2.moments(c)
+        rect = cv2.minAreaRect(c)
+        box = cv2.boxPoints(rect)
+        
+        #print("Box: ")
+        #print(box)
+        #print("\n")
+        #for p in points:
+        #    print("(" + str(p.x+ "," + str(p.y) + ")"))
+        #angle between horizontal and top left
+        angle = rect[2]
+        Moments.append(M)
+        cX = int((M["m10"] / M["m00"]) * 1.0)
+        cY = int((M["m01"] / M["m00"])* 1.0)
+        centers.append((cX, cY))
+        shape = sd.detect(c)
+        c = c.astype("float")
+        c = c.astype("int")
+        cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
+        cv2.putText(img, str(angle) , (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+           # filled = cnt_area/hull_area
+            #if filled <= solidity: #Used to determine if target is hollow or not
+             #   squares.append(p)
+        #else:
+         #   badPolys.append(p)
 
+offsetDirection,offsetMagnitude = calculateTargetOffsetX(binImage, Moments[0], Moments[1], Pxthreshold)
 height, width, channels = img.shape
 imCenterX = width / 2
 cv2.putText(img, "Center of Image: " + str(imCenterX), (10, 500), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
@@ -100,17 +133,21 @@ cv2.putText(img, "Center of Rect2: " + str(centers[1][0]), (10, 550), cv2.FONT_H
 TargetOffset1 = imCenterX - centers[0][0]
 TargetOffset2 = imCenterX - centers[1][0]
 #Currently just checking for absolute centricity
-if(abs(TargetOffset1) < abs(TargetOffset2)):
-    cv2.putText(img, "Aligned To Right of Target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-elif(abs(TargetOffset1) > abs(TargetOffset2)):
+#
+#if(direction == "positive"):
+#    cv2.putText(img, "Aligned To Right of Target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+#elif(abs(TargetOffset1) > abs(TargetOffset2)):
+#    cv2.putText(img, "Aligned To Left of Target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+#else:
+#    cv2.putText(img, "Aligned in center of target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
+if(offsetDirection == "Left"):
     cv2.putText(img, "Aligned To Left of Target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-else:
+elif(offsetDirection == "Center"):
     cv2.putText(img, "Aligned in center of target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+else:
+    cv2.putText(img, "Aligned To Right of Target", (10, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 cv2.imshow('frame', img)
-
-
-            
-
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
@@ -126,6 +163,32 @@ def preProcess(inp):
     out = cv2.dilate(out, None, iterations = dilate)
     return out
 
-def findContours(inpt):
-    cont, hier = cv2.findContours(inpt, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_TC89_KCOS)
+def findContours(inputImage):
+    im2, cont, hier = cv2.findContours(inputImage, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_TC89_KCOS)
+    return im2, cont, hier;
+
+def calcDistance(point1, point2):
+    x2 = point2[0]
+    x1 = point1[0]
+    y2 = point2[1]
+    y1 = point1[1]
+
+    distance = math.sqrt((x2-x1)**(2) - (y2-y1**(2)))
+    return distance
+
+def findRotationAngle(rect):
+    box = cv2.boxPoints(rect)
+    
+    BottomLeft = box[0]
+    TopLeft = box[1]
+    TopRight = box[2]
+    BottomRight = box[3]
+
+    h = calcDistance(TopLeft, BottomLeft)
+    Vertical = [TopLeft[0], BottomLeft[1]]
+    x = BottomLeft[0] - Vertical[0]
+    rTheta = math.asin(float(h/x))
+    theta = math.degrees(rTheta)
+    return theta
+
 
