@@ -33,7 +33,7 @@ public class FollowArc {
             for(int lastPointSent = 0; lastPointSent < prof.numPoints; lastPointSent++) {
                 TrajectoryPoint point = new TrajectoryPoint();
                 /* Fill out point based on Talon API */
-                point.position = prof.points[lastPointSent][0];
+                point.position = prof.points[lastPointSent][0] + startPosition;
                 point.velocity = prof.points[lastPointSent][1];
                 point.timeDur = (int) prof.points[lastPointSent][2];
                 point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3]);
@@ -81,12 +81,12 @@ public class FollowArc {
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
         buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
         buffer.init();
+        rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfileArc);
 
     }
 
     public void run() {
         rightTalon.getMotionProfileStatus(status);
-        rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfileArc);
 
         String line = "";
         line += "  rightencoderCount: " + rightTalon.getSelectedSensorPosition() + "\n";
@@ -107,15 +107,6 @@ public class FollowArc {
         if(rightTalon.isMotionProfileFinished()) {
             end();
         }
-    }
-
-    public boolean isFinished() {
-        if (!hasPathStarted) {
-            return false;
-        }
-        boolean leftComplete = status.activePointValid && status.isLast;
-        boolean trajectoryComplete = leftComplete;
-        return trajectoryComplete || isFinished;
     }
 
     public void end() {

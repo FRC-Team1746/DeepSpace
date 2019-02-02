@@ -1,7 +1,6 @@
 package frc.auton.follower;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
@@ -21,6 +20,7 @@ public class AutonDriveTrain {
 	private VictorSPX rightFollowerB;
     private TalonSRX leftTalon;
     private PigeonIMU gyro;
+    private TalonSRX gyroTalon;
 	private VictorSPX leftFollowerA;
     private VictorSPX leftFollowerB;
     
@@ -32,7 +32,8 @@ public class AutonDriveTrain {
         leftTalon = new TalonSRX(eConstants.MOTOR_DRIVE_LEFT_MASTER);
         leftFollowerA = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_A);
         leftFollowerB = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_B);
-        gyro = new PigeonIMU(eConstants.GYRO);
+        gyroTalon = new TalonSRX(eConstants.GYRO);
+        gyro = new PigeonIMU(gyroTalon);
 
         srxConfig.slot0.kF = Constants.kGains_MotProf.kF;
         srxConfig.slot0.kP = Constants.kGains_MotProf.kP;
