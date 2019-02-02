@@ -7,11 +7,11 @@ public class Hatch{
 
   ElectricalConstants eConstants;
   
-  private DigitalInput hatch;
+  private DigitalInput hatchs;
  
  public Hatch(){
   eConstants = new ElectricalConstants();
-  hatch = new DigitalInput(eConstants.HATCH);
+  hatchs = new DigitalInput(eConstants.HATCH);
   DoubleSolenoid hatcheniod1 = new DoubleSolenoid(eConstants.HATCHENIOD11, eConstants.HATCHENIOD12 );
   DoubleSolenoid hatcheniod2 = new DoubleSolenoid(eConstants.HATCHENIOD21, eConstants.HATCHENIOD22 );
 
@@ -37,6 +37,6 @@ public class Hatch{
  }
 
  public boolean getSensor(){
-   return hatch.get();
+   return hatchs.get();
  }
 }

@@ -19,8 +19,8 @@ public class Lift{
 
 	private DigitalInput liftBottom;
   private DigitalInput liftTop;
-  private DigitalInput hatch;
-  private DigitalInput ball;
+  private DigitalInput hatchs;
+  private DigitalInput balls;
 
 	public Lift(Controls Controls) {
     controls = Controls;
@@ -30,8 +30,8 @@ public class Lift{
 		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_RIGHT);
 		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
     liftTop = new DigitalInput(eConstants.LIFT_TOP);
-    hatch = new DigitalInput(eConstants.HATCH);
-    ball = new DigitalInput(eConstants.BALL);
+    hatchs = new DigitalInput(eConstants.HATCH);
+    balls = new DigitalInput(eConstants.BALL);
 
     liftLeft.follow(liftRight);
 
@@ -102,7 +102,7 @@ public class Lift{
 				liftRight.configMotionCruiseVelocity((int) (6500 + (Math.abs(controls.driver_YR_Axis() * 1500))),
 						Constants.kTimeoutMs);
 				liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      }else if(hatch.get()){
+      }else if(hatchs.get()){
         if(controls.driver_A_Button()){
 					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
 					liftPosition = Constants.hatchPosition1;
@@ -116,7 +116,7 @@ public class Lift{
 					liftPosition = Constants.hatchPosition2;
 					System.out.println("Y Pressed");
         }
-      }else if(ball.get()){
+      }else if(balls.get()){
         if(controls.driver_A_Button()){
 					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
 					liftPosition = Constants.ballPosition1;

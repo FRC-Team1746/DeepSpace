@@ -14,13 +14,13 @@ public class Ball{
   private WPI_TalonSRX ballLeft;
 
 
-  private DigitalInput ball;
+  private DigitalInput balls;
 
   public Ball(){
     eConstants = new ElectricalConstants();
 		ballRight = new WPI_TalonSRX(eConstants.BALL_RIGHT);
     ballLeft = new WPI_TalonSRX(eConstants.BALL_LEFT);
-    ball = new DigitalInput(eConstants.BALL);
+    balls = new DigitalInput(eConstants.BALL);
     DoubleSolenoid balleniod1 = new DoubleSolenoid(eConstants.BALLENIOD11, eConstants.BALLENIOD12 );
     DoubleSolenoid balleniod2 = new DoubleSolenoid(eConstants.BALLENIOD21, eConstants.BALLENIOD22 );
 
@@ -48,6 +48,6 @@ public class Ball{
   }
 
   public boolean getSensor(){
-    return ball.get();
+    return balls.get();
   }
 }
