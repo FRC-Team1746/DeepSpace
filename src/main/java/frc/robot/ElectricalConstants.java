@@ -53,11 +53,8 @@ public class ElectricalConstants {
 	public int HATCHENOID22 = 3;
 	public int BALLENOID11 = 4;
 	public int BALLENOID12 = 5;
-	public int CLIMBENOID11 = 6;
-	public int CLIMBENOID12 = 7;
-
-	public int CLIMBENOID21 = 8;
-	public int CLIMBENOID22 = 9;
+	public int CLIMBENOID1 = 6;
+	public int CLIMBENOID2 = 7;
 	
 	//Relay
 	public int relay0 = 0;
