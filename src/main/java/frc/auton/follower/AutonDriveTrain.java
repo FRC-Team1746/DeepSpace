@@ -9,8 +9,8 @@ import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI;
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import frc.robot.ElectricalConstants;
 
 public class AutonDriveTrain {
@@ -20,7 +20,7 @@ public class AutonDriveTrain {
     private VictorSPX rightFollowerA;
 	private VictorSPX rightFollowerB;
     private TalonSRX leftTalon;
-    private ADXRS450_Gyro gyro;
+    private PigeonIMU gyro;
 	private VictorSPX leftFollowerA;
     private VictorSPX leftFollowerB;
     
@@ -32,22 +32,8 @@ public class AutonDriveTrain {
         leftTalon = new TalonSRX(eConstants.MOTOR_DRIVE_LEFT_MASTER);
         leftFollowerA = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_A);
         leftFollowerB = new VictorSPX(eConstants.MOTOR_DRIVE_LEFT_FOLLOWER_B);
-        gyro = new ADXRS450_Gyro();
+        gyro = new PigeonIMU(eConstants.GYRO);
 
-        /* remote 0 will look at gyro God help me plz*/
-        // srxConfig.remoteFilter0.remoteSensorDeviceID = 0;
-        // srxConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
-        /* remote 1 will capture leftTalon */
-        // srxConfig.remoteFilter1.remoteSensorDeviceID = leftTalon.getDeviceID();
-        // srxConfig.remoteFilter1.remoteSensorSource = RemoteSensorSource.TalonSRX_SelectedSensor;
-        // /* setting differences for PID calculation */ 
-        // srxConfig.diff0Term = FeedbackDevice.QuadEncoder;
-        // srxConfig.diff1Term = FeedbackDevice.RemoteSensor1;
-        // srxConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.SensorDifference;
-        // srxConfig.primaryPID.selectedFeedbackCoefficient = 0.5; /* divide by 2 so we servo sensor-average, intead of sum */
-        /* turn position will come from the gyro */
-        // srxConfig.auxiliaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
-        /* PID for each slot */
         srxConfig.slot0.kF = Constants.kGains_MotProf.kF;
         srxConfig.slot0.kP = Constants.kGains_MotProf.kP;
         srxConfig.slot0.kI = Constants.kGains_MotProf.kI;
@@ -63,17 +49,25 @@ public class AutonDriveTrain {
         srxConfig.slot1.closedLoopPeakOutput = Constants.kGains_MotProf.kPeakOutput;
 
         rightTalon.configAllSettings(srxConfig);
-        rightTalon.setInverted(InvertType.InvertMotorOutput);
+        rightTalon.setInverted(true);
+        rightTalon.setSensorPhase(false);
         rightFollowerA.setInverted(InvertType.FollowMaster);
-        rightFollowerB.setInverted(InvertType.FollowMaster);
+        rightFollowerB.setInverted(InvertType.FollowMaster);  
+
         /* speed up polling so trajectory points can be loaded faster */
         leftTalon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
+
+        /* Configuring Remote Sensors */
         leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
         rightTalon.configRemoteFeedbackFilter(leftTalon.getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, 0, 0);
+        rightTalon.configRemoteFeedbackFilter(gyro.getDeviceID(), RemoteSensorSource.GadgeteerPigeon_Yaw, 1, 0);
         rightTalon.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor0, 0);
         rightTalon.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.QuadEncoder, 0);
-        rightTalon.configSelectedFeedbackSensor(FeedbackDevice.SensorSum, 0, 0);
+        rightTalon.configSelectedFeedbackSensor(FeedbackDevice.SensorDifference, 0, 0);
         rightTalon.configSelectedFeedbackCoefficient(0.5, 0, 0);
+
+        rightTalon.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
+        rightTalon.configSelectedFeedbackCoefficient((3600.0 / 2000.0), 1, 0);
 
         rightFollowerA.follow(rightTalon);
         rightFollowerB.follow(rightTalon);
@@ -88,6 +82,12 @@ public class AutonDriveTrain {
 
     public TalonSRX getLeftTalon() {
         return leftTalon;
+    }
+
+    public double getAngle() {
+        double[] ypr_deg = new double[3];
+        gyro.getYawPitchRoll(ypr_deg);
+        return ypr_deg[0];
     }
 
     public double getDistance() {

@@ -38,7 +38,7 @@ public class FollowArc {
                 point.timeDur = (int) prof.points[lastPointSent][2];
                 point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3]);
                 point.profileSlotSelect0 = Constants.kPrimaryPIDSlot;
-                // point.profileSlotSelect1 = Constants.kAuxPIDSlot;
+                point.profileSlotSelect1 = Constants.kAuxPIDSlot;
                 point.zeroPos = false;
                 point.isLastPoint = false;
                 point.useAuxPID = false;
@@ -81,11 +81,12 @@ public class FollowArc {
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
         buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance());
         buffer.init();
-        rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfile);
+
     }
 
     public void run() {
         rightTalon.getMotionProfileStatus(status);
+        rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfileArc);
 
         String line = "";
         line += "  rightencoderCount: " + rightTalon.getSelectedSensorPosition() + "\n";

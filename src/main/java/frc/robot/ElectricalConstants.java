@@ -9,6 +9,8 @@ public class ElectricalConstants {
 	public int MOTOR_DRIVE_RIGHT_MASTER = 10;
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_A = 11;
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_B = 12;
+
+	public int GYRO = 53;
 		
 	public int CUBE_INTAKE_LEFT = 51;
 	public int CUBE_INTAKE_RIGHT = 52;
