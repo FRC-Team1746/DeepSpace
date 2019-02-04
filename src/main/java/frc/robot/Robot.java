@@ -1,6 +1,8 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.*;
+import edu.wpi.first.wpilibj.*;
 
 public class Robot extends TimedRobot {
   
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 		TeleopDrive.setRampRate(.5);
 		TeleopDrive.setBrakeMode(false);
+
   }
 
   @Override
