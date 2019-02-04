@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.ElectricalConstants;
-import frc.robot.drivebase.Controls;
+import frc.robot.constants.Controls;
 import frc.robot.constants.Constants;
 
 public class Intake{

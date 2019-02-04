@@ -3,6 +3,7 @@ package frc.robot.drivebase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.constants.ElectricalConstants;
+import frc.robot.constants.Controls;
 
 public class TeleopDrive {
     private Controls m_controls;
