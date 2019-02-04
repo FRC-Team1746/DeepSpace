@@ -1,7 +1,8 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.constants.ElectricalConstants;;
 
 public class Hatch{
 

@@ -1,6 +1,7 @@
-package frc.robot;
+package frc.robot.drivebase;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.constants.ElectricalConstants;
 
 public class Controls {
 	ElectricalConstants electricalConstants = new ElectricalConstants();

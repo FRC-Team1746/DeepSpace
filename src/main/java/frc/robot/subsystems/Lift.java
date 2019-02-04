@@ -1,11 +1,14 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import java.lang.Math;
 import edu.wpi.first.wpilibj.DigitalInput;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.*;
+import frc.robot.constants.ElectricalConstants;
+import frc.robot.drivebase.Controls;
+import frc.robot.constants.Constants;
+
 public class Lift{
 
 	ElectricalConstants eConstants;

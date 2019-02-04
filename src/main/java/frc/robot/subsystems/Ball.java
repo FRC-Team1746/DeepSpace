@@ -1,12 +1,10 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
-// import java.util.function.DoubleToIntFunction;
+import frc.robot.constants.ElectricalConstants;
 
 import com.ctre.phoenix.motorcontrol.can.*;
-
 
 public class Ball{
 

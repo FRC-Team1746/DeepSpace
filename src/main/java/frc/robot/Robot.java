@@ -1,5 +1,8 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.drivebase.Controls;
+import frc.robot.drivebase.TeleopDrive;
+
 public class Robot extends TimedRobot {
   
   Controls controls;
@@ -33,7 +36,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 		TeleopDrive.teleopArcadeDrive();
-		// updateSmartDashboard();
   }
 
   @Override
