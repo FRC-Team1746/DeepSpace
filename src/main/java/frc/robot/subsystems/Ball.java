@@ -12,6 +12,7 @@ public class Ball{
 
   private WPI_TalonSRX ballRight;
   private WPI_TalonSRX ballLeft;
+  private WPI_TalonSRX overBumper;
   private DoubleSolenoid ballenoid1;
 
 
@@ -21,6 +22,7 @@ public class Ball{
     eConstants = new ElectricalConstants();
 		ballRight = new WPI_TalonSRX(eConstants.BALL_RIGHT);
     ballLeft = new WPI_TalonSRX(eConstants.BALL_LEFT);
+    overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
     balls = new DigitalInput(eConstants.BALLS);
     ballenoid1 = new DoubleSolenoid(eConstants.BALLENOID11, eConstants.BALLENOID12 );
 
@@ -39,11 +41,13 @@ public class Ball{
   public void intakeIn(Double speed){
     ballLeft.set(speed);
     ballRight.set(-speed);
+    overBumper.set(speed);
   }
 
   public void intakeOut(Double speed){
     ballLeft.set(-speed);
     ballRight.set(speed);
+    overBumper.set(-speed);
   }
 
   public boolean getSensor(){

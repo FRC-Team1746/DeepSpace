@@ -1,17 +1,20 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.constants.Controls;
-import frc.robot.subsystems.TeleopDrive;
-
+import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   
   Controls controls;
-  TeleopDrive TeleopDrive;
+  TeleopDrive teleopDrive;
+  Lift lift;
+  Intake intake;
 
   @Override
   public void robotInit() {
     controls = new Controls();
-    TeleopDrive = new TeleopDrive(controls);
+    teleopDrive = new TeleopDrive(controls);
+    lift = new Lift(controls);
+    intake = new Intake(controls);
   }
 
 
@@ -28,14 +31,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-		TeleopDrive.setRampRate(.5);
-		TeleopDrive.setBrakeMode(false);
+		teleopDrive.setRampRate(.5);
+		teleopDrive.setBrakeMode(false);
 
   }
 
   @Override
   public void teleopPeriodic() {
-		TeleopDrive.teleopArcadeDrive();
+    teleopDrive.teleopArcadeDrive();
+    lift.update();
+    intake.update();
   }
 
   @Override
