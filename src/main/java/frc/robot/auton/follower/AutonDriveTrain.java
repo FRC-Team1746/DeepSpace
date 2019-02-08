@@ -6,15 +6,13 @@ import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import frc.robot.ElectricalConstants;
+import frc.robot.constants.ElectricalConstants;;
 
 public class AutonDriveTrain implements FollowsArc {
     private ElectricalConstants eConstants;
-    private TalonSRXConfiguration srxConfig = new TalonSRXConfiguration();
     private TalonSRX rightTalon;
     private VictorSPX rightFollowerA;
 	private VictorSPX rightFollowerB;
@@ -35,25 +33,14 @@ public class AutonDriveTrain implements FollowsArc {
         gyroTalon = new TalonSRX(eConstants.GYRO);
         gyro = new PigeonIMU(gyroTalon);
 
-        srxConfig.slot0.kF = Constants.kGains_MotProf.kF;
-        srxConfig.slot0.kP = Constants.kGains_MotProf.kP;
-        srxConfig.slot0.kI = Constants.kGains_MotProf.kI;
-        srxConfig.slot0.kD = Constants.kGains_MotProf.kD;
-        srxConfig.slot0.integralZone = (int) Constants.kGains_MotProf.kIzone;
-        srxConfig.slot0.closedLoopPeakOutput = Constants.kGains_MotProf.kPeakOutput;
-
-        srxConfig.slot1.kF = Constants.kGains_MotProf.kF;
-        srxConfig.slot1.kP = Constants.kGains_MotProf.kP;
-        srxConfig.slot1.kI = Constants.kGains_MotProf.kI;
-        srxConfig.slot1.kD = Constants.kGains_MotProf.kD;
-        srxConfig.slot1.integralZone = (int) Constants.kGains_MotProf.kIzone;
-        srxConfig.slot1.closedLoopPeakOutput = Constants.kGains_MotProf.kPeakOutput;
-
-        rightTalon.configAllSettings(srxConfig);
         rightTalon.setInverted(true);
         rightTalon.setSensorPhase(false);
         rightFollowerA.setInverted(InvertType.FollowMaster);
         rightFollowerB.setInverted(InvertType.FollowMaster);  
+
+        /* PID */
+        rightTalon.config_kP(0, 0.08);
+        rightTalon.config_kP(1, 0.25);
 
         /* speed up polling so trajectory points can be loaded faster */
         leftTalon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
@@ -68,7 +55,7 @@ public class AutonDriveTrain implements FollowsArc {
         rightTalon.configSelectedFeedbackCoefficient(0.5, 0, 0);
 
         rightTalon.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
-        rightTalon.configSelectedFeedbackCoefficient((3600.0 / 2000.0), 1, 0);
+        rightTalon.configSelectedFeedbackCoefficient((3600.00/2000.00), 1, 0);
 
         rightFollowerA.follow(rightTalon);
         rightFollowerB.follow(rightTalon);
@@ -95,7 +82,7 @@ public class AutonDriveTrain implements FollowsArc {
         return ypr_deg[0];
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return rightTalon.getSelectedSensorPosition();
     }
 }

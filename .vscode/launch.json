@@ -8,6 +8,13 @@
       "type": "java",
       "name": "CodeLens (Launch) - OttoPathCreator",
       "request": "launch",
+      "mainClass": "frc.robot.auton.OttoPathCreator",
+      "projectName": "DeepSpace"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - OttoPathCreator",
+      "request": "launch",
       "mainClass": "frc.auton.OttoPathCreator",
       "projectName": "DeepSpace"
     },

@@ -59,7 +59,7 @@ public class OttoPathGenerator extends PathGenerator {
     }
 
     public static void exportArcToJavaFile(OttoPath path) {
-        exportArcToJavaFile("src\\main\\java\\frc\\auton\\arcs", path);
+        exportArcToJavaFile("src\\main\\java\\frc\\robot\\auton\\arcs", path);
     }
 
     public static void exportRotationToJavaFile(String relativeDirectoryName, OttoRotation bobRotation) {

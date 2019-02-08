@@ -6,7 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 public interface FollowsArc {
     public TalonSRX getLeft();
     public TalonSRX getRight();
-    public double getDistance();
+    public int getDistance();
     public PigeonIMU getGyro();
     public double getAngle();
 }

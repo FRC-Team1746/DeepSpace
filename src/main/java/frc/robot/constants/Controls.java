@@ -28,7 +28,7 @@ public class Controls {
 	}
 
 	public double driver_YL_Axis(){
-		return xbox_driver.getRawAxis(1);
+		return -xbox_driver.getRawAxis(1);
 	}
 
 	public double driver_XR_Axis(){

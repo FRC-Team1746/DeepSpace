@@ -1,57 +1,58 @@
 package frc.robot.auton.follower;
 
 import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
-import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import frc.robot.auton.follower.SrxMotionProfile;;
+import frc.robot.auton.follower.SrxMotionProfile;
 
 public class FollowArc {
-    private SrxTrajectory trajectoryToFollow = null;
-    private MotionProfileStatus status = new MotionProfileStatus();
-    public int i = 0;
+    private int kPrimaryPIDSlot = 0;
+    private int kAuxPIDSlot = 1;
     BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
     private class BufferLoader {
         private boolean flipped;
-        private double startPosition = 0;
-        private double gyroPosition = 0;
+        private boolean flipRobot;
+        private int startPosition = 0;
+        private int direction;
         private SrxMotionProfile prof;
 
-        public BufferLoader(SrxMotionProfile prof, boolean flipped, double startPosition, double gyroPosition) {
+        public BufferLoader(SrxMotionProfile prof, boolean flipped, int startPosition, boolean flipRobot) {
             this.prof = prof;
             this.flipped = flipped;
             this.startPosition = startPosition;
-            this.gyroPosition = gyroPosition;
+            this.flipRobot = flipRobot;
         }
 
         public void init() {
             bufferedStream.Clear();
+            direction = flipRobot ? -1 : 1;
 
             for(int lastPointSent = 0; lastPointSent < prof.numPoints; lastPointSent++) {
                 TrajectoryPoint point = new TrajectoryPoint();
                 /* Fill out point based on Talon API */
-                point.position = prof.points[lastPointSent][0] + startPosition;
-                point.velocity = prof.points[lastPointSent][1];
                 point.timeDur = (int) prof.points[lastPointSent][2];
-                point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3] + gyroPosition);
-                point.profileSlotSelect0 = Constants.kPrimaryPIDSlot;
-                point.profileSlotSelect1 = Constants.kAuxPIDSlot;
-                point.isLastPoint = false;
+
+                /* Drive Part */
+                point.position = direction * prof.points[lastPointSent][0] + startPosition;
+                point.velocity = direction * prof.points[lastPointSent][1];
+
+                /* Turn Part */
+                point.auxiliaryPos = (flipped ? -1 : 1) * 10 * (prof.points[lastPointSent][3]);
+                point.auxiliaryVel = 0;
+                point.auxiliaryArbFeedFwd = 0;
+
+                point.profileSlotSelect0 = kPrimaryPIDSlot;
+                point.profileSlotSelect1 = kAuxPIDSlot;
                 point.useAuxPID = true;
-                if ((lastPointSent + 1) == prof.numPoints) {
-                    point.isLastPoint = true;
-                }
+                point.isLastPoint = ((lastPointSent + 1) == prof.numPoints);
 
                 bufferedStream.Write(point);
-                // System.out.println("Last Point was: " + lastPointSent);
-                // System.out.println("Number of Points: " + prof.numPoints);
             }
         }
-
     }
 
     private BufferLoader buffer;
@@ -59,10 +60,17 @@ public class FollowArc {
     private TalonSRX rightTalon;
     private TalonSRX leftTalon;
     private PigeonIMU gyro;
+    private SrxTrajectory trajectoryToFollow;
+    private boolean flipRobot;
 
     public FollowArc(AutonDriveTrain drivetrain, SrxTrajectory trajectoryToFollow) {
+        this(drivetrain, trajectoryToFollow, false);
+    }
+
+    public FollowArc(AutonDriveTrain drivetrain, SrxTrajectory trajectoryToFollow, boolean flipRobot) {
         this.drivetrain = drivetrain;
         this.trajectoryToFollow = trajectoryToFollow;
+        this.flipRobot = flipRobot;
 
         rightTalon = drivetrain.getRight();
         leftTalon = drivetrain.getLeft();
@@ -73,38 +81,20 @@ public class FollowArc {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
         setUpGyro(gyro);
-        // if(rightTalon.getSelectedSensorPosition() != 0) {
-        //     rightTalon.setSelectedSensorPosition(0, 0, 10);
-        //     rightTalon.getSensorCollection().setQuadraturePosition(0, 10);
-        //     i++;
-        // }
-        // System.out.println("Loops Completed: " + i);
-        System.out.println("EncoderRight count: " + rightTalon.getSelectedSensorPosition());
-        System.out.println("EncoderLeft count: " + leftTalon.getSelectedSensorPosition());
+    
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
-        buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, drivetrain.getDistance(), drivetrain.getAngle());
+
+        buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, 
+        drivetrain.getDistance(), flipRobot);
         buffer.init();
         rightTalon.startMotionProfile(bufferedStream, 10, ControlMode.MotionProfileArc);
-
     }
 
     public void run() {
-        rightTalon.getMotionProfileStatus(status);
-
         String line = "";
-        line += "  rightencoderCount: " + rightTalon.getSelectedSensorPosition() + "\n";
+        line += "  rightencoderCount: " + rightTalon.getSensorCollection().getQuadraturePosition() + "\n";
         line += "  leftencoderCount: " + leftTalon.getSelectedSensorPosition() + "\n";
-        // line += "  topBufferRem: " + status.topBufferRem + "\n";
-        // line += "  topBufferCnt: " + status.topBufferCnt + "\n";
-        // line += "  btmBufferCnt: " + status.btmBufferCnt + "\n";
-        // line += "  hasUnderrun: " + status.hasUnderrun + "\n";
-        // line += "  isUnderrun: " + status.isUnderrun + "\n";
-        // line += "  activePointValid: " + status.activePointValid + "\n";
-        // line += "  isLast: " + status.isLast + "\n";
-        // line += "  profileSlotSelect0: " + status.profileSlotSelect + "\n";
-        // line += "  profileSlotSelect1: " + status.profileSlotSelect1 + "\n";
-        // line += "  outputEnable: " + status.outputEnable.toString() + "\n";
-        // line += "  timeDurMs: " + status.timeDurMs + "\n";
+        line += "  Gyro count: " + drivetrain.getAngle();
         System.out.println(line);
         
         if(rightTalon.isMotionProfileFinished()) {
@@ -122,8 +112,8 @@ public class FollowArc {
         talon.clearMotionProfileTrajectories();
         talon.changeMotionControlFramePeriod(5);
         talon.clearMotionProfileHasUnderrun(10);
-        talon.getSensorCollection().setQuadraturePosition(0, 15);
-        talon.setSelectedSensorPosition(0, 0, 15);
+        talon.setSelectedSensorPosition(0);
+        talon.getSensorCollection().setQuadraturePosition(0, 10);
     }
 
     private void setUpGyro(PigeonIMU gyro) {
