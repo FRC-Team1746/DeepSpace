@@ -7,9 +7,6 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.auton.follower.SrxMotionProfile;
 
 public class FollowArc {
@@ -96,10 +93,15 @@ public class FollowArc {
     }
 
     public void run() {
+        double acVel = Math.abs(rightTalon.getSelectedSensorVelocity()) + 
+        leftTalon.getSelectedSensorVelocity()*0.5;
+        double expeVel = trajectoryToFollow.centerProfile.points[i][1];
+        double err = acVel - expeVel;
+
         String line = "";
-        line += "  ActualVelocity: " + (Math.abs(rightTalon.getSelectedSensorVelocity()) + 
-        leftTalon.getSelectedSensorVelocity())*0.5 + "\n";
-        line += "  WantedPositionCount: " + trajectoryToFollow.centerProfile.points[i][1] + "\n";
+        line += "  ActualVelocity: " + acVel + "\n";
+        line += "  WantedPositionCount: " + expeVel + "\n";
+        line += "  Error: " + err + "\n";
         line += "  ------------------------------------- ";
         System.out.println(line);
 
