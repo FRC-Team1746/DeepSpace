@@ -7,11 +7,15 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.auton.follower.SrxMotionProfile;
 
 public class FollowArc {
     private int kPrimaryPIDSlot = 0;
     private int kAuxPIDSlot = 1;
+    public int i = 0;
     BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
     private class BufferLoader {
         private boolean flipped;
@@ -63,6 +67,7 @@ public class FollowArc {
     private SrxTrajectory trajectoryToFollow;
     private boolean flipRobot;
 
+
     public FollowArc(AutonDriveTrain drivetrain, SrxTrajectory trajectoryToFollow) {
         this(drivetrain, trajectoryToFollow, false);
     }
@@ -81,7 +86,7 @@ public class FollowArc {
         setUpTalon(rightTalon);
         setUpTalon(leftTalon);
         setUpGyro(gyro);
-    
+
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
 
         buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, 
@@ -92,11 +97,14 @@ public class FollowArc {
 
     public void run() {
         String line = "";
-        line += "  rightencoderCount: " + rightTalon.getSensorCollection().getQuadraturePosition() + "\n";
-        line += "  leftencoderCount: " + leftTalon.getSelectedSensorPosition() + "\n";
-        line += "  Gyro count: " + drivetrain.getAngle();
+        line += "  ActualVelocity: " + (Math.abs(rightTalon.getSelectedSensorVelocity()) + 
+        leftTalon.getSelectedSensorVelocity())*0.5 + "\n";
+        line += "  WantedPositionCount: " + trajectoryToFollow.centerProfile.points[i][1] + "\n";
+        line += "  ------------------------------------- ";
         System.out.println(line);
-        
+
+        i++;
+
         if(rightTalon.isMotionProfileFinished()) {
             end();
         }

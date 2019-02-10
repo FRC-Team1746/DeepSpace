@@ -14,10 +14,10 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
     private SrxTranslatorConfig config = new SrxTranslatorConfig();
 
     public OttoPathCreator() {
-        config.max_acc = 0.5; // Acceleration In FPS
-        config.max_vel = 2; // In FPS
+        config.max_acc = 10; // Acceleration In FPS
+        config.max_vel = 20; // In FPS
         config.wheelDiaInch = 4;
-        config.scaleFactor = 0.15;
+        config.scaleFactor = 0.1;
         config.encoderTicksPerRev = 1143;
         config.robotLength = 34;
         config.robotWidth = 34;
@@ -37,7 +37,7 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
 
     /**
      * Configuation Arcs relating to Distance, Turning, and Speed
-     * DistanceScaling- Robot will run 3 feet, adjust scaling to get exact distance
+     * DistanceScaling- Robot will run 5 feet, adjust scaling to get exact distance
      * TurnScaling- Robot will run 3 feet, then turn and go 3 feet to the left, adjusting heading loop to get exact angle
      * SpeedScaling- Robot will run 3 feet and 3 feet to the left at 3 FPS. Run another 3 feet forward and 3 feet to the left.
      * End 6 feet away from starting position facing opposite direction  
@@ -46,7 +46,8 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
     private List<OttoPath> getConfigArcs() {
         OttoPath distanceScaling = new OttoPath(config, "DistanceScaling");
         distanceScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));
-        distanceScaling.addWaypointRelative(3, 0, 0, 0, 3);
+        distanceScaling.addWaypointRelative(5, 0, 0, 0, 3);
+        
 
         OttoPath turnScaling = new OttoPath(config, "TurnScaling");
         turnScaling.addWaypoint(new Waypoint(2, 13.5, 0, 0, 0));

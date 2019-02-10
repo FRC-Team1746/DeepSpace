@@ -13,7 +13,7 @@ public class Lift{
 
 	ElectricalConstants eConstants;
 	Controls controls;
-	Constants constants;
+	
 
 	private VictorSPX liftLeft;
 	private WPI_TalonSRX liftRight;
@@ -28,7 +28,6 @@ public class Lift{
 	public Lift(Controls Controls) {
     controls = Controls;
 		eConstants = new ElectricalConstants();
-		constants = new Constants();
 		liftLeft = new VictorSPX(eConstants.ELEVATOR_LEFT);
 		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_RIGHT);
 		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
@@ -39,33 +38,33 @@ public class Lift{
     liftLeft.follow(liftRight);
 
     /* first choose the sensor */
-		liftRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, constants.kPIDLoopIdx,
-    constants.kTimeoutMs);
+		liftRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx,
+    Constants.kTimeoutMs);
     liftRight.setSensorPhase(false);
     liftRight.setInverted(false);
     /* Set relevant frame periods to be at least as fast as periodic rate */
-    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, constants.kTimeoutMs);
-    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, constants.kTimeoutMs);
+    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
     /* set the peak and nominal outputs */
-    liftRight.configNominalOutputForward(0, constants.kTimeoutMs);
-    liftRight.configNominalOutputReverse(0, constants.kTimeoutMs);
-    liftRight.configPeakOutputForward(1, constants.kTimeoutMs);
-    liftRight.configPeakOutputReverse(-1, constants.kTimeoutMs);
+    liftRight.configNominalOutputForward(0, Constants.kTimeoutMs);
+    liftRight.configNominalOutputReverse(0, Constants.kTimeoutMs);
+    liftRight.configPeakOutputForward(1, Constants.kTimeoutMs);
+    liftRight.configPeakOutputReverse(-1, Constants.kTimeoutMs);
     /* set closed loop gains in slot0 - see documentation */
-    liftRight.selectProfileSlot(constants.kSlotIdx, constants.kPIDLoopIdx);
-    liftRight.config_kF(0, .146, constants.kTimeoutMs);
-    liftRight.config_kP(0, 2.5, constants.kTimeoutMs);
-    liftRight.config_kI(0, 0, constants.kTimeoutMs);
-    liftRight.config_kD(0, 25, constants.kTimeoutMs);
-    liftLeft.config_kF(0, .146, constants.kTimeoutMs);
-    liftLeft.config_kP(0, 2.5, constants.kTimeoutMs);
-    liftLeft.config_kI(0, 0, constants.kTimeoutMs);
-    liftLeft.config_kD(0, 25, constants.kTimeoutMs);
+    liftRight.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
+    liftRight.config_kF(0, .146, Constants.kTimeoutMs);
+    liftRight.config_kP(0, 2.5, Constants.kTimeoutMs);
+    liftRight.config_kI(0, 0, Constants.kTimeoutMs);
+    liftRight.config_kD(0, 25, Constants.kTimeoutMs);
+    liftLeft.config_kF(0, .146, Constants.kTimeoutMs);
+    liftLeft.config_kP(0, 2.5, Constants.kTimeoutMs);
+    liftLeft.config_kI(0, 0, Constants.kTimeoutMs);
+    liftLeft.config_kD(0, 25, Constants.kTimeoutMs);
     /* set acceleration and vcruise velocity - see documentation */
-    liftRight.configMotionCruiseVelocity(500, constants.kTimeoutMs);
-    liftRight.configMotionAcceleration(5000, constants.kTimeoutMs);
+    liftRight.configMotionCruiseVelocity(500, Constants.kTimeoutMs);
+    liftRight.configMotionAcceleration(5000, Constants.kTimeoutMs);
     /* zero the sensor */
-    liftRight.setSelectedSensorPosition(0, constants.kPIDLoopIdx, constants.kTimeoutMs);
+    liftRight.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     liftRight.configOpenloopRamp(0, 0);
     liftRight.configClosedloopRamp(0, 0);
 

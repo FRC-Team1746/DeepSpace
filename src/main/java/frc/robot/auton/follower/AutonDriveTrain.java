@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import frc.robot.constants.ElectricalConstants;;
+import frc.robot.constants.ElectricalConstants;
 
 public class AutonDriveTrain implements FollowsArc {
     private ElectricalConstants eConstants;
@@ -39,8 +39,9 @@ public class AutonDriveTrain implements FollowsArc {
         rightFollowerB.setInverted(InvertType.FollowMaster);  
 
         /* PID */
-        rightTalon.config_kP(0, 0.08);
-        rightTalon.config_kP(1, 0.25);
+        rightTalon.config_kP(0, 0.07);
+        rightTalon.config_kF(0, 0.314); // F-gain = (100% X 1023) / 3257 F-gain = 0.314
+        rightTalon.config_kP(1, 0.07);
 
         /* speed up polling so trajectory points can be loaded faster */
         leftTalon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
