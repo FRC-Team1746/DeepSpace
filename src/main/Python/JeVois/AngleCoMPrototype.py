@@ -28,14 +28,14 @@ class ShapeDetector:
         return shape
 
 def calculateTargetOffsetX(inputImage, Moment1, Moment2, Threshold):
-    height, width = inputImage.shape;
-    imCenterX = width / 2;
-    cX1 = int((Moment1["m10"] / Moment1["m00"]) * 1.0);
-    cX2 = int((Moment2["m10"] / Moment2["m00"]) * 1.0);
-    cY1 = int((Moment1["m01"] / Moment1["m00"]) * 1.0);
-    cY2 = int((Moment2["m01"] / Moment2["m00"]) * 1.0);
+    height, width = inputImage.shape
+    imCenterX = width / 2
+    cX1 = int((Moment1["m10"] / Moment1["m00"]) * 1.0)
+    cX2 = int((Moment2["m10"] / Moment2["m00"]) * 1.0)
+    cY1 = int((Moment1["m01"] / Moment1["m00"]) * 1.0)
+    cY2 = int((Moment2["m01"] / Moment2["m00"]) * 1.0)
 
-    CenterOfTarget = (cX1 + cX2) / 2;
+    CenterOfTarget = (cX1 + cX2) / 2
     TargetPixelOffsetX = CenterOfTarget - imCenterX;
     if(TargetPixelOffsetX < -Threshold):
         direction = "Left";
@@ -44,6 +44,33 @@ def calculateTargetOffsetX(inputImage, Moment1, Moment2, Threshold):
     else:
         direction = "Center";
     return direction, TargetPixelOffsetX
+
+def calcDistance(point1, point2):
+    x2 = point2[0]
+    x1 = point1[0]
+    y2 = point2[1]
+    y1 = point1[1]
+
+    distance = math.sqrt((x2-x1)**(2) - (y2-y1**(2)))
+    return distance
+
+
+def findRotationAngle(rect):
+    box = cv2.boxPoints(rect)
+    
+    BottomLeft = box[0]
+    TopLeft = box[1]
+    TopRight = box[2]
+    BottomRight = box[3]
+    print("bottomleft: "+ str(BottomLeft))
+    h = calcDistance(TopLeft, BottomLeft)
+    Vertical = [TopLeft[0], BottomLeft[1]]
+    x = BottomLeft[0] - Vertical[0]
+    #print("h: " + str(h))
+    #print("x: " + str(x))
+    rTheta = math.asin(float(x/h))
+    theta = math.degrees(rTheta)
+    return theta
 
 
 ############################
@@ -89,7 +116,9 @@ sd = ShapeDetector()
 centers = []
 Moments = []
 points = []
+rectangles = []
 counter = 0
+print("num rects: "+ str(len(contours)))
 for c in contours:
     if (contours != None) and (len(contours) > 0):
         cnt_area = cv2.contourArea(c)
@@ -100,7 +129,7 @@ for c in contours:
         #if (cv2.isContourConvex(p) != False) and (len(p) == 4) and (cv2.contourArea(p) >= area): #p=3 triangle,4 rect,>=5 circle
         M = cv2.moments(c)
         rect = cv2.minAreaRect(c)
-        box = cv2.boxPoints(rect)
+        
         
         #print("Box: ")
         #print(box)
@@ -108,12 +137,17 @@ for c in contours:
         #for p in points:
         #    print("(" + str(p.x+ "," + str(p.y) + ")"))
         #angle between horizontal and top left
+        #target defined as rectangles in 15, 75 angle order
         angle = rect[2]
+        
+        #target defined as rectangles in 15, 75 angle order
         Moments.append(M)
         cX = int((M["m10"] / M["m00"]) * 1.0)
         cY = int((M["m01"] / M["m00"])* 1.0)
         centers.append((cX, cY))
         shape = sd.detect(c)
+        if(shape == "rectangle"):
+            rectangles.append(c)
         c = c.astype("float")
         c = c.astype("int")
         cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
@@ -123,7 +157,7 @@ for c in contours:
              #   squares.append(p)
         #else:
          #   badPolys.append(p)
-
+rects = cv2.minAreaRect(rectangles[0])
 offsetDirection,offsetMagnitude = calculateTargetOffsetX(binImage, Moments[0], Moments[1], Pxthreshold)
 height, width, channels = img.shape
 imCenterX = width / 2
@@ -166,29 +200,5 @@ def preProcess(inp):
 def findContours(inputImage):
     im2, cont, hier = cv2.findContours(inputImage, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_TC89_KCOS)
     return im2, cont, hier;
-
-def calcDistance(point1, point2):
-    x2 = point2[0]
-    x1 = point1[0]
-    y2 = point2[1]
-    y1 = point1[1]
-
-    distance = math.sqrt((x2-x1)**(2) - (y2-y1**(2)))
-    return distance
-
-def findRotationAngle(rect):
-    box = cv2.boxPoints(rect)
-    
-    BottomLeft = box[0]
-    TopLeft = box[1]
-    TopRight = box[2]
-    BottomRight = box[3]
-
-    h = calcDistance(TopLeft, BottomLeft)
-    Vertical = [TopLeft[0], BottomLeft[1]]
-    x = BottomLeft[0] - Vertical[0]
-    rTheta = math.asin(float(h/x))
-    theta = math.degrees(rTheta)
-    return theta
 
 
