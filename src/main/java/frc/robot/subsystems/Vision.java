@@ -17,26 +17,54 @@ public class Vision {
   double tvert;        // Vertical sidelength of the rough bounding box (0 - 320 pixels)
   double getpipe;      // True active pipeline index of the camera (0 .. 9)
   double camtran;      // Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
+      //these are used for generating drive and steer from vision
+  double LimelightDriveCommand;
+  double LimelightDriveMax = 0.3;
+  double LimelightSteerCommand;
+  double Drive_K = 0.1;   // this needs to be tuned to robot
+  double Steer_K = 0.005;   // this needs to be tuned to robot
+  double DesiredTargetArea = 23;  // this needs to be tuned to robot
+
   SerialPort jevois;
   
   // int baudRate = 9600;
   int baudRate = 115200;
   int dataBits = 8;
 
-  public Vision(){
-    jevois = new SerialPort(baudRate, SerialPort.Port.kUSB1);
+  // public Vision(){
+  //   jevois = new SerialPort(baudRate, SerialPort.Port.kUSB1);
 
+  // }
+
+  // public void track(){
+  //   jevois.enableTermination();
+  //   System.out.println(jevois.readString());
+  //   // System.out.println("Tracking...");
+  //   if (jevois.getBytesReceived() > 0) {
+  //     System.out.println("There are: " + jevois.getBytesReceived() + " availible to read");   
+  //   } else {
+  //     System.out.println("Number of bytes: " + jevois.getBytesReceived());
+  //   }
+  // }
+  
+  public double GenerateDrive() {
+    if (!isTargetValid()){
+      LimelightDriveCommand = 0.0;
+    } else if ((Math.sqrt(DesiredTargetArea) - Math.sqrt(getTargetArea())) * Drive_K > LimelightDriveMax){
+      LimelightDriveCommand = LimelightDriveMax;
+    } else {
+      LimelightDriveCommand = (Math.sqrt(DesiredTargetArea) - Math.sqrt(getTargetArea())) * Drive_K;
+    }
+    return LimelightDriveCommand;
   }
 
-  public void track(){
-    jevois.enableTermination();
-    System.out.println(jevois.readString());
-    // System.out.println("Tracking...");
-    if (jevois.getBytesReceived() > 0) {
-      System.out.println("There are: " + jevois.getBytesReceived() + " availible to read");   
+  public double GenerateSteer() {
+    if (!isTargetValid()) {
+      LimelightSteerCommand = 0.0;
     } else {
-      System.out.println("Number of bytes: " + jevois.getBytesReceived());
+      LimelightSteerCommand = getXOffset() * Steer_K;
     }
+    return LimelightSteerCommand;
   }
 
   public boolean fetchUpdate() {
@@ -58,6 +86,7 @@ public class Vision {
     }
     return true;
   }
+
 
   public boolean isTargetValid() { 
     if (validTarget > 0.5) {

@@ -37,8 +37,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    TeleopDrive.teleopArcadeDrive();
-    vision.track();
+    if (controls.driver_A_Button()) {
+      vision.fetchUpdate();
+      TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
+    } else {
+      TeleopDrive.teleopArcadeDrive();
+    }
+    // vision.setLedMode(0);
+    // vision.track();
+    // vision.fetchUpdate();
+    // System.out.println(vision.toString());
   }
 
   @Override
