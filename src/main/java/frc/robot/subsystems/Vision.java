@@ -17,13 +17,21 @@ public class Vision {
   double tvert;        // Vertical sidelength of the rough bounding box (0 - 320 pixels)
   double getpipe;      // True active pipeline index of the camera (0 .. 9)
   double camtran;      // Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
-      //these are used for generating drive and steer from vision
+      // below group is used for generating drive and steer from vision
   double LimelightDriveCommand;
-  double LimelightDriveMax = 0.3;
+  double LimelightDriveMax = 0.4;
   double LimelightSteerCommand;
-  double Drive_K = 0.1;   // this needs to be tuned to robot
-  double Steer_K = 0.005;   // this needs to be tuned to robot
-  double DesiredTargetArea = 23;  // this needs to be tuned to robot
+  double Drive_K = 0.03;  // tune. Constant for generating drive speed from vision
+  double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
+  double Steer_K = 0.01;  // tune. Constant for generating turn speed from vision
+  double Steer_D = 0;
+  double txError = 0;
+  double previoustxError = 0;
+  double deltatxError = 0;
+  double DesiredTargetArea = 14;  // this needs to be tuned to robot
+  double areaError = 0;   // just set to zero to start with 
+  double previousAreaError = 0; // same stroy as above
+  double deltaError = 0; // same story as above
 
   SerialPort jevois;
   
@@ -48,22 +56,34 @@ public class Vision {
   // }
   
   public double GenerateDrive() {
-    if (!isTargetValid()){
-      LimelightDriveCommand = 0.0;
-    } else if ((Math.sqrt(DesiredTargetArea) - Math.sqrt(getTargetArea())) * Drive_K > LimelightDriveMax){
-      LimelightDriveCommand = LimelightDriveMax;
-    } else {
-      LimelightDriveCommand = (Math.sqrt(DesiredTargetArea) - Math.sqrt(getTargetArea())) * Drive_K;
+    areaError = DesiredTargetArea - getTargetArea();
+    if (areaError != previousAreaError){
+      deltaError = areaError - previousAreaError;
     }
+    if (!isTargetValid()) {
+      LimelightDriveCommand = 0.0;
+    } else {
+      LimelightDriveCommand = (areaError * Drive_K) + (deltaError * Drive_D);
+    }
+
+    if (LimelightDriveCommand > LimelightDriveMax) {
+      LimelightDriveCommand = LimelightDriveMax;
+    }
+    previousAreaError = areaError;
     return LimelightDriveCommand;
   }
 
   public double GenerateSteer() {
+    txError = getXOffset();                              // I know that this may be slightly redundent but fight me!
+    if (txError != previoustxError){
+      deltatxError = txError - previoustxError;
+    }
     if (!isTargetValid()) {
       LimelightSteerCommand = 0.0;
     } else {
-      LimelightSteerCommand = getXOffset() * Steer_K;
+      LimelightSteerCommand = (getXOffset() * Steer_K) + (deltatxError * Steer_D);
     }
+    previoustxError = txError;
     return LimelightSteerCommand;
   }
 
