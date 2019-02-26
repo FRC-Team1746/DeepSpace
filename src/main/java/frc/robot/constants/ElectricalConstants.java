@@ -19,9 +19,9 @@ public class ElectricalConstants {
 	public int ELEVATOR_LEFT = 30;
 	public int ELEVATOR_RIGHT = 31;
 
-	public int BALL_LEFT = 40;
-	public int BALL_RIGHT = 41;
-	public int OVER_BUMPER = 42;
+	public int OVER_BUMPER = 40;
+	public int BALL_LEFT = 41;
+	public int BALL_RIGHT = 42;
 	
 	// MoreBoard
 	public int EMPTY1 = 10;
