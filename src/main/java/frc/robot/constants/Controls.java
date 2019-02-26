@@ -7,6 +7,8 @@ public class Controls {
 	ElectricalConstants electricalConstants = new ElectricalConstants();
 	
 	double x_axisSquared;
+	double x_axis;
+	double y_axis;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
 	
@@ -18,17 +20,33 @@ public class Controls {
 
 	//AXIS
 	public double driver_XL_Axis(){
-		x_axisSquared = xbox_driver.getRawAxis(0);
-		x_axisSquared = x_axisSquared * x_axisSquared;
-		if (xbox_driver.getRawAxis(0) < 0) {
-			x_axisSquared = x_axisSquared * -1;
+		x_axis = xbox_driver.getRawAxis(0);
+		if(Math.abs(x_axis) < .1){
+			x_axis = 0;
+			return x_axis;
+		}else{
+			x_axisSquared = x_axis * x_axis;
+			if (x_axis < 0) {
+				x_axisSquared = x_axisSquared * -1;
+			}
+			return x_axisSquared;
 		}
-		return x_axisSquared;
 		//return xbox_driver.getRawAxis(0);
 	}
 
 	public double driver_YL_Axis(){
-		return xbox_driver.getRawAxis(1);
+		y_axis = xbox_driver.getRawAxis(1);
+		if(Math.abs(y_axis) < .1){
+			y_axis = 0;
+		}
+		return y_axis;
+		// else{
+		// 	x_axisSquared = x_axis * x_axis;
+		// 	if (x_axis < 0) {
+		// 		x_axisSquared = x_axisSquared * -1;
+		// 	}
+		// 	return x_axisSquared;
+		// }
 	}
 
 	public double driver_XR_Axis(){

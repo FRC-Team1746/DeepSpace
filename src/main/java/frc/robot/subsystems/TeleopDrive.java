@@ -38,8 +38,8 @@ public class TeleopDrive {
 
 
     public void teleopArcadeDrive(){
-        m_RightMaster.set(m_controls.driver_YL_Axis() - m_controls.driver_XL_Axis());
-        m_LeftMaster.set(m_controls.driver_YL_Axis() + m_controls.driver_XL_Axis());
+        m_RightMaster.set(-m_controls.driver_YL_Axis() - m_controls.driver_XL_Axis());
+        m_LeftMaster.set(-m_controls.driver_YL_Axis() + m_controls.driver_XL_Axis());
         setRampRate(0.0);	
     }
 
