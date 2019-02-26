@@ -87,6 +87,10 @@ public class Vision {
     return LimelightSteerCommand;
   }
 
+  // public double GerateSkewCorrection() {
+
+  // }
+
   public boolean fetchUpdate() {
     try {
       validTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
