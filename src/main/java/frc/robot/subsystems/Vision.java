@@ -25,13 +25,17 @@ public class Vision {
   double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
   double Steer_K = 0.01;  // tune. Constant for generating turn speed from vision
   double Steer_D = 0;
+  double Skew_P = 0.0;
   double txError = 0;
+  double skewError = 0;
+  double prevSkew = 0;
   double previoustxError = 0;
   double deltatxError = 0;
   double DesiredTargetArea = 14;  // this needs to be tuned to robot
   double areaError = 0;   // just set to zero to start with 
   double previousAreaError = 0; // same stroy as above
   double deltaError = 0; // same story as above
+  double desiredSkew = 0;
 
   SerialPort jevois;
   
@@ -87,9 +91,20 @@ public class Vision {
     return LimelightSteerCommand;
   }
 
-  // public double GerateSkewCorrection() {
-
-  // }
+   public double GenerateSkewCorrection() 
+   {
+    double skewCorrection = 0;
+    skewError = desiredSkew - getSkew();
+    if(!isTargetValid())
+    {
+      skewCorrection = 0.0;
+    }
+    else
+    {
+      skewCorrection = (skewError) * Skew_P;
+    }
+    return skewCorrection;
+   }
 
   public boolean fetchUpdate() {
     try {
@@ -133,7 +148,15 @@ public class Vision {
   }
 
   public double getSkew() {
-    return skew;
+    //return skew;
+    /*if(skew < 0)
+    {
+      return -90.0 - skew;
+    }
+    else return skew;
+    */
+    //return 1.0 / Math.sin( Math.toRadians(-90) - Math.toRadians(skew));
+    return 100.0*Math.cos(Math.toRadians(45) + Math.toRadians(skew));
   }
 
   public double getPipeLatency() {

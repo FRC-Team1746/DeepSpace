@@ -37,12 +37,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    vision.fetchUpdate();
     if (controls.driver_A_Button()) {
-      vision.fetchUpdate();
+      
       TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
     } else {
       TeleopDrive.teleopArcadeDrive();
     }
+    System.out.print("Skew:");
+    System.out.println(vision.getSkew());
     // vision.setLedMode(0);
     // vision.track();
     // vision.fetchUpdate();
