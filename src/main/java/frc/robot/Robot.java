@@ -6,15 +6,15 @@ public class Robot extends TimedRobot {
   
   Controls controls;
   TeleopDrive teleopDrive;
-  // Lift lift;
-  // Intake intake;
+  Lift lift;
+  Intake intake;
 
   @Override
   public void robotInit() {
     controls = new Controls();
     teleopDrive = new TeleopDrive(controls);
-    // lift = new Lift(controls);
-    // intake = new Intake(controls);
+    lift = new Lift(controls);
+    intake = new Intake(controls);
   }
 
 
@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     teleopDrive.teleopArcadeDrive();
-    // lift.update();
-    // intake.update();
+    lift.update();
+    intake.update();
   }
 
   @Override
