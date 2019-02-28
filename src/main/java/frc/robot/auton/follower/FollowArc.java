@@ -1,5 +1,10 @@
 package frc.robot.auton.follower;
 
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -13,6 +18,7 @@ public class FollowArc {
     private int kPrimaryPIDSlot = 0;
     private int kAuxPIDSlot = 1;
     public int i = 0;
+    public int j = 0;
     BufferedTrajectoryPointStream bufferedStream = new BufferedTrajectoryPointStream();
     private class BufferLoader {
         private boolean flipped;
@@ -61,6 +67,9 @@ public class FollowArc {
     private TalonSRX rightTalon;
     private TalonSRX leftTalon;
     private PigeonIMU gyro;
+    private ArrayList<Double> errList = new ArrayList<Double>();
+    StringBuilder sb = new StringBuilder();
+    private double err;
     private SrxTrajectory trajectoryToFollow;
     private boolean flipRobot;
 
@@ -85,7 +94,6 @@ public class FollowArc {
         setUpGyro(gyro);
 
         leftTalon.follow(rightTalon, FollowerType.AuxOutput1);
-
         buffer = new BufferLoader(trajectoryToFollow.centerProfile, trajectoryToFollow.flipped, 
         drivetrain.getDistance(), flipRobot);
         buffer.init();
@@ -93,37 +101,51 @@ public class FollowArc {
     }
 
     public void run() {
-        double acVel = Math.abs(rightTalon.getSelectedSensorVelocity()) + 
-        leftTalon.getSelectedSensorVelocity()*0.5;
-        double expeVel = trajectoryToFollow.centerProfile.points[i][1];
-        double err = acVel - expeVel;
-
-        String line = "";
-        line += "  ActualVelocity: " + acVel + "\n";
-        line += "  WantedPositionCount: " + expeVel + "\n";
-        line += "  Error: " + err + "\n";
-        line += "  ------------------------------------- ";
-        System.out.println(line);
-
-        i++;
-
+        if(i < trajectoryToFollow.centerProfile.numPoints) {
+            StringBuilder sb = new StringBuilder();
+            double acVel = Math.abs((rightTalon.getSelectedSensorPosition()) + 
+            leftTalon.getSelectedSensorPosition())*0.5;
+            double expeVel = rightTalon.getActiveTrajectoryPosition();
+            double err1 = acVel - expeVel;
+            errList.add(err1);
+            String line = "";
+            line += i+','+err1 + "\n";
+            sb.append(line);
+            System.out.println(line);
+            i++;
+        } else {
+            try (PrintWriter pw = new PrintWriter(new File("C:\\Users\\ayush\\Desktop\\FRC\\error.csv"))) {
+                System.out.println("error csv created");
+                pw.write(sb.toString());
+            } catch (FileNotFoundException e) {
+                    System.out.println(e.getMessage());
+            }
+        }
         if(rightTalon.isMotionProfileFinished()) {
             end();
         }
     }
 
     public void end() {
-        System.out.println("TAKE A STEP BACK!!!!!!!!");
         resetTalon(rightTalon, ControlMode.PercentOutput, 0);
         resetTalon(leftTalon, ControlMode.PercentOutput, 0);
+        if(j==0) {
+            for(double e : errList) {
+                err += e;
+            }
+            j++;
+        }
+        double eAvg = err / errList.size();
+        System.out.println("AVERAGE ERROR: " + eAvg);
     }
 
     private void setUpTalon(TalonSRX talon) {
         talon.clearMotionProfileTrajectories();
         talon.changeMotionControlFramePeriod(5);
         talon.clearMotionProfileHasUnderrun(10);
-        talon.setSelectedSensorPosition(0);
-        talon.getSensorCollection().setQuadraturePosition(0, 10);
+        talon.setSelectedSensorPosition(0, 0, 100);
+        talon.setSelectedSensorPosition(0, 1, 100);
+        talon.getSensorCollection().setQuadraturePosition(0, 100);
     }
 
     private void setUpGyro(PigeonIMU gyro) {

@@ -39,9 +39,9 @@ public class AutonDriveTrain implements FollowsArc {
         rightFollowerB.setInverted(InvertType.FollowMaster);  
 
         /* PID */
-        rightTalon.config_kP(0, 0.07);
-        rightTalon.config_kF(0, 0.314); // F-gain = (100% X 1023) / 3257 F-gain = 0.314
-        rightTalon.config_kP(1, 0.07);
+        rightTalon.config_kP(0, 10);
+        rightTalon.config_kF(0, 0.1603); // F-gain = (100% X 1023) / 6381 F-gain = 0.1603
+        rightTalon.config_kP(1, 10);
 
         /* speed up polling so trajectory points can be loaded faster */
         leftTalon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
