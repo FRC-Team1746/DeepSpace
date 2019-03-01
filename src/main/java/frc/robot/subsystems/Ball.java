@@ -43,7 +43,7 @@ public class Ball{
   public void intakeIn(Double speed){
     ballLeft.set(ControlMode.PercentOutput, speed/3*4);
     ballRight.set(ControlMode.PercentOutput, -speed/3*4);
-    overBumper.set(ControlMode.PercentOutput, speed/3*4);
+    overBumper.set(speed/3*4);
   }
 
   public void intakeOut(Double speed){

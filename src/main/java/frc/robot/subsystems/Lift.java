@@ -21,25 +21,18 @@ public class Lift{
 	private boolean moving;
 
 	private DigitalInput liftBottom;
-  private DigitalInput liftTop;
   private DigitalInput hatchs;
   private DigitalInput balls;
 
   public Lift(Controls Controls) 
   {
-    //#region Object Declaration for associated electronic components
-    controls = Controls;
-		eConstants = new ElectricalConstants();
+    
+		eConstants =  new ElectricalConstants();
 		constants = new Constants();
-		liftLeft = new VictorSPX(eConstants.ELEVATOR_LEFT);
-		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_RIGHT);
+		liftLeft = new VictorSPX(eConstants.ELEVATOR_TALON);
+		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_VICTOR);
 		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
-    liftTop = new DigitalInput(eConstants.LIFT_TOP);
-    hatchs = new DigitalInput(eConstants.HATCH);
-    balls = new DigitalInput(eConstants.BALLS);
-    //#endregion
 
-    //#region Configuring Motor Controllers for feedback control
     liftLeft.follow(liftRight);
     /* first choose the sensor */
 		liftRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, constants.kPIDLoopIdx,
@@ -102,11 +95,6 @@ public class Lift{
   public void update()
   {
     if(liftBottom.get() && !controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_B_Button())
-    {
-      liftRight.set(0);
-    }
-
-    else if(liftTop.get())
     {
       liftRight.set(0);
     }
@@ -186,6 +174,10 @@ public class Lift{
   public double getLiftPosition() 
   {
 		return liftRight.getSelectedSensorPosition(Constants.kPIDLoopIdx);
+  }
+
+  public boolean getSensor(){
+    return liftBottom.get();
   }
   
 

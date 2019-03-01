@@ -8,6 +8,8 @@ public class Robot extends TimedRobot {
   TeleopDrive teleopDrive;
   Lift lift;
   Intake intake;
+  Ball ball;
+  Hatch hatch;
 
   @Override
   public void robotInit() {
@@ -15,6 +17,8 @@ public class Robot extends TimedRobot {
     teleopDrive = new TeleopDrive(controls);
     lift = new Lift(controls);
     intake = new Intake(controls);
+    ball = new Ball();
+    hatch = new Hatch();
   }
 
 
@@ -41,6 +45,9 @@ public class Robot extends TimedRobot {
     teleopDrive.teleopArcadeDrive();
     lift.update();
     intake.update();
+    System.out.println("Ball Sensor: " + ball.getSensor());
+    System.out.println("Hatch Sensor: " + hatch.getSensor());
+    System.out.println("Lift Sensor: " + lift.getSensor());
   }
 
   @Override
