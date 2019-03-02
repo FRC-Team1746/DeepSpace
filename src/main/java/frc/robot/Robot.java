@@ -5,7 +5,7 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   
   Controls controls;
-  TeleopDrive teleopDrive;
+  TeleopDrive TeleopDrive;
   Lift lift;
   Intake intake;
   Ball ball;
@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     controls = new Controls();
-    teleopDrive = new TeleopDrive(controls);
+    TeleopDrive = new TeleopDrive(controls);
     lift = new Lift(controls);
     intake = new Intake(controls);
     ball = new Ball();
@@ -35,14 +35,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-		teleopDrive.setRampRate(.5);
-		teleopDrive.setBrakeMode(false);
+		TeleopDrive.setRampRate(.5);
+		TeleopDrive.setBrakeMode(false);
 
   }
 
   @Override
   public void teleopPeriodic() {
-    teleopDrive.teleopArcadeDrive();
+    TeleopDrive.teleopArcadeDrive();
     lift.update();
     intake.update();
     System.out.println("Ball Sensor: " + ball.getSensor());
