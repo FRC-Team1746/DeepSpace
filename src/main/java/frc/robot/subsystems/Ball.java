@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.constants.ElectricalConstants;
 
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -15,7 +15,7 @@ public class Ball{
   private VictorSPX ballRight;
   private VictorSPX ballLeft;
   private WPI_TalonSRX overBumper;
-  private DoubleSolenoid ballenoid1;
+  private Solenoid ballenoid;
 
 
   private DigitalInput balls;
@@ -26,18 +26,17 @@ public class Ball{
     ballLeft = new VictorSPX(eConstants.BALL_LEFT);
     overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
     balls = new DigitalInput(eConstants.BALLS);
-    ballenoid1 = new DoubleSolenoid(eConstants.BALLENOID11, eConstants.BALLENOID12 );
+    ballenoid = new Solenoid(eConstants.BALLENOID);
 
-    ballenoid1.set(DoubleSolenoid.Value.kOff);
-
+    ballenoid.set(true);;
   }
 
   public void armUp(){
-    ballenoid1.set(DoubleSolenoid.Value.kForward);
+    ballenoid.set(true);
   }
 
   public void armDown(){
-    ballenoid1.set(DoubleSolenoid.Value.kReverse);
+    ballenoid.set(false);
   }
 
   public void intakeIn(Double speed){

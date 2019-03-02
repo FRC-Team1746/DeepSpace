@@ -18,12 +18,12 @@ public class Intake{
   boolean rivet;
   //#endregion
   
-  public Intake(Controls Controls)
+  public Intake(Controls Controls, Lift Lift, Ball Ball, Hatch Hatch)
   {
     controls = Controls;
-    hatch = new Hatch();
-    ball = new Ball();
-    lift = new Lift(controls);
+    lift = Lift;
+    hatch = Hatch;
+    ball = Ball;
   }
 
   public void update(){

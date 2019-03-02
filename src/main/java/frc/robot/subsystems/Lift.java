@@ -29,13 +29,13 @@ public class Lift{
     
 		eConstants =  new ElectricalConstants();
 		constants = new Constants();
-		liftLeft = new VictorSPX(eConstants.ELEVATOR_TALON);
-		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_VICTOR);
+		liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
+		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON);
 		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
-		liftRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, constants.kPIDLoopIdx,
+		liftRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, constants.kPIDLoopIdx,
     constants.kTimeoutMs);
     liftRight.setSensorPhase(false);
     liftRight.setInverted(false);
@@ -53,10 +53,10 @@ public class Lift{
     liftRight.config_kP(0, 2.5, constants.kTimeoutMs);
     liftRight.config_kI(0, 0, constants.kTimeoutMs);
     liftRight.config_kD(0, 25, constants.kTimeoutMs);
-    liftLeft.config_kF(0, .146, constants.kTimeoutMs);
-    liftLeft.config_kP(0, 2.5, constants.kTimeoutMs);
-    liftLeft.config_kI(0, 0, constants.kTimeoutMs);
-    liftLeft.config_kD(0, 25, constants.kTimeoutMs);
+    // liftLeft.config_kF(0, .146, constants.kTimeoutMs);
+    // liftLeft.config_kP(0, 2.5, constants.kTimeoutMs);
+    // liftLeft.config_kI(0, 0, constants.kTimeoutMs);
+    // liftLeft.config_kD(0, 25, constants.kTimeoutMs);
     /* set acceleration and vcruise velocity - see documentation */
     liftRight.configMotionCruiseVelocity(500, constants.kTimeoutMs);
     liftRight.configMotionAcceleration(5000, constants.kTimeoutMs);

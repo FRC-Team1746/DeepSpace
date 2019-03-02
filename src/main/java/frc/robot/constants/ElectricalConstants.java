@@ -37,8 +37,8 @@ public class ElectricalConstants {
 	
 	// DIOs
 	public int LIFT_BOTTOM = 0;
-	public int LIFT_TOP = 1;
-	public int HATCH = 2; 
+	public int HATCH1 = 1;
+	public int HATCH2 = 2; 
 	public int BALLS = 3;
 	public int DIO4 = 4;
 	public int DIO5 = 5;
@@ -50,17 +50,17 @@ public class ElectricalConstants {
 	//ANALOG
 	
 	//PCM
-	public int HATCHENOID11 = 0;
-	public int HATCHENOID12 = 1;
-	public int HATCHENOID21 = 2;
-	public int HATCHENOID22 = 3;
-	public int BALLENOID11 = 4;
-	public int BALLENOID12 = 5;
-	public int CLIMBENOID1 = 6;
-	public int CLIMBENOID2 = 7;
+	public int BALLENOID = 0; 
+	public int PCM1 = 1;
+	public int PCM2 = 2;
+	public int PCM3 = 3;
+	public int HATCHENOID21 = 4; //lefttopup(out)
+	public int HATCHENOID22 = 5; //leftbottomdown(in)
+	public int HATCHENOID11 = 6; //righttopin
+	public int HATCHENOID12 = 7; //rightbottomout
 	
 	//Relay
-	public int relay0 = 0;
+	public int POWER = 0;
 	public int relay1 = 1;
 	public int relay2 = 2;
 	public int relay3 = 3;

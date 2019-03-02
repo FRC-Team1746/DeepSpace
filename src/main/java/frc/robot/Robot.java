@@ -7,27 +7,23 @@ public class Robot extends TimedRobot {
   
   Controls controls;
   TeleopDrive TeleopDrive;
-<<<<<<< HEAD
   Vision vision;
-=======
   Lift lift;
   Intake intake;
   Ball ball;
   Hatch hatch;
->>>>>>> TeleopDrive
+  Pneumatics pneumatics;
 
   @Override
   public void robotInit() {
     controls = new Controls();
     TeleopDrive = new TeleopDrive(controls);
-<<<<<<< HEAD
-    vision = new Vision();
-=======
     lift = new Lift(controls);
-    intake = new Intake(controls);
+    intake = new Intake(controls, lift, ball, hatch);
     ball = new Ball();
     hatch = new Hatch();
->>>>>>> TeleopDrive
+    vision = new Vision();
+    pneumatics = new Pneumatics();
   }
 
 
@@ -51,9 +47,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-<<<<<<< HEAD
+    TeleopDrive.teleopArcadeDrive();
+    lift.update();
+    intake.update();
+    pneumatics.update();
+    System.out.println("Ball Sensor: " + ball.getSensor());
+    System.out.println("Hatch Sensor 1: " + hatch.getSensor1());
+    System.out.println("Hatch Sensor 1: " + hatch.getSensor2());
+    System.out.println("Lift Sensor: " + lift.getSensor());
+
+
     vision.fetchUpdate();
-    if (controls.driver_X_Button()) {
+    if (controls.driver_B_Button()) {
       
       TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
     } else {
@@ -65,14 +70,13 @@ public class Robot extends TimedRobot {
     // vision.track();
     // vision.fetchUpdate();
     // System.out.println(vision.toString());
-=======
-    TeleopDrive.teleopArcadeDrive();
-    lift.update();
-    intake.update();
-    System.out.println("Ball Sensor: " + ball.getSensor());
-    System.out.println("Hatch Sensor: " + hatch.getSensor());
+  }
+
+  public void updateLog(){
+    // System.out.println("Ball Sensor: " + ball.getSensor());
+    // System.out.println("Hatch Sensor 1: " + hatch.getSensor1());
+    // System.out.println("Hatch Sensor 1: " + hatch.getSensor2());
     System.out.println("Lift Sensor: " + lift.getSensor());
->>>>>>> TeleopDrive
   }
 
   @Override
