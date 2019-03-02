@@ -16,11 +16,12 @@ public class ElectricalConstants {
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_A = 11;
 	public int MOTOR_DRIVE_RIGHT_FOLLOWER_B = 12;
 
-	public int ELEVATOR_LEFT = 30;
-	public int ELEVATOR_RIGHT = 31;
+	public int ELEVATOR_TALON = 30;
+	public int ELEVATOR_VICTOR = 31;
 
-	public int BALL_LEFT = 40;
-	public int BALL_RIGHT = 41;
+	public int OVER_BUMPER = 40;
+	public int BALL_LEFT = 41;
+	public int BALL_RIGHT = 42;
 	
 	// MoreBoard
 	public int EMPTY1 = 10;

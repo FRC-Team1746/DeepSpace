@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     vision.fetchUpdate();
-    if (controls.driver_A_Button()) {
+    if (controls.driver_X_Button()) {
       
       TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
     } else {
