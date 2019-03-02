@@ -1,8 +1,8 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.auton.arcs.DistanceScalingArc;
-import frc.robot.auton.arcs.TurnScalingArc;
-import frc.robot.auton.arcs.SpeedScalingArc;
+// import frc.robot.auton.arcs.DistanceScalingArc;
+// import frc.robot.auton.arcs.TurnScalingArc;
+// import frc.robot.auton.arcs.SpeedScalingArc;
 import frc.robot.auton.follower.AutonDriveTrain;
 import frc.robot.auton.follower.FollowArc;
 import frc.robot.constants.Controls;
@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    auton = new FollowArc(new AutonDriveTrain(), new DistanceScalingArc());
+    // auton = new FollowArc(new AutonDriveTrain(), new DistanceScalingArc());
     auton.init();
   }
 
