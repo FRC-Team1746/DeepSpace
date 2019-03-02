@@ -7,13 +7,27 @@ public class Robot extends TimedRobot {
   
   Controls controls;
   TeleopDrive TeleopDrive;
+<<<<<<< HEAD
   Vision vision;
+=======
+  Lift lift;
+  Intake intake;
+  Ball ball;
+  Hatch hatch;
+>>>>>>> TeleopDrive
 
   @Override
   public void robotInit() {
     controls = new Controls();
     TeleopDrive = new TeleopDrive(controls);
+<<<<<<< HEAD
     vision = new Vision();
+=======
+    lift = new Lift(controls);
+    intake = new Intake(controls);
+    ball = new Ball();
+    hatch = new Hatch();
+>>>>>>> TeleopDrive
   }
 
 
@@ -37,6 +51,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+<<<<<<< HEAD
     vision.fetchUpdate();
     if (controls.driver_X_Button()) {
       
@@ -50,6 +65,14 @@ public class Robot extends TimedRobot {
     // vision.track();
     // vision.fetchUpdate();
     // System.out.println(vision.toString());
+=======
+    TeleopDrive.teleopArcadeDrive();
+    lift.update();
+    intake.update();
+    System.out.println("Ball Sensor: " + ball.getSensor());
+    System.out.println("Hatch Sensor: " + hatch.getSensor());
+    System.out.println("Lift Sensor: " + lift.getSensor());
+>>>>>>> TeleopDrive
   }
 
   @Override
