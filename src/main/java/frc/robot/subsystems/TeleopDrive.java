@@ -38,14 +38,15 @@ public class TeleopDrive {
 
 
     public void teleopArcadeDrive(){
-        m_RightMaster.set(-m_controls.driver_YL_Axis() - m_controls.driver_XL_Axis());
-        m_LeftMaster.set(-m_controls.driver_YL_Axis() + m_controls.driver_XL_Axis());
-        setRampRate(0.0);	
+        m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*7
+        ));
+        m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*7));
+        // setRampRate(0.0);	
     }
 
     public void setDriveAndSteer(double driveCmd, double steerCmd) {
-        m_RightMaster.set(driveCmd - steerCmd);
-        m_LeftMaster.set(driveCmd + steerCmd);
+        m_RightMaster.set(-driveCmd - steerCmd);
+        m_LeftMaster.set(-driveCmd + steerCmd);
     }
 
     public void setRampRate(double rate){
@@ -61,6 +62,30 @@ public class TeleopDrive {
         }else{
             m_LeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
             m_RightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+        }
+    }
+
+    public void Test(int Ta)
+    {
+        //System.out.println("Encoder: ");
+        //System.out.println(m_RightMaster.getSelectedSensorPosition());
+        switch(Ta)
+        {
+            case 1:
+                m_RightMaster.set(-0.5);
+                break;
+            case 2:
+                m_RightFollowerA.set(-0.25);
+                break;
+            case 3:
+                m_RightFollowerB.set(-0.25);
+                break;
+            default:
+                m_RightMaster.set(0);
+                m_RightFollowerA.set(0);
+                m_RightFollowerB.set(0);
+            break;
+
         }
     }
 }

@@ -17,8 +17,9 @@ public class Pneumatics{
   }
 
   public void update(){
-    if(sensor.getPressureSwitchValue()){
-      power.set(Value.kOn);
+    // System.out.println(sensor.getPressureSwitchValue());
+    if(!sensor.getPressureSwitchValue()){
+      power.set(Value.kForward);
     }
     else{
       power.set(Value.kOff);

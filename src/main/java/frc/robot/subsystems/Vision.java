@@ -21,8 +21,10 @@ public class Vision {
   double LimelightDriveCommand;
   double LimelightDriveMax = 0.4;
   double LimelightSteerCommand;
-  double Drive_K = 0.03;  // tune. Constant for generating drive speed from vision
-  double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
+  // double Drive_K = 0.03;  // tune. Constant for generating drive speed from vision
+  // double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
+  double Drive_K = 0.0;  // tune. Constant for generating drive speed from vision
+  double Drive_D = 0;  
   double Steer_K = 0.01;  // tune. Constant for generating turn speed from vision
   double Steer_D = 0;
   double Skew_P = 0.0;
@@ -31,7 +33,7 @@ public class Vision {
   double prevSkew = 0;
   double previoustxError = 0;
   double deltatxError = 0;
-  double DesiredTargetArea = 14;  // this needs to be tuned to robot
+  double DesiredTargetArea = 7.67;  // this needs to be tuned to robot
   double areaError = 0;   // just set to zero to start with 
   double previousAreaError = 0; // same stroy as above
   double deltaError = 0; // same story as above
@@ -85,7 +87,7 @@ public class Vision {
     if (!isTargetValid()) {
       LimelightSteerCommand = 0.0;
     } else {
-      LimelightSteerCommand = (getXOffset() * Steer_K) + (deltatxError * Steer_D);
+      LimelightSteerCommand = (txError * Steer_K) + (deltatxError * Steer_D);
     }
     previoustxError = txError;
     return LimelightSteerCommand;

@@ -18,12 +18,11 @@ public class Hatch{
   eConstants = new ElectricalConstants();
   hatch1 = new DigitalInput(eConstants.HATCH1);
   hatch2 = new DigitalInput(eConstants.HATCH2);
-  hatchenoid1 = new DoubleSolenoid(eConstants.HATCHENOID11, eConstants.HATCHENOID12 );
-  hatchenoid2 = new DoubleSolenoid(eConstants.HATCHENOID21, eConstants.HATCHENOID22 );
+  hatchenoid1 = new DoubleSolenoid(eConstants.HATCHENOID11, eConstants.HATCHENOID12);
+  hatchenoid2 = new DoubleSolenoid(eConstants.HATCHENOID21, eConstants.HATCHENOID22);
 
   hatchenoid1.set(DoubleSolenoid.Value.kOff);
   hatchenoid2.set(DoubleSolenoid.Value.kOff);
-
  }
 
  public void pivotUp(){
@@ -35,11 +34,11 @@ public class Hatch{
  }
 
  public void rivetOut(){
-   hatchenoid1.set(DoubleSolenoid.Value.kForward);
+   hatchenoid1.set(DoubleSolenoid.Value.kReverse);
  }
 
  public void rivetIn(){
-  hatchenoid1.set(DoubleSolenoid.Value.kReverse);
+  hatchenoid1.set(DoubleSolenoid.Value.kForward);
  }
 
  public boolean getSensor(){

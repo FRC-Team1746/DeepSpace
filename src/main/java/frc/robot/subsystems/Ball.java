@@ -28,15 +28,14 @@ public class Ball{
     balls = new DigitalInput(eConstants.BALLS);
     ballenoid = new Solenoid(eConstants.BALLENOID);
 
-    ballenoid.set(true);;
   }
 
   public void armUp(){
-    ballenoid.set(true);
+    ballenoid.set(false);
   }
 
   public void armDown(){
-    ballenoid.set(false);
+    ballenoid.set(true);
   }
 
   public void intakeIn(Double speed){

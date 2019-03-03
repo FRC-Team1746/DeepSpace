@@ -53,7 +53,7 @@ public class ElectricalConstants {
 	public int BALLENOID = 0; 
 	public int PCM1 = 1;
 	public int PCM2 = 2;
-	public int PCM3 = 3;
+	public int PCM5 = 5;
 	public int HATCHENOID21 = 4; //lefttopup(out)
 	public int HATCHENOID22 = 5; //leftbottomdown(in)
 	public int HATCHENOID11 = 6; //righttopin

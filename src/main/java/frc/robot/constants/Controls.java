@@ -9,6 +9,10 @@ public class Controls {
 	double x_axisSquared;
 	double x_axis;
 	double y_axis;
+	boolean lbt = false;
+	boolean lbp = false;
+	boolean rbt = false;
+	boolean rbp = false;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
 	
@@ -29,7 +33,7 @@ public class Controls {
 			if (x_axis < 0) {
 				x_axisSquared = x_axisSquared * -1;
 			}
-			return x_axisSquared;
+			return x_axis;
 		}
 		//return xbox_driver.getRawAxis(0);
 	}
@@ -84,11 +88,25 @@ public class Controls {
 	}
 
 	public boolean driver_LB_Button(){
-		return xbox_driver.getRawButton(5);
+		if(xbox_driver.getRawButton(5) && !lbp) {
+			lbt = true;
+		} 
+		else {
+			lbt = false;
+		}
+		lbp = xbox_driver.getRawButton(5);
+		return lbt;
 	}
 
 	public boolean driver_RB_Button(){
-		return xbox_driver.getRawButton(6);
+		if(xbox_driver.getRawButton(6) && !rbp) {
+			rbt = true;
+		} 
+		else {
+			rbt = false;
+		}
+		rbp = xbox_driver.getRawButton(6);
+		return rbt;
 	}
 
 	public boolean driver_Se_Button(){
