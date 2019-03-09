@@ -7,12 +7,15 @@ public class Controls {
 	ElectricalConstants electricalConstants = new ElectricalConstants();
 	
 	double x_axisSquared;
+	double y_axisSquared;
 	double x_axis;
 	double y_axis;
 	boolean lbt = false;
 	boolean lbp = false;
 	boolean rbt = false;
 	boolean rbp = false;
+	boolean stt = false;
+	boolean stp = false;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
 	
@@ -33,7 +36,7 @@ public class Controls {
 			if (x_axis < 0) {
 				x_axisSquared = x_axisSquared * -1;
 			}
-			return x_axis;
+			return x_axisSquared;
 		}
 		//return xbox_driver.getRawAxis(0);
 	}
@@ -42,14 +45,15 @@ public class Controls {
 		y_axis = xbox_driver.getRawAxis(1);
 		if(Math.abs(y_axis) < .1){
 			y_axis = 0;
+			return y_axis;
 		}
 		return y_axis;
 		// else{
-		// 	x_axisSquared = x_axis * x_axis;
-		// 	if (x_axis < 0) {
-		// 		x_axisSquared = x_axisSquared * -1;
+		// 	y_axisSquared = y_axis * y_axis;
+		// 	if (y_axis < 0) {
+		// 		y_axisSquared = y_axisSquared * -1;
 		// 	}
-		// 	return x_axisSquared;
+		// 	return y_axisSquared;
 		// }
 	}
 
@@ -114,7 +118,14 @@ public class Controls {
 	}
 
 	public boolean driver_St_Button(){
-		return xbox_driver.getRawButton(8);
+		if(xbox_driver.getRawButton(8) && !stp) {
+			stt = true;
+		} 
+		else {
+			stt = false;
+		}
+		stp = xbox_driver.getRawButton(8);
+		return stt;
 	}
 
 	public boolean driver_LA_Button(){

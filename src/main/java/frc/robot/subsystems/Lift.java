@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import java.lang.Math;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -22,7 +24,7 @@ public class Lift{
 	private double liftPosition;
 	private boolean moving;
 
-	private DigitalInput liftBottom;
+	private AnalogInput liftBottom;
   private DigitalInput hatchs;
   private DigitalInput balls;
 
@@ -30,10 +32,11 @@ public class Lift{
   {
     
 		eConstants =  new ElectricalConstants();
-		constants = new Constants();
+    constants = new Constants();
 		liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
-		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON);
-		liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM);
+		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
+    liftBottom = new AnalogInput(eConstants.LIFT_BOTTOM); // Positive = Up
+    controls = Controls; 
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
@@ -96,8 +99,9 @@ public class Lift{
     
   public void update()
   {
-    if(liftBottom.get() && !controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_B_Button())
+    if(liftBottom.getVoltage()<1.33 && !controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_B_Button())
     {
+      resetEncoder();
       liftRight.set(0);
     }
 
@@ -109,39 +113,39 @@ public class Lift{
 						Constants.kTimeoutMs);
 				liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
       }
-      else if(hatchs.get())
-      {
-        if(controls.driver_A_Button())
-        {
-					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
-					liftPosition = Constants.hatchPosition1;
-					System.out.println("A Pressed");
-        }
-        else if(controls.driver_X_Button())
-        {
-					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
-					liftPosition = Constants.hatchPosition2;
-					System.out.println("X Pressed");
-        }
-        else if(controls.driver_Y_Button())
-        {
-					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
-					liftPosition = Constants.hatchPosition2;
-					System.out.println("Y Pressed");
-        }
-      }
+      // else if(hatchs.get())
+      // {
+      //   if(controls.driver_A_Button())
+      //   {
+			// 		liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
+			// 		liftPosition = Constants.hatchPosition1;
+			// 		System.out.println("A Pressed");
+      //   }
+      //   else if(controls.driver_X_Button())
+      //   {
+			// 		liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
+			// 		liftPosition = Constants.hatchPosition2;
+			// 		System.out.println("X Pressed");
+      //   }
+      //   else if(controls.driver_Y_Button())
+      //   {
+			// 		liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
+			// 		liftPosition = Constants.hatchPosition2;
+			// 		System.out.println("Y Pressed");
+      //   }
+      // }
       else if(balls.get())
       {
-        if(controls.driver_A_Button()){
+        if(controls.driver_X_Button()){
 					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
 					liftPosition = Constants.ballPosition1;
 					System.out.println("A Pressed");
         }
-        else if(controls.driver_X_Button())
+        else if(controls.driver_B_Button())
         {
 					liftRight.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
 					liftPosition = Constants.ballPosition2;
-					System.out.println("X Pressed");
+					System.out.println("B Pressed");
         }
         else if(controls.driver_Y_Button())
         {
@@ -152,7 +156,7 @@ public class Lift{
       }
       else if(controls.driver_A_Button())
       {
-        if (liftBottom.get()) 
+        if (liftBottom.getVoltage()<1.33) 
         {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
         } 
@@ -163,24 +167,35 @@ public class Lift{
         }
         System.out.println("A Pressed");
       }
+      else if (liftBottom.getVoltage()<1.33) 
+      {
+        resetEncoder();
+        liftPosition = 0;
+      }
       liftRight.set(ControlMode.MotionMagic, liftPosition);
     }
 
-    if (liftBottom.get()) 
-    {
-			resetEncoder();
-			liftPosition = 0;
-		}
+    liftRight.set(ControlMode.MotionMagic, liftPosition);
+  }
 
+  public void test() {
+    if(controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15)
+    {
+      liftRight.set(ControlMode.PercentOutput, -controls.driver_YR_Axis()/10*5);
+    }
+    else
+    {
+      liftRight.set(ControlMode.PercentOutput, 0);
+    }
   }
 
   public double getLiftPosition() 
   {
-		return liftRight.getSelectedSensorPosition(Constants.kPIDLoopIdx);
+		return liftRight.getSelectedSensorPosition();
   }
 
-  public boolean getSensor(){
-    return liftBottom.get();
+  public double getSensor(){
+    return liftBottom.getVoltage();
   }
   
 

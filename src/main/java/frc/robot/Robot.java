@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-		TeleopDrive.setRampRate(.5);
+		// TeleopDrive.setRampRate(.5);
 		TeleopDrive.setBrakeMode(true);
     
   }
@@ -37,17 +37,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     TeleopDrive.teleopArcadeDrive();
-    hatch.rivetIn();
-    hatch.pivotUp();
+    intake.update();
   }
 
   @Override
   public void teleopInit() {
-		TeleopDrive.setRampRate(.5);
-		TeleopDrive.setBrakeMode(true);
-
-    hatch.rivetIn();
-    hatch.pivotUp();
+		// TeleopDrive.setRampRate(.5);
+    TeleopDrive.setBrakeMode(true);
+    lift.setBrakeMode(true);
   }
 
   @Override
@@ -60,13 +57,14 @@ public class Robot extends TimedRobot {
     // } else {
     //   TeleopDrive.teleopArcadeDrive();
     // }
-*/
-    TeleopDrive.teleopArcadeDrive();
-    pneumatics.update();
-    // lift.update();
+*/  
+    System.out.println("Lift Encoders: " + lift.getLiftPosition());
+    // TeleopDrive.teleopArcadeDrive();
+    // pneumatics.update();
+    lift.update();
     intake.update();
-    // System.out.println("Ball Sensor: " + ball.getSensor());
-    // System.out.println("Hatch Sensor: " + hatch.getSensor());
+    System.out.println("Ball Sensor: " + ball.getSensor()); //false=ball in, true=ball out
+    System.out.println("Hatch Sensor: " + hatch.getSensor1());
     System.out.println("Lift Sensor: " + lift.getSensor());
   }
 

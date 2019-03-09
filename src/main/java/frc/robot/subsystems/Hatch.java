@@ -45,7 +45,7 @@ public class Hatch{
    return getSensor1() | getSensor2();
  }
 
- public boolean getSensor1() {
+ public boolean getSensor1() { // Inverted Left
    return hatch1.get();
  }
 

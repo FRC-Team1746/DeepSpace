@@ -36,18 +36,103 @@ public class Ball{
 
   public void armDown(){
     ballenoid.set(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
-  public void intakeIn(Double speed){
-    ballLeft.set(ControlMode.PercentOutput, speed/3*4);
-    ballRight.set(ControlMode.PercentOutput, -speed/3*4);
-    overBumper.set(speed/3*4);
+  public void intakeIn(double controller){
+    if(controller > .1){
+      ballLeft.set(ControlMode.PercentOutput, -controller/3*4);
+      ballRight.set(ControlMode.PercentOutput, controller/3*4);
+      overBumper.set(ControlMode.PercentOutput, controller/3*4);
+    }else { //Stops
+			ballLeft.set(ControlMode.PercentOutput, 0);
+			ballRight.set(ControlMode.PercentOutput, 0);
+      overBumper.set(ControlMode.PercentOutput, 0);;
+		}
   }
 
-  public void intakeOut(Double speed){
-    ballLeft.set(ControlMode.PercentOutput, -speed/3*4);
-    ballRight.set(ControlMode.PercentOutput, speed/3*4);
-    overBumper.set(-speed/3*4);
+  public void intakeOut(double controller){
+    if(controller > .1){
+      ballLeft.set(ControlMode.PercentOutput, -controller/3*4);
+      ballRight.set(ControlMode.PercentOutput, controller/3*4);
+    }else { //Stops
+			ballLeft.set(ControlMode.PercentOutput, 0);
+			ballRight.set(ControlMode.PercentOutput, 0);
+		}
+  }
+
+  public void intakeControl(double control)
+  {
+    if (Math.abs(control) > 0.2)
+    {
+      ballLeft.set(ControlMode.PercentOutput, -control/3*4);
+      ballRight.set(ControlMode.PercentOutput, control/3*4);
+      overBumper.set(ControlMode.PercentOutput, -control/3*4);
+      if(balls.get())
+      {
+        ballLeft.set(ControlMode.PercentOutput, -control/3*4);
+        ballRight.set(ControlMode.PercentOutput, control/3*4);
+      }
+    }
+    else
+    {
+      ballLeft.set(ControlMode.PercentOutput, 0);
+      ballRight.set(ControlMode.PercentOutput, 0);
+      overBumper.set(ControlMode.PercentOutput, 0);
+    }
+    
   }
 
   public boolean getSensor(){

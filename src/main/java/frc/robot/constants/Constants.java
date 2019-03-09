@@ -1,8 +1,8 @@
 package frc.robot.constants;
 
 public class Constants {
-	public static final double liftEncoderPerInch = 914;
-	public static final double liftBottomFromFloor = 6;
+	public static final double liftEncoderPerInch = 63.41; // 755,768,760/3=761/12=63.41 ticks for 1 feet
+	public static final double liftBottomFromFloor = 4.38; // Inches
 	public static final double liftEncoderPosition0 = -6666;
 	public static final double hatchPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
 	public static final double hatchPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks

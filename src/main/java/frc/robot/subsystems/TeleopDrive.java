@@ -38,10 +38,17 @@ public class TeleopDrive {
 
 
     public void teleopArcadeDrive(){
-        m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*7
-        ));
-        m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*7));
-        // setRampRate(0.0);	
+        setRampRate(0.0);	
+        if(Math.abs(m_controls.driver_YL_Axis()) > Math.abs(m_controls.driver_XL_Axis())) 
+        {
+            m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*7.5));
+            m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*7)); 
+        } 
+        else 
+        {
+            m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*8.5));
+            m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*8)); 
+        }
     }
 
     public void setDriveAndSteer(double driveCmd, double steerCmd) {

@@ -40,7 +40,7 @@ public class ElectricalConstants {
 	public int HATCH1 = 1;
 	public int HATCH2 = 2; 
 	public int BALLS = 3;
-	public int DIO4 = 4;
+	public int COMPRESSOR = 4;
 	public int DIO5 = 5;
 	public int DIO6 = 6;
 	public int DIO7 = 7;

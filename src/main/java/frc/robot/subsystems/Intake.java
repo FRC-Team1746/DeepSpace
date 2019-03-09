@@ -68,6 +68,15 @@ public class Intake{
         hatchUp = true;
       }
     }
+    // ball.intakeIn(controls.driver_R_Trigger());
+    // ball.intakeOut(controls.driver_L_Trigger());
+    ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
+    // else if(controls.driver_R_Trigger() > .1) {
+    //   ball.intakeIn(controls.driver_R_Trigger());
+    // }
+    // else if(controls.driver_L_Trigger() > .1) {
+    //   ball.intakeOut(controls.driver_L_Trigger());
+    // }
 
 
 
@@ -159,5 +168,7 @@ public class Intake{
     //     ball.intakeOut(controls.driver_R_Trigger());
     //   }
   
+  }
 }
-}
+
+
