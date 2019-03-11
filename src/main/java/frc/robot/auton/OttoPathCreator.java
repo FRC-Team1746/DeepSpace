@@ -60,7 +60,7 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
         for(File file : filesInFolder) {
             OttoPath CsvPath = new OttoPath(config, file.getName());
             FileReader in = new FileReader(file);
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
             for(CSVRecord record : records) {
                 String x = record.get(1);
                 String y = record.get(2);
