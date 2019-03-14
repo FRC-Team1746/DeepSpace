@@ -13,8 +13,8 @@ public class Pneumatics{
   Relay power;
 
   public Pneumatics(){
-    sensor = new DigitalInput(eConstants.COMPRESSOR);
-    power = new Relay(eConstants.POWER);
+    sensor = new DigitalInput(4);
+    power = new Relay(0);
   }
 
   public void update(){

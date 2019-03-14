@@ -17,9 +17,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     controls = new Controls();
     TeleopDrive = new TeleopDrive(controls);
-    lift = new Lift(controls);
     hatch = new Hatch();
     ball = new Ball();
+    lift = new Lift(controls, ball, hatch);
     intake = new Intake(controls, lift, ball, hatch);
     pneumatics = new Pneumatics();
     vision = new Vision();
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-/*NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS
+/*NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
     // if(controls.driver_B_Button()) {
     //   vision.fetchUpdate();
     //   TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
@@ -59,12 +59,13 @@ public class Robot extends TimedRobot {
     // }
 */  
     System.out.println("Lift Encoders: " + lift.getLiftPosition());
-    // TeleopDrive.teleopArcadeDrive();
-    // pneumatics.update();
+    TeleopDrive.teleopArcadeDrive();
+    pneumatics.update();
     lift.update();
+    // lift.test();
     intake.update();
-    System.out.println("Ball Sensor: " + ball.getSensor()); //false=ball in, true=ball out
-    System.out.println("Hatch Sensor: " + hatch.getSensor1());
+   // System.out.println("Ball Sensor: " + ball.getSensor()); //No ball > 1.3
+    // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     System.out.println("Lift Sensor: " + lift.getSensor());
   }
 

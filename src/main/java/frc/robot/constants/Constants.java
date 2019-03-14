@@ -1,18 +1,17 @@
 package frc.robot.constants;
 
 public class Constants {
-	public static final double liftEncoderPerInch = 63.41; // 755,768,760/3=761/12=63.41 ticks for 1 feet
-	public static final double liftBottomFromFloor = 4.38; // Inches
-	public static final double liftEncoderPosition0 = -6666;
-	public static final double hatchPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
-	public static final double hatchPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks
-	public static final double hatchPosition3 = liftEncoderPerInch * (73-liftBottomFromFloor);//6 feet 60324 Ticks
-	public static final double ballPosition1 = liftEncoderPerInch * (31-liftBottomFromFloor);//29 Inches 21022 Ticks
-	public static final double ballPosition2 = liftEncoderPerInch * (76-liftBottomFromFloor);//5 feet 49356 Ticks
-	public static final double ballPosition3 = liftEncoderPerInch * (73-liftBottomFromFloor);//6 feet 60324 Ticks
-	public static final double liftAutonStartPosition = 25246;//Starting Position 
-	public static final double liftEncoderTolerance = liftEncoderPerInch/2;
-	public static final double climbingBarHeight = 81;           //In Inches ;
+	public static final double liftEncoderPerInch = 120; //  Comp bot: 755,768,760/3=761/12=63.41 ticks for 1 feet, Practice Bot: 
+	public static final double liftBottomFromFloor = 4.375; // Inches
+	public static final double liftEncoderPosition0 = 240;
+	public static final double hatchPosition1 = liftEncoderPerInch * (11-liftBottomFromFloor);//29 Inches 21022 Ticks
+	public static final double hatchPosition2 = liftEncoderPerInch * (16-liftBottomFromFloor);//5 feet 49356 Ticks
+	public static final double hatchPosition3 = liftEncoderPerInch * (20-liftBottomFromFloor);//6 feet 60324 Ticks
+	public static final double ballPosition1 = liftEncoderPerInch * (11);//29 Inches 21022 Ticks
+	public static final double ballPosition2 = liftEncoderPerInch * (16-liftBottomFromFloor);//5 feet 49356 Ticks
+	public static final double ballPosition3 = liftEncoderPerInch * (20-liftBottomFromFloor);//6 feet 60324 Ticks
+	public static final double liftAutonStartPosition = 0;//Starting Position 
+	public static final double liftEncoderTolerance = liftEncoderPerInch/3;
 
 	//Retractor
 	public static final double retZeroDeg = 858; // In 5 Volts Out Of 1023  Units 

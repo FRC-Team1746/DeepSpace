@@ -190,7 +190,7 @@ public class Vision {
   }
 
   public void setLedMode(int ledMode) { // 0-use the LED mode set in the current pipeline   1-force off   2-force blink  3-force on
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(ledMode);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(2);
   }
 
   public void setCamMode(int camMode) { // 0-Vision processor   1-DriverCamera

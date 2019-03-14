@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.constants.ElectricalConstants;
 
@@ -18,14 +18,14 @@ public class Ball{
   private Solenoid ballenoid;
 
 
-  private DigitalInput balls;
+  private AnalogInput balls;
 
   public Ball(){
     eConstants = new ElectricalConstants();
 		ballRight = new VictorSPX(eConstants.BALL_RIGHT);
     ballLeft = new VictorSPX(eConstants.BALL_LEFT);
     overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
-    balls = new DigitalInput(eConstants.BALLS);
+    balls = new AnalogInput(eConstants.BALLS);
     ballenoid = new Solenoid(eConstants.BALLENOID);
 
   }
@@ -36,59 +36,6 @@ public class Ball{
 
   public void armDown(){
     ballenoid.set(true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 
   public void intakeIn(double controller){
@@ -120,7 +67,7 @@ public class Ball{
       ballLeft.set(ControlMode.PercentOutput, -control/3*4);
       ballRight.set(ControlMode.PercentOutput, control/3*4);
       overBumper.set(ControlMode.PercentOutput, -control/3*4);
-      if(balls.get())
+      if(balls.getVoltage() < .1)
       {
         ballLeft.set(ControlMode.PercentOutput, -control/3*4);
         ballRight.set(ControlMode.PercentOutput, control/3*4);
@@ -135,7 +82,7 @@ public class Ball{
     
   }
 
-  public boolean getSensor(){
-    return balls.get();
+  public double getSensor(){
+    return balls.getVoltage();
   }
 }

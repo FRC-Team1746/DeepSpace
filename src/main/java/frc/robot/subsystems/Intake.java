@@ -68,9 +68,12 @@ public class Intake{
         hatchUp = true;
       }
     }
+
     // ball.intakeIn(controls.driver_R_Trigger());
     // ball.intakeOut(controls.driver_L_Trigger());
+
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
+    
     // else if(controls.driver_R_Trigger() > .1) {
     //   ball.intakeIn(controls.driver_R_Trigger());
     // }
@@ -81,13 +84,13 @@ public class Intake{
 
 
 
-    // //If we have a ball, and the lift is below the first hatch scoring position:
-    // if(ball.getSensor() && lift.getLiftPosition() < constants.hatchPosition1)
-    // {
-    //   ball.armDown();
-    //   hatch.pivotUp();  
-    // }
-    // //Otherwhise if the hatch mechanism is not deployed, retract the OTB intake  
+    //If we have a ball, and the lift is below the first hatch scoring position:
+    if(ball.getSensor() > 1.3 && lift.getLiftPosition() < constants.hatchPosition1)
+    {
+      ball.armDown();
+      hatch.pivotUp();  
+    }
+    //Otherwhise if the hatch mechanism is not deployed, retract the OTB intake  
     // else if(!hatchUp && lift.getLiftPosition() > constants.hatchPosition1)
     // {
     //   ball.armUp();
@@ -127,7 +130,6 @@ public class Intake{
     //     ballUp = true;
     //   }
     // }
-
     // //If the driver presses the LB button:
     // //Read the state of the hatch pivot, and switch the state
     // else if(controls.driver_LB_Button())
