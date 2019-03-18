@@ -1,4 +1,4 @@
-package frc.robot.auton;
+package frc.robot.auton.crayolaCode;
 
 import java.util.function.Function;
 
@@ -12,7 +12,10 @@ public class OttoGen {
     private Function inputSource;
     private Function targetSource;
     private double targetValue;
+    private int N = 4000;
     private boolean returnPID;
+    private double[][] W1;
+    private double[][] W2;
 
     public OttoGen(Function inputSource, Function targetSource, double targetValue, boolean returnPID) {
         this.inputSource = inputSource;
@@ -20,16 +23,18 @@ public class OttoGen {
         this.targetValue = targetValue;
         this.returnPID = returnPID;
 
-        double[][] W1 = new double[2][3]; // [Input Neurons], [PID Values] might wanna jack np for this
-        double[][] B1 = new double[1][3]; // [# of Bias values], [PID Values]
-
-        double[][] W2 = new double[3][1]; // [PID Values], [System Input]
+        W1 = np.random(2, 3); // [Input Neurons], [PID Values] might wanna jack np for this
+        W2 = np.random(3, 1); // [PID Values], [System Input]
     }
 
     public void train() {
-        for(int i=0; i < 4000; i++) {
+        for(int i=0; i < N; i++) {
+            double[][] input = new double[1][2];
+            double[][] u1 = np.dot(input, W1);
+            double[][] output = np.dot(u1, W2);
 
             if(i % 100 == 0) {
+                
 
             }
         }
@@ -57,4 +62,8 @@ public class OttoGen {
         }
         return 0.1;
     } 
+
+    public static void main(String[] args) {
+
+    }
 }
