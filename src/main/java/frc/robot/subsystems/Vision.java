@@ -2,8 +2,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.networktables.*;
+import frc.robot.constants.Controls;
 
 public class Vision {
+
+  Controls controls;
 
   double validTarget;  // Whether the limelight has any valid targets (0 or 1)
   double xOffset;      // Horiszontal Offset from crosshair to target (-27 degrees to 27 degrees)
@@ -25,8 +28,8 @@ public class Vision {
   // double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
   double Drive_K = 0.0;  // tune. Constant for generating drive speed from vision
   double Drive_D = 0;  
-  double Steer_K = 0.01;  // tune. Constant for generating turn speed from vision
-  double Steer_D = 0;
+  double Steer_K = 0.07;  // tune. Constant for generating turn speed from vision
+  double Steer_D = 0.25;
   double Skew_P = 0.0;
   double txError = 0;
   double skewError = 0;
@@ -130,9 +133,12 @@ public class Vision {
 
 
   public boolean isTargetValid() { 
-    if (validTarget > 0.5) {
+    if (validTarget > 0.5) 
+    {
       return true;
-    } else {
+    } 
+    else
+    {
       return false;
     }
   }
@@ -190,7 +196,11 @@ public class Vision {
   }
 
   public void setLedMode(int ledMode) { // 0-use the LED mode set in the current pipeline   1-force off   2-force blink  3-force on
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(2);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(ledMode);
+  }
+
+  public double getLedMode() {
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(0);
   }
 
   public void setCamMode(int camMode) { // 0-Vision processor   1-DriverCamera
@@ -213,6 +223,13 @@ public class Vision {
   }
 
 
+  public void lightOnButtonPress(boolean button) {
+    if (button && (getLedMode() > 0.5)) {
+      setLedMode(0);
+    // } else if (!button && getLedMode() < 0.5) {
+    //   setLedMode(1);
+    }
+  }
 
   public String toString() {
     String str = "Vision [validTarget= " + validTarget + "(" + isTargetValid() + "), xOffset= " + xOffset + ", yOffset= " + yOffset + 

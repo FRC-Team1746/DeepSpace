@@ -51,6 +51,11 @@ public class TeleopDrive {
         }
     }
 
+    public void setSteer (double steerCmd) {
+        m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (steerCmd));
+        m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (steerCmd));
+    }
+
     public void setDriveAndSteer(double driveCmd, double steerCmd) {
         m_RightMaster.set(-driveCmd - steerCmd);
         m_LeftMaster.set(-driveCmd + steerCmd);

@@ -26,11 +26,11 @@ public class Hatch{
  }
 
  public void pivotUp(){
-  hatchenoid2.set(DoubleSolenoid.Value.kForward);
+  hatchenoid2.set(DoubleSolenoid.Value.kReverse); // COMPETITION BOT IS kFORWARD
  }
 
  public void pivotDown(){
-  hatchenoid2.set(DoubleSolenoid.Value.kReverse);
+  hatchenoid2.set(DoubleSolenoid.Value.kForward); // COMPETITION BOT IS kREVERSE
  }
 
  public void rivetOut(){

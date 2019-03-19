@@ -49,24 +49,34 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-/*NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
-    // if(controls.driver_B_Button()) {
-    //   vision.fetchUpdate();
-    //   TeleopDrive.setDriveAndSteer(vision.GenerateDrive(), vision.GenerateSteer());
-    //   System.out.println(vision.getXOffset());
-    // } else {
-    //   TeleopDrive.teleopArcadeDrive();
-    // }
-*/  
+// NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
+    System.out.println("Above The iffff isTargetValid: " + vision.isTargetValid());
+    vision.lightOnButtonPress(controls.driver_B_Button());
+    if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
+    {
+    TeleopDrive.setSteer(vision.GenerateSteer());
+    System.out.println(vision.getXOffset());
+    }
+    else {
+      System.out.println("Fetch Update Vision: " + vision.fetchUpdate());
+      TeleopDrive.teleopArcadeDrive();
+    }
+    // System.out.println(vision.getXOffset());
+    System.out.println("below it isTargetValid: " + vision.isTargetValid());
+    if(controls.driver_B_Button()) {
+      System.out.println("B button pressed");
+    }
+
     System.out.println("Lift Encoders: " + lift.getLiftPosition());
-    TeleopDrive.teleopArcadeDrive();
+    // TeleopDrive.teleopArcadeDrive();
     pneumatics.update();
     lift.update();
     // lift.test();
     intake.update();
-   // System.out.println("Ball Sensor: " + ball.getSensor()); //No ball > 1.3
+   System.out.println("Ball Sensor: " + ball.getSensor()); //No ball > 1.3
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     System.out.println("Lift Sensor: " + lift.getSensor());
+    // System.out.println("Ball Sensor: " + ball.getSensor());
   }
 
   @Override
@@ -77,4 +87,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 }

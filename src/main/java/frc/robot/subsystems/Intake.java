@@ -85,7 +85,7 @@ public class Intake{
 
 
     //If we have a ball, and the lift is below the first hatch scoring position:
-    if(ball.getSensor() > 1.3 && lift.getLiftPosition() < constants.hatchPosition1)
+    if(ball.getSensor() <= 1.3 && lift.getLiftPosition() < constants.hatchPosition1)
     {
       ball.armDown();
       hatch.pivotUp();  
