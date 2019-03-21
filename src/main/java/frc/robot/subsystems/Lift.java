@@ -102,9 +102,9 @@ public class Lift{
     
   public void update()
   {
-    if(!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_B_Button())
+    if(!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button())
     {
-      System.out.println("Manual Case/DeAct");
+      // System.out.println("Manual Case/DeAct");
       if(controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15)
       {
         System.out.println("CASE HIT");
@@ -134,19 +134,19 @@ public class Lift{
           liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
-        System.out.println("A Pressed");
+        System.out.println("A Pressed Read");
       }
       else if(controls.driver_X_Button())
       {
 			  liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
 				liftPosition = Constants.hatchPosition2;
-				System.out.println("X Pressed");
+				System.out.println("X Pressed Read");
       }
       else if(controls.driver_Y_Button())
       {
 				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
 				liftPosition = Constants.hatchPosition3;
-				System.out.println("Y Pressed");
+				System.out.println("Y Pressed Read");
       }
     }
     else if(ball.getSensor() < 1.3)
@@ -167,7 +167,7 @@ public class Lift{
       {
 			  liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
 				liftPosition = Constants.ballPosition3;
-				System.out.println("Y Pressed");
+				System.out.println("Y Pressed Read");
       }
       else if(controls.driver_A_Button())
       {
@@ -185,7 +185,7 @@ public class Lift{
           liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
-        System.out.println("A Pressed");
+        System.out.println("A Pressed Read");
       }
     }
     else if (liftBottom.getVoltage()<1.33) 

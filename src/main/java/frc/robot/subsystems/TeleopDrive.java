@@ -18,6 +18,8 @@ public class TeleopDrive {
     private PigeonIMU gyro;
     ElectricalConstants eConstants;
 
+    private double teleP;
+
     public TeleopDrive(Controls controls) {
         m_controls = controls;
         eConstants = new ElectricalConstants();
@@ -42,8 +44,7 @@ public class TeleopDrive {
 
     public void teleopArcadeDrive(){
         setRampRate(0.0);	
-        if(Math.abs(m_controls.driver_YL_Axis()) > Math.abs(m_controls.driver_XL_Axis())) 
-        {
+        if(Math.abs(m_controls.driver_YL_Axis()) > Math.abs(m_controls.driver_XL_Axis())){
             m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*7.5));
             m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*7)); 
         } 
@@ -52,8 +53,21 @@ public class TeleopDrive {
             m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (m_controls.driver_XL_Axis()/10*8.5));
             m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (m_controls.driver_XL_Axis()/10*8)); 
         }
+        // teleP=0.01;
+        // if(Math.abs(m_controls.driver_YL_Axis()) > Math.abs(m_controls.driver_XL_Axis())) 
+        // {
+        //     m_RightMaster.set(-(m_controls.driver_YL_Axis()+(teleP*getEncoderDifference()/2) - (m_controls.driver_XL_Axis()+(teleP*getEncoderDifference()/2))));
+        //     m_LeftMaster.set(-(m_controls.driver_YL_Axis()+(teleP*getEncoderDifference()/2) + (m_controls.driver_XL_Axis()+(teleP*getEncoderDifference()/2)))); 
+        // } 
+        // else 
+        // {
+        //     m_RightMaster.set(-(m_controls.driver_YL_Axis()+(teleP*getEncoderDifference()/2)) - (m_controls.driver_XL_Axis()+(teleP*getEncoderDifference()/2)));
+        //     m_LeftMaster.set(-(m_controls.driver_YL_Axis()+(teleP*getEncoderDifference()/2) + (m_controls.driver_XL_Axis()+(teleP*getEncoderDifference()/2)))); 
+        // }
     }
-
+    public double getEncoderDifference(){
+        return m_RightMaster.getSelectedSensorPosition() - m_LeftMaster.getSelectedSensorPosition();
+    }
     public void setSteer (double steerCmd) {
         m_RightMaster.set(-(m_controls.driver_YL_Axis()/10*9) - (steerCmd));
         m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (steerCmd));

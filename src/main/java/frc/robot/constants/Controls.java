@@ -138,28 +138,28 @@ public class Controls {
 
 	//DPAD
 	public boolean driver_UP_DPAD(){
-		if ((xbox_oper.getPOV()) == 0) {
+		if ((xbox_driver.getPOV()) == 0) {
 			return true;
 		}else {
 			return false;
 		}
 	}
 	public boolean driver_DOWN_DPAD(){
-		if ((xbox_oper.getPOV()) == 180) {
+		if ((xbox_driver.getPOV()) == 180) {
 			return true;
 		}else {
 			return false;
 		}
 	}
 	public boolean driver_LEFT_DPAD(){
-		if ((xbox_oper.getPOV()) == 270) {
+		if ((xbox_driver.getPOV()) == 270) {
 			return true;
 		}else {
 			return false;
 		}
 	}
 	public boolean driver_RIGHT_DPAD(){
-		if ((xbox_oper.getPOV()) == 90) {
+		if ((xbox_driver.getPOV()) == 90) {
 			return true;
 		}else {
 			return false;
