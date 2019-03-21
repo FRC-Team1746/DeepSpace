@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import frc.robot.constants.ElectricalConstants;
 import frc.robot.constants.Controls;
 
@@ -13,6 +15,7 @@ public class TeleopDrive {
     public WPI_TalonSRX m_RightMaster;
     private WPI_VictorSPX m_RightFollowerA;
     private WPI_VictorSPX m_RightFollowerB;
+    private PigeonIMU gyro;
     ElectricalConstants eConstants;
 
     public TeleopDrive(Controls controls) {
@@ -56,6 +59,11 @@ public class TeleopDrive {
         m_LeftMaster.set(-(m_controls.driver_YL_Axis()/10*9) + (steerCmd));
     }
 
+    public void resetEncoders() {
+        m_RightMaster.setSelectedSensorPosition(0);
+        m_LeftMaster.setSelectedSensorPosition(0);
+    }
+
     public void setDriveAndSteer(double driveCmd, double steerCmd) {
         m_RightMaster.set(-driveCmd - steerCmd);
         m_LeftMaster.set(-driveCmd + steerCmd);
@@ -65,6 +73,12 @@ public class TeleopDrive {
         m_LeftMaster.configOpenloopRamp(rate, 10);
         m_RightMaster.configOpenloopRamp(rate, 10);
 
+    }
+
+    public double getAngle() {
+        double[] ypr_deg = new double[3];
+        gyro.getYawPitchRoll(ypr_deg);
+        return ypr_deg[0];
     }
 
     public void setBrakeMode(boolean brake) {
