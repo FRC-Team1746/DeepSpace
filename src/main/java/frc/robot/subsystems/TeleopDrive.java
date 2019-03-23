@@ -43,6 +43,11 @@ public class TeleopDrive {
         setRampRate(0.0);	
     }
 
+    public void resetEncoders() {
+        m_RightMaster.setSelectedSensorPosition(0);
+        m_LeftMaster.setSelectedSensorPosition(0);
+    }
+
     public void setRampRate(double rate){
         m_LeftMaster.configOpenloopRamp(rate, 10);
         m_RightMaster.configOpenloopRamp(rate, 10);
