@@ -16,14 +16,12 @@ public class Lift{
 
 	ElectricalConstants eConstants;
 	Controls controls;
-  Constants constants;
   Ball ball;
   Hatch hatch;
 
 	private VictorSPX liftLeft;
 	private WPI_TalonSRX liftRight;
 	private double liftPosition;
-	private boolean moving;
 
   private AnalogInput liftBottom;
 
@@ -34,7 +32,6 @@ public class Lift{
   {
     
 		eConstants =  new ElectricalConstants();
-    constants = new Constants();
 		liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
 		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
     liftBottom = new AnalogInput(eConstants.LIFT_BOTTOM); // Positive = Up
@@ -45,29 +42,29 @@ public class Lift{
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
-		liftRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, constants.kPIDLoopIdx,
-    constants.kTimeoutMs);
+		liftRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx,
+    Constants.kTimeoutMs);
     liftRight.setSensorPhase(false);
     liftRight.setInverted(false);
     /* Set relevant frame periods to be at least as fast as periodic rate */
-    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, constants.kTimeoutMs);
-    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, constants.kTimeoutMs);
+    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+    liftRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
     /* set the peak and nominal outputs */
-    liftRight.configNominalOutputForward(0, constants.kTimeoutMs);
-    liftRight.configNominalOutputReverse(0, constants.kTimeoutMs);
-    liftRight.configPeakOutputForward(1, constants.kTimeoutMs);
-    liftRight.configPeakOutputReverse(-1, constants.kTimeoutMs);
+    liftRight.configNominalOutputForward(0, Constants.kTimeoutMs);
+    liftRight.configNominalOutputReverse(0, Constants.kTimeoutMs);
+    liftRight.configPeakOutputForward(1, Constants.kTimeoutMs);
+    liftRight.configPeakOutputReverse(-1, Constants.kTimeoutMs);
     /* set closed loop gains in slot0 - see documentation */
-    liftRight.selectProfileSlot(constants.kSlotIdx, constants.kPIDLoopIdx);
-    // liftRight.config_kF(0, .146, constants.kTimeoutMs);
-    // liftRight.config_kP(0, 2.5, constants.kTimeoutMs);
-    // liftRight.config_kI(0, 0, constants.kTimeoutMs);
-    // liftRight.config_kD(0, 25, constants.kTimeoutMs);
+    liftRight.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
+    // liftRight.config_kF(0, .146, Constants.kTimeoutMs);
+    // liftRight.config_kP(0, 2.5, Constants.kTimeoutMs);
+    // liftRight.config_kI(0, 0, Constants.kTimeoutMs);
+    // liftRight.config_kD(0, 25, Constants.kTimeoutMs);
     /* set acceleration and vcruise velocity - see documentation */
-    liftRight.configMotionCruiseVelocity(500, constants.kTimeoutMs);
-    liftRight.configMotionAcceleration(2000, constants.kTimeoutMs);
+    liftRight.configMotionCruiseVelocity(500, Constants.kTimeoutMs);
+    liftRight.configMotionAcceleration(2000, Constants.kTimeoutMs);
     /* zero the sensor */
-    liftRight.setSelectedSensorPosition(0, constants.kPIDLoopIdx, constants.kTimeoutMs);
+    liftRight.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     liftRight.configOpenloopRamp(0, 0);
     liftRight.configClosedloopRamp(0, 0);
 
@@ -152,16 +149,15 @@ public class Lift{
     else if(ball.getSensor() < 1.3)
     {
       System.out.println("Ball Case");
-      // if(controls.driver_X_Button()){
-			// 	liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-			// 	liftPosition = Constants.ballPosition1;
-			// 	System.out.println("A Pressed");
-      // }
-      if(controls.driver_X_Button())
+      if(ball.isStalling() && !controls.driver_X_Button() && !controls.driver_Y_Button() && !controls.driver_A_Button() && (getLiftPosition() < Constants.ballPosition1)) {
+				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+				liftPosition = Constants.ballPosition1;
+      }
+      else if(controls.driver_X_Button())
       {
 				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
 				liftPosition = Constants.ballPosition2;
-				System.out.println("X Pressed");
+				System.out.println("X Pressed Read");
       }
       else if(controls.driver_Y_Button())
       {
@@ -196,18 +192,6 @@ public class Lift{
     liftRight.set(ControlMode.MotionMagic, liftPosition);
     }
 
-  public void test() {
-    if(controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15)
-    {
-    // Comp Bot:  liftRight.set(ControlMode.PercentOutput, -controls.driver_YR_Axis()/10*5);
-    liftRight.set(ControlMode.PercentOutput, controls.driver_YR_Axis()/10*5);
-    }
-    else
-    {
-      liftRight.set(ControlMode.PercentOutput, 0);
-    }
-  }
-
   public double getLiftPosition() 
   {
 		return liftRight.getSelectedSensorPosition();
@@ -217,13 +201,10 @@ public class Lift{
     return liftBottom.getVoltage();
   }
 
-  public void setElevator(double ticks)
-  {
-    double error = ticks - this.getLiftPosition();
-    //double deltaError;
+  // public void setElevator(double ticks)
+  // {
+  //   double error = ticks - this.getLiftPosition();
+  //   //double deltaError;
 
-  }
-
-  
-
+  // }
 }

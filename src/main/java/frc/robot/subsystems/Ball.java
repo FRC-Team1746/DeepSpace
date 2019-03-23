@@ -16,9 +16,9 @@ public class Ball{
   private VictorSPX ballLeft;
   private WPI_TalonSRX overBumper;
   private Solenoid ballenoid;
-
-
   private AnalogInput balls;
+
+  private boolean stalling;
 
   public Ball(){
     eConstants = new ElectricalConstants();
@@ -26,8 +26,7 @@ public class Ball{
     ballLeft = new VictorSPX(eConstants.BALL_LEFT);
     overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
     balls = new AnalogInput(eConstants.BALLS);
-    ballenoid = new Solenoid(eConstants.BALLENOID);
-
+    ballenoid = new Solenoid(eConstants.BALLENOID); //NO BALLENOID!
   }
 
   public void armUp(){
@@ -38,51 +37,36 @@ public class Ball{
     ballenoid.set(true);
   }
 
-  public void intakeIn(double controller){
-    if(controller > .1){
-      ballLeft.set(ControlMode.PercentOutput, -controller/3*4);
-      ballRight.set(ControlMode.PercentOutput, controller/3*4);
-      overBumper.set(ControlMode.PercentOutput, controller/3*4);
-    }else { //Stops
-			ballLeft.set(ControlMode.PercentOutput, 0);
-			ballRight.set(ControlMode.PercentOutput, 0);
-      overBumper.set(ControlMode.PercentOutput, 0);;
-		}
-  }
-
-  public void intakeOut(double controller){
-    if(controller > .1){
-      ballLeft.set(ControlMode.PercentOutput, -controller/3*4);
-      ballRight.set(ControlMode.PercentOutput, controller/3*4);
-    }else { //Stops
-			ballLeft.set(ControlMode.PercentOutput, 0);
-			ballRight.set(ControlMode.PercentOutput, 0);
-		}
-  }
-
   public void intakeControl(double control)
   {
     if (Math.abs(control) > 0.2)
     {
-      ballLeft.set(ControlMode.PercentOutput, -control/3*4);
-      ballRight.set(ControlMode.PercentOutput, control/3*4);
-      overBumper.set(ControlMode.PercentOutput, -control/3*4);
-      if(balls.getVoltage() < .1)
-      {
-        ballLeft.set(ControlMode.PercentOutput, -control/3*4);
-        ballRight.set(ControlMode.PercentOutput, control/3*4);
-      }
+      stalling = false;
+      ballLeft.set(ControlMode.PercentOutput, -control/4*3);
+      ballRight.set(ControlMode.PercentOutput, control/4*3);
+      overBumper.set(ControlMode.PercentOutput, -control/4*3);
+    }
+    else if(balls.getVoltage() < 1.33){
+      stalling = true;
+      ballLeft.set(ControlMode.PercentOutput, 0.1);
+      ballRight.set(ControlMode.PercentOutput, 0.1);
+      overBumper.set(ControlMode.PercentOutput, 0);
     }
     else
     {
+      stalling = false;
       ballLeft.set(ControlMode.PercentOutput, 0);
       ballRight.set(ControlMode.PercentOutput, 0);
       overBumper.set(ControlMode.PercentOutput, 0);
-    }
-    
+    } 
   }
 
   public double getSensor(){
     return balls.getVoltage();
   }
+
+  public boolean isStalling() {
+    return stalling;
+  }
+  
 }

@@ -6,6 +6,8 @@ import frc.robot.subsystems.TeleopDrive;
 
 public class driveStraight {
     private States currentState;
+    private double m_speed;
+    private int m_delayCounter;
     private TeleopDrive m_driveTrain;
     private double m_initialHeading;
 
@@ -32,6 +34,7 @@ public class driveStraight {
             case INIT:
                 m_driveTrain.resetEncoders();
                 m_initialHeading = m_driveTrain.getAngle();
+                m_speed = .25;
                 currentState = States.DRIVESTRAIGHTINIT;
                 break;
             case DRIVESTRAIGHTINIT:

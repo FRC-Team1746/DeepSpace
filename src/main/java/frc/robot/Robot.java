@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 		// TeleopDrive.setRampRate(.5);
     TeleopDrive.setBrakeMode(true);
+    // TeleopDrive.resetEncoders();
     lift.setBrakeMode(true);
   }
 
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
     TeleopDrive.setSteer(vision.GenerateSteer());
-    System.out.println(vision.getXOffset());
+    // System.out.println(vision.getXOffset());
     }
     else {
       // System.out.println("Fetch Update Vision: " + vision.fetchUpdate());
@@ -64,16 +65,15 @@ public class Robot extends TimedRobot {
     // System.out.println(vision.getXOffset());
     // System.out.println("below it isTargetValid: " + vision.isTargetValid());
     if(controls.driver_B_Button()) {
-      System.out.println("B button pressed");
+      // System.out.println("B button pressed");
     }
 
-    System.out.println("Lift Encoders: " + lift.getLiftPosition());
-    // TeleopDrive.teleopArcadeDrive();
+
+    // System.out.println("Lift Encoders: " + lift.getLiftPosition());
     pneumatics.update();
     lift.update();
-    // lift.test();
     intake.update();
-   System.out.println("Ball Sensor: " + ball.getSensor()); //No ball > 1.3
+    // System.out.println("Ball Sensor: " + ball.getSensor());
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     // System.out.println("Lift Sensor: " + lift.getSensor());
     // System.out.println("Ball Sensor: " + ball.getSensor());
