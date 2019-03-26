@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.constants.ElectricalConstants;
 
@@ -16,16 +16,20 @@ public class Ball{
   private VictorSPX ballLeft;
   private WPI_TalonSRX overBumper;
   private Solenoid ballenoid;
-  private AnalogInput balls;
+  private DigitalInput balls;
+
+  private int ballSenseCounter = 0;
+  private boolean haveBall = false;
 
   private boolean stalling;
+  
 
   public Ball(){
     eConstants = new ElectricalConstants();
 		ballRight = new VictorSPX(eConstants.BALL_RIGHT);
     ballLeft = new VictorSPX(eConstants.BALL_LEFT);
     overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
-    balls = new AnalogInput(eConstants.BALLS);
+    balls = new DigitalInput(eConstants.BALLS);
     ballenoid = new Solenoid(eConstants.BALLENOID); //NO BALLENOID!
   }
 
@@ -43,15 +47,16 @@ public class Ball{
     {
       stalling = false;
       ballLeft.set(ControlMode.PercentOutput, -control/4*3);
-      ballRight.set(ControlMode.PercentOutput, control/4*3);
+      ballRight.set(ControlMode.PercentOutput, -control/4*3);
       overBumper.set(ControlMode.PercentOutput, -control/4*3);
     }
-    else if(balls.getVoltage() < 1.33){
+    else if(haveBall()){
       stalling = true;
-      ballLeft.set(ControlMode.PercentOutput, 0.1);
-      ballRight.set(ControlMode.PercentOutput, 0.1);
-      overBumper.set(ControlMode.PercentOutput, 0);
-    }
+      ballLeft.set(ControlMode.PercentOutput, -0.07);
+      ballRight.set(ControlMode.PercentOutput, -0.07);
+      overBumper.set(ControlMode.PercentOutput, 0); // as of 3/24/2019 the practice robot has the right ball intake wired to what the over the bumber is supposed to be connected to (the talon) thus they are reversed --see next-->
+    }          // after wireing is fixed set over the bumber stalling to 0
+                
     else
     {
       stalling = false;
@@ -61,12 +66,16 @@ public class Ball{
     } 
   }
 
-  public double getSensor(){
-    return balls.getVoltage();
+  public void testBall () {
+    overBumper.set(ControlMode.PercentOutput, 0.25);
+  }
+
+  public boolean haveBall(){
+    return !balls.get();
   }
 
   public boolean isStalling() {
     return stalling;
   }
-  
+
 }

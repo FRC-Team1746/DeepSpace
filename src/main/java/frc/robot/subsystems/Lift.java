@@ -5,6 +5,7 @@ import java.lang.Math;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -12,38 +13,35 @@ import frc.robot.constants.ElectricalConstants;
 import frc.robot.constants.Controls;
 import frc.robot.constants.Constants;
 
-public class Lift{
+public class Lift {
 
-	ElectricalConstants eConstants;
-	Controls controls;
+  ElectricalConstants eConstants;
+  Controls controls;
   Ball ball;
   Hatch hatch;
 
-	private VictorSPX liftLeft;
-	private WPI_TalonSRX liftRight;
-	private double liftPosition;
+  private VictorSPX liftLeft;
+  private WPI_TalonSRX liftRight;
+  private double liftPosition;
 
   private AnalogInput liftBottom;
 
   private double feedFoward;
 
+  public Lift(Controls Controls, Ball Ball, Hatch Hatch) {
 
-  public Lift(Controls Controls, Ball Ball, Hatch Hatch) 
-  {
-    
-		eConstants =  new ElectricalConstants();
-		liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
-		liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
+    eConstants = new ElectricalConstants();
+    liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
+    liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
     liftBottom = new AnalogInput(eConstants.LIFT_BOTTOM); // Positive = Up
-    controls = Controls; 
+    controls = Controls;
     ball = Ball;
     hatch = Hatch;
-    feedFoward = 0.1;
+    feedFoward = 0.075;
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
-		liftRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx,
-    Constants.kTimeoutMs);
+    liftRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     liftRight.setSensorPhase(false);
     liftRight.setInverted(false);
     /* Set relevant frame periods to be at least as fast as periodic rate */
@@ -68,143 +66,122 @@ public class Lift{
     liftRight.configOpenloopRamp(0, 0);
     liftRight.configClosedloopRamp(0, 0);
 
-
-    //#endregion
+    // #endregion
     resetEncoder();
   }
 
-  public void resetEncoder() 
-  {
-		liftRight.setSelectedSensorPosition(0, 0, 10);
-	}
+  public void resetEncoder() {
+    liftRight.setSelectedSensorPosition(0, 0, 10);
+  }
 
-	public void setRampRate(double rate) {
-		liftRight.configOpenloopRamp(rate, 5);
-		liftLeft.configOpenloopRamp(rate, 5);
-	}
+  public void setRampRate(double rate) {
+    liftRight.configOpenloopRamp(rate, 5);
+    liftLeft.configOpenloopRamp(rate, 5);
+  }
 
-	public void setBrakeMode(boolean brake) {
-		if (brake) {
-			liftRight.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-			liftLeft.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-		}
-	}
-
-	public void setCoast(boolean coast) {
-		if (coast) {
-			liftRight.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
-			liftLeft.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+  public void setBrakeMode(boolean brake) {
+    if (brake) {
+      liftRight.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+      liftLeft.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
     }
   }
-    
-  public void update()
-  {
-    if(!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button())
-    {
+
+  public void setCoast(boolean coast) {
+    if (coast) {
+      liftRight.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+      liftLeft.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+    }
+  }
+
+  public void update() {
+    if (!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button()) {
       // System.out.println("Manual Case/DeAct");
-      if(controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15)
-      {
-        System.out.println("CASE HIT");
-        liftRight.configMotionCruiseVelocity(1000,Constants.kTimeoutMs);
+      if (controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15) {
+        // System.out.println("CASE HIT");
+        liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      }
-      else
-      {
+      } else {
         liftRight.set(0);
-      }
-    }
-    else if(ball.getSensor()>=1.3)
-    {
-      if(controls.driver_A_Button())
-      {
-        if (liftBottom.getVoltage()<1.33) 
-        {
-          liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
-        } 
-        else if(getLiftPosition() <= Constants.liftEncoderPosition0)
-        {
-          liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
+        if (liftDown()) {
+          // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          resetEncoder();
           liftPosition = 0;
         }
-        else 
-        {
+      }
+      // if(ball.isStalling() && (getLiftPosition() < Constants.ballPosition1)) {
+      // liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+      // liftPosition = Constants.ballPosition1;
+      // }
+    } else if (!ball.haveBall()) {
+      System.out.println("No ball case");
+      if (controls.driver_A_Button()) {
+        if (liftDown()) {
+          liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
+        } else if (getLiftPosition() <= Constants.liftEncoderPosition0) {
+          liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
+          liftPosition = 0;
+        } else {
           liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
+      } else if (controls.driver_X_Button()) {
+        liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+        liftPosition = Constants.hatchPosition2;
+        System.out.println("X Pressed Read");
+      } else if (controls.driver_Y_Button()) {
+        liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+        liftPosition = Constants.hatchPosition3;
+        System.out.println("Y Pressed Read");
       }
-      else if(controls.driver_X_Button())
-      {
-			  liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-				liftPosition = Constants.hatchPosition2;
-				System.out.println("X Pressed Read");
-      }
-      else if(controls.driver_Y_Button())
-      {
-				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-				liftPosition = Constants.hatchPosition3;
-				System.out.println("Y Pressed Read");
-      }
-    }
-    else if(ball.getSensor() < 1.3)
-    {
+    } else if (ball.haveBall()) {
       System.out.println("Ball Case");
-      if(ball.isStalling() && !controls.driver_X_Button() && !controls.driver_Y_Button() && !controls.driver_A_Button() && (getLiftPosition() < Constants.ballPosition1)) {
-				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-				liftPosition = Constants.ballPosition1;
-      }
-      else if(controls.driver_X_Button())
-      {
-				liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-				liftPosition = Constants.ballPosition2;
-				System.out.println("X Pressed Read");
-      }
-      else if(controls.driver_Y_Button())
-      {
-			  liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-				liftPosition = Constants.ballPosition3;
-				System.out.println("Y Pressed Read");
-      }
-      else if(controls.driver_A_Button())
-      {
-        if (liftBottom.getVoltage()<1.33) 
-        {
+      if (controls.driver_X_Button()) {
+        liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+        liftPosition = Constants.ballPosition2;
+        System.out.println("X Pressed Read");
+      } else if (controls.driver_Y_Button()) {
+        liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
+        liftPosition = Constants.ballPosition3;
+        System.out.println("Y Pressed Read");
+      } else if (controls.driver_A_Button()) {
+        if (liftDown()) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
-        } 
-        else if(getLiftPosition() <= Constants.liftEncoderPosition0)
-        {
+        } else if (getLiftPosition() <= Constants.liftEncoderPosition0) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
           liftPosition = 0;
-        }
-        else 
-        {
+        } else {
           liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
       }
-    }
-    else if (liftBottom.getVoltage()<1.33) 
-    {
+    } else if (liftDown()) {
+      System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       resetEncoder();
       liftPosition = 0;
     }
-    liftRight.set(ControlMode.MotionMagic, liftPosition);
-    }
-
-  public double getLiftPosition() 
-  {
-		return liftRight.getSelectedSensorPosition();
+    liftRight.set(ControlMode.MotionMagic, liftPosition, DemandType.ArbitraryFeedForward, feedFoward);
+    
   }
 
-  public double getSensor(){
+  public double getLiftPosition() {
+    return liftRight.getSelectedSensorPosition();
+  }
+
+  public boolean liftDown() {
+    return liftBottom.getVoltage() < 1.3;
+  }
+
+  public double getSensor() {
     return liftBottom.getVoltage();
   }
 
   // public void setElevator(double ticks)
   // {
-  //   double error = ticks - this.getLiftPosition();
-  //   //double deltaError;
+  // double error = ticks - this.getLiftPosition();
+  // //double deltaError;
 
   // }
+
 }

@@ -18,7 +18,7 @@ public class ElectricalConstants {
 
 	public int ELEVATOR_TALON = 30;
 	public int ELEVATOR_VICTOR = 31;
-
+	
 	public int OVER_BUMPER = 40;
 	public int BALL_LEFT = 41;
 	public int BALL_RIGHT = 42;
@@ -38,7 +38,7 @@ public class ElectricalConstants {
 	// DIOs
 	public int LIFT_BOTTOM = 0;
 	public int HATCH1 = 1;
-	public int HATCH2 = 2; 
+	public int DIO2 = 2; 
 	public int BALLS = 3;
 	public int COMPRESSOR = 4;
 	public int DIO5 = 5;

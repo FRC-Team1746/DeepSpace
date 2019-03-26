@@ -29,7 +29,7 @@ public class Intake{
   }
 
   public void update(){
-    System.out.println("Intake Update");
+    // System.out.println("Intake Update");
     if(controls.driver_RB_Button())
     {
       if(rivet)
@@ -72,13 +72,9 @@ public class Intake{
       }
     }
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
-    
-
-
-
-
+  
     //If we have a ball, and the lift is below the first hatch scoring position:
-    // if(ball.getSensor() <= 1.3 && lift.getLiftPosition() < Constants.ballPosition1)
+    // if(ball.haveBall() && lift.getLiftPosition() < Constants.ballPosition1)
     // {
     //   ball.armDown();
     //   hatch.pivotUp();  

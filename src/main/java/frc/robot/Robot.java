@@ -69,14 +69,14 @@ public class Robot extends TimedRobot {
     }
 
 
-    // System.out.println("Lift Encoders: " + lift.getLiftPosition());
+    System.out.println("Lift Encoders: " + lift.getLiftPosition());
     pneumatics.update();
     lift.update();
     intake.update();
-    // System.out.println("Ball Sensor: " + ball.getSensor());
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
-    // System.out.println("Lift Sensor: " + lift.getSensor());
-    // System.out.println("Ball Sensor: " + ball.getSensor());
+    System.out.println("Lift Sensor: " + lift.liftDown());
+    // System.out.println("Lift Sensor Value:" + lift.getSensor());
+    // System.out.println("Ball Sensor: " + ball.haveBall());
   }
 
   @Override
@@ -85,7 +85,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void testInit() {
+  }
+
+  @Override
   public void testPeriodic() {
+   
   }
 
 }
