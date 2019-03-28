@@ -8,8 +8,8 @@ public class Constants {
 	public static final double hatchPosition3 = liftEncoderPerInch * ((53-liftBottomFromFloor)/3);//56 inches 2065 Ticks (w/out dividing by 3 - 6195 Ticks)
 	public static final double ballPosition1 = liftEncoderPerInch * ((22-liftBottomFromFloor)/3); // 22 inches 705 Ticks (w/out dividing by 3 - 2115 Ticks)
 	public static final double ballPositionCargo = liftEncoderPerInch * ((36-liftBottomFromFloor)/3);//36 Inches 1265 Ticks (w/out dividing by 3 - 3795 Ticks)
-	public static final double ballPosition2 = liftEncoderPerInch * ((49-liftBottomFromFloor)/3);//49 inches 1785 Ticks (w/out dividing by 3 - 5355 Ticks)
-	public static final double ballPosition3 = liftEncoderPerInch * ((77-liftBottomFromFloor)/3);//77 inches 2905 Ticks (w/out dividing by 3 - 8715 Ticks)
+	public static final double ballPosition2 = liftEncoderPerInch * ((45-liftBottomFromFloor)/3);//49 inches 1785 Ticks (w/out dividing by 3 - 5355 Ticks)
+	public static final double ballPosition3 = liftEncoderPerInch * ((70-liftBottomFromFloor)/3);//77 inches 2905 Ticks (w/out dividing by 3 - 8715 Ticks)
 	public static final double liftAutonStartPosition = 0;//Starting Position 
 	public static final double liftEncoderTolerance = liftEncoderPerInch/3;
 	
