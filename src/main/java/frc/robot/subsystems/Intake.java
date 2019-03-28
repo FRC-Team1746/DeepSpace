@@ -62,6 +62,7 @@ public class Intake{
       }
     }else if(lift.getLiftPosition() > (Constants.ballPosition1 - 60)){
       ball.armUp();
+      ballUp = true;
     }
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
   
