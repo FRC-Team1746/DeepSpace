@@ -17,8 +17,7 @@ public class Intake{
   boolean rivet;
   //#endregion
   
-  public Intake(Controls Controls, Lift Lift, Ball Ball, Hatch Hatch)
-  {
+  public Intake(Controls Controls, Lift Lift, Ball Ball, Hatch Hatch){
     controls = Controls;
     lift = Lift;
     hatch = Hatch;
@@ -30,46 +29,39 @@ public class Intake{
 
   public void update(){
     // System.out.println("Intake Update");
-    if(controls.driver_RB_Button())
-    {
-      if(rivet)
-      {
+    if(controls.driver_RB_Button()){
+      if(rivet){
        hatch.rivetIn();
        rivet = false;
       }
-      else
-      {
+      else{
        hatch.rivetOut();
        rivet = true;
       }
-    }else if(controls.driver_St_Button())
-    {
+    }else if(controls.driver_St_Button()){
       System.out.println("Over The Bumper");
       System.out.println("BALLUP: " + ballUp);
-      if(ballUp)
-      {
+      if(ballUp){
         ball.armDown();
          ballUp = false;
       }
-      else
-      {
+      else{
         ball.armUp();
         ballUp = true;
       }
     }
-    else if(controls.driver_LB_Button())
-    {
+    else if(controls.driver_LB_Button()){
       System.out.println("Pivot Has Been Hit");
-      if(hatchUp)
-      {
+      if(hatchUp){
         hatch.pivotDown();
         hatchUp = false;
       }
-      else
-      {
+      else{
         hatch.pivotUp();
         hatchUp = true;
       }
+    }else if(lift.getLiftPosition() > (Constants.ballPosition1 - 60)){
+      ball.armUp();
     }
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
   
