@@ -121,7 +121,7 @@ public class Lift {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
           liftPosition = 0;
         } else {
-          liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
+          liftRight.configMotionCruiseVelocity(175, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
@@ -138,11 +138,11 @@ public class Lift {
       System.out.println("Ball Case");
       if (controls.driver_X_Button()) {
         liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition2;
+        liftPosition = Constants.ballPositionCargo;
         System.out.println("X Pressed Read");
       } else if (controls.driver_Y_Button()) {
         liftRight.configMotionCruiseVelocity(1000, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition3;
+        liftPosition = Constants.ballPosition2;
         System.out.println("Y Pressed Read");
       } else if (controls.driver_A_Button()) {
         if (liftDown()) {
@@ -161,7 +161,11 @@ public class Lift {
       resetEncoder();
       liftPosition = 0;
     }
-    liftRight.set(ControlMode.MotionMagic, liftPosition, DemandType.ArbitraryFeedForward, feedFoward);
+    if(liftPosition == 0){
+      liftRight.set(ControlMode.MotionMagic, liftPosition);
+    }else{
+      liftRight.set(ControlMode.MotionMagic, liftPosition, DemandType.ArbitraryFeedForward, feedFoward);
+    }
     
   }
 

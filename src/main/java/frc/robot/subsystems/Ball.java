@@ -46,8 +46,8 @@ public class Ball{
     if (Math.abs(control) > 0.2)
     {
       stalling = false;
-      ballLeft.set(ControlMode.PercentOutput, -control/4*3);
-      ballRight.set(ControlMode.PercentOutput, -control/4*3);
+      ballLeft.set(ControlMode.PercentOutput, -control);
+      ballRight.set(ControlMode.PercentOutput, -control);
       overBumper.set(ControlMode.PercentOutput, -control/4*3);
     }
     else if(haveBall()){
