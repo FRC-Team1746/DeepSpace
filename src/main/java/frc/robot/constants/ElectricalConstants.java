@@ -20,8 +20,8 @@ public class ElectricalConstants {
 	public int ELEVATOR_VICTOR = 31;
 	
 	public int OVER_BUMPER = 40;
-	public int BALL_LEFT = 41;
-	public int BALL_RIGHT = 42;
+	public int BALL_LEFT = 42; //pract 41
+	public int BALL_RIGHT = 41; //pract 42
 	
 	// MoreBoard
 	public int EMPTY1 = 10;
