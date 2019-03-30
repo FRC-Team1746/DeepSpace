@@ -37,7 +37,7 @@ public class Lift {
     controls = Controls;
     ball = Ball;
     hatch = Hatch;
-    feedFoward = 0.1625;
+    feedFoward = 0.075;
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
@@ -100,6 +100,9 @@ public class Lift {
         // System.out.println("CASE HIT");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
+      } else if(ball.haveBall() && getLiftPosition() < Constants.ballPosition1) {
+        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
+        liftPosition = Constants.ballPosition1;
       } else {
         liftRight.set(0);
         if (liftDown()) {
@@ -117,7 +120,7 @@ public class Lift {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
           liftPosition = 0;
         } else {
-          liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
+          liftRight.configMotionCruiseVelocity(175, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
@@ -134,7 +137,7 @@ public class Lift {
       System.out.println("Ball Case");
       if (controls.driver_X_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition1;
+        liftPosition = Constants.ballPositionCargo;
         System.out.println("X Pressed Read");
       } else if (controls.driver_Y_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
@@ -155,10 +158,6 @@ public class Lift {
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
-      } else if(getLiftPosition() < Constants.ballPosition1){
-        System.out.println("BALLPOSITION1 REACHED");
-        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition1;
       }
     } else if (liftDown()) {
       System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
