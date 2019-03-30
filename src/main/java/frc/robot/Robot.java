@@ -29,14 +29,25 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 		// TeleopDrive.setRampRate(.5);
-		TeleopDrive.setBrakeMode(true);
-    
+    TeleopDrive.setBrakeMode(true);
+    lift.setBrakeMode(true);
   }
 
 
   @Override
   public void autonomousPeriodic() {
-    TeleopDrive.teleopArcadeDrive();
+    vision.lightOnButtonPress(controls.driver_B_Button());
+    if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
+    {
+    TeleopDrive.setSteer(vision.GenerateSteer());
+    }
+    else {
+      TeleopDrive.teleopArcadeDrive();
+    }
+
+    intake.update();
+    pneumatics.update();
+    lift.update();
     intake.update();
   }
 
@@ -50,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-// NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
+    // NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
     // System.out.println("Above The iffff isTargetValid: " + vision.isTargetValid());
     vision.lightOnButtonPress(controls.driver_B_Button());
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
