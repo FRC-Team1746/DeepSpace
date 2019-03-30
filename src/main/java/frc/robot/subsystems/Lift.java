@@ -37,7 +37,7 @@ public class Lift {
     controls = Controls;
     ball = Ball;
     hatch = Hatch;
-    feedFoward = 0.075;
+    feedFoward = 0.1625;
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
@@ -117,7 +117,7 @@ public class Lift {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
           liftPosition = 0;
         } else {
-          liftRight.configMotionCruiseVelocity(175, Constants.kTimeoutMs);
+          liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
@@ -134,7 +134,7 @@ public class Lift {
       System.out.println("Ball Case");
       if (controls.driver_X_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPositionCargo;
+        liftPosition = Constants.ballPosition1;
         System.out.println("X Pressed Read");
       } else if (controls.driver_Y_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
@@ -156,6 +156,7 @@ public class Lift {
         }
         System.out.println("A Pressed Read");
       } else if(getLiftPosition() < Constants.ballPosition1){
+        System.out.println("BALLPOSITION1 REACHED");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = Constants.ballPosition1;
       }
