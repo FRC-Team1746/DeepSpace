@@ -207,6 +207,10 @@ public class Vision {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(camMode);
   }
 
+  public double getCamMode () {
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").getDouble(0);
+  }
+
   public void setPipeLine(int pipeLine) { // 0 through 9 as pipeline
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeLine);
   }
@@ -222,6 +226,13 @@ public class Vision {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("snapshot").setNumber(snapshootingOnOrOf);
   }
 
+  public void PipelineOnPress(boolean button) {
+    if (button && (getCamMode() > 0.5)) {
+      setCamMode(0);
+    } else if (!button && (getCamMode() < 0.5)) {
+      setCamMode(1);
+    }
+  }
 
   public void lightOnButtonPress(boolean button) {
     if (button && (getLedMode() > 0.5)) {
