@@ -100,7 +100,7 @@ public class Lift {
         // System.out.println("CASE HIT");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      } else if(ball.haveBall() && getLiftPosition() < Constants.ballPosition1) {
+      } else if(ball.haveBall() && controls.driver_Se_Button() && getLiftPosition() < Constants.ballPosition1) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = Constants.ballPosition1;
       } else {

@@ -1,11 +1,13 @@
 package frc.robot.constants;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.constants.ElectricalConstants;
 
 public class Controls {
 	ElectricalConstants electricalConstants = new ElectricalConstants();
-	
 	double x_axisSquared;
 	double y_axisSquared;
 	double x_axis;
@@ -16,6 +18,9 @@ public class Controls {
 	boolean rbp = false;
 	boolean stt = false;
 	boolean stp = false;
+	boolean sett = false;
+	boolean setp = false;
+	NetworkTableEntry autoBallOn;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
 	
@@ -23,6 +28,9 @@ public class Controls {
 	{
 		xbox_driver = new Joystick(electricalConstants.JOYSTICK_DRIVER);
 		xbox_oper = new Joystick(electricalConstants.JOYSTICK_OPERATOR);
+		NetworkTableInstance inst = NetworkTableInstance.getDefault();
+		NetworkTable table = inst.getTable("automationChecks");	
+		autoBallOn = table.getEntry("autoBallON");
 	}	
 
 	//AXIS
@@ -114,7 +122,14 @@ public class Controls {
 	}
 
 	public boolean driver_Se_Button(){
-		return xbox_driver.getRawButton(7);
+		if(xbox_driver.getRawButton(7) && !setp) {
+			sett = true;
+		} else {
+			sett = false;
+		}
+		setp = xbox_driver.getRawButton(7);
+		autoBallOn.setBoolean(sett);
+		return sett;
 	}
 
 	public boolean driver_St_Button(){
