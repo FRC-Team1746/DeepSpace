@@ -21,7 +21,7 @@ public class testErrorGen {
     @Before
     public void setup() {
         testGenA = new ErrorGen(inputSource, targetSource, "src\\main\\deploy\\testGenA.csv");
-        testGenB = new ErrorGen(inputSource, targetSource, "src\\main\\deploy\\testGenB.csv");
+        testGenB = new ErrorGen(inputSource, targetSource, "src\\main\\deploy\\testGenB~.csv");
     }
 
     @Test
