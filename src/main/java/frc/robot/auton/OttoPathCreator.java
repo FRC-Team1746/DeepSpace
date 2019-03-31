@@ -2,8 +2,6 @@ package frc.robot.auton;
 
 import static java.util.Arrays.asList;
 
-import org.apache.commons.csv.*;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -43,35 +41,9 @@ public class OttoPathCreator extends AbstractOttoPathCreator {
     protected List<OttoPath> getArcs() throws IOException {
         List<OttoPath> paths = new ArrayList<OttoPath>();
         paths.addAll(getConfigArcs());
-        paths.addAll(generateCsvArcs());
         return paths;
     }   
 
-   
-    private List<OttoPath> generateCsvArcs() throws IOException {
-        List<OttoPath> paths = new ArrayList<OttoPath>();
-
-        List<File> filesInFolder = Files.walk(Paths.get(HOME_FOLDER))
-        .filter(Files::isRegularFile)
-        .map(Path::toFile)
-        .collect(Collectors.toList());
-
-        for(File file : filesInFolder) {
-            OttoPath CsvPath = new OttoPath(config, file.getName());
-            FileReader in = new FileReader(file);
-            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
-            for(CSVRecord record : records) {
-                String x = record.get(1);
-                String y = record.get(2);
-                String velocity = record.get(4);
-                String heading = record.get(7);
-                CsvPath.addWaypoint(Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(heading),
-                Double.parseDouble(velocity), Double.parseDouble(velocity));
-            }
-            paths.add(CsvPath);
-        }
-        return paths;
-    }
 
      /**
      * Configuation Arcs relating to Distance, Turning, and Speed

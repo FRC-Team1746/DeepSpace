@@ -1,4 +1,4 @@
-package frc.robot.auton.tests;
+package frc.robot.tests;
 
 import static org.junit.Assert.assertNotNull;
 
