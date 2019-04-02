@@ -23,6 +23,7 @@ public class Lift {
   private VictorSPX liftLeft;
   private WPI_TalonSRX liftRight;
   private double liftPosition;
+  private boolean autoOn;
 
   private DigitalInput liftBottom;
 
@@ -38,6 +39,7 @@ public class Lift {
     ball = Ball;
     hatch = Hatch;
     feedFoward = 0.25;
+    autoOn = false;
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
@@ -100,7 +102,10 @@ public class Lift {
         // System.out.println("CASE HIT");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      } else if(ball.haveBall() && controls.driver_Se_Button() && getLiftPosition() < Constants.ballPosition1) {
+      } if(controls.driver_Se_Button()) {
+        autoOn = autoOn ? false : true;
+      } if(autoOn) controls.setRumble();
+       else if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = Constants.ballPosition1;
       } else {
@@ -196,3 +201,4 @@ public class Lift {
   // }
 
 }
+  

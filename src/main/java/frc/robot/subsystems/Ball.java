@@ -43,15 +43,19 @@ public class Ball{
 
   public void intakeControl(double control)
   {
+    System.out.println("CONTROL VALUE: " + control);
     if (Math.abs(control) > 0.2){
       stalling = false;
+      System.out.println("Intake");
       ballLeft.set(ControlMode.PercentOutput, control); 
       ballRight.set(ControlMode.PercentOutput, -control);//left //neg pract
       overBumper.set(ControlMode.PercentOutput, control/4*3); //neg pract
-    // }else if(-control < -0.2){
-    //   ballLeft.set(ControlMode.PercentOutput, control/3*2); 
-    //   ballRight.set(ControlMode.PercentOutput, -control/3*2);
-    //   overBumper.set(ControlMode.PercentOutput, 0);
+    }else if(control < -0.2){
+      stalling = false;
+      System.out.println("Outtake");
+      ballLeft.set(ControlMode.PercentOutput, control/10*2); 
+      ballRight.set(ControlMode.PercentOutput, -control/10*2);
+      overBumper.set(ControlMode.PercentOutput, control/10*2);
     }else if(haveBall()){
       stalling = true;
       ballLeft.set(ControlMode.PercentOutput, 0.07);

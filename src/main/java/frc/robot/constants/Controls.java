@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.constants.ElectricalConstants;
 
 public class Controls {
@@ -179,6 +180,11 @@ public class Controls {
 		}else {
 			return false;
 		}
+	}
+
+	public void setRumble() {
+		xbox_driver.setRumble(RumbleType.kLeftRumble, 0.33);
+		xbox_driver.setRumble(RumbleType.kRightRumble, 0.33);
 	}
 }
 

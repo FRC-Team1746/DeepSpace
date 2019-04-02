@@ -48,15 +48,11 @@ public class liftModule {
             autoOn = autoOn ? false : true;
             indicator = autoOn ? 1 : 0;  
           }
-            if(haveBall && getLiftPosition() < Constants.ballPosition1) {
+            if(haveBall && getLiftPosition() < Constants.ballPosition1 && autoOn) {
                 if(autoOn) {
                     liftPosition = Constants.ballPosition1;
                     liftTarget[0] = 800;
                     liftTarget[1] = liftPosition;
-                } else {
-                    liftTarget[0] = 0;
-                    liftTarget[1] = 0;
-                    indicator = 0;
                 }
               }
            else {
