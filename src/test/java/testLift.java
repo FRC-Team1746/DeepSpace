@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +22,17 @@ public class testLift {
 
     @Test
     public void automationToggle() {
-        lift.setDriver_Se_Button(true);
         lift.setHaveBall(true);
+        assertArrayEquals("Test if Otto Off", new double[]{0, 0}, lift.update(), 1e-8);
+        assertEquals("Testing indicator off", 0, lift.indicator, 1e-8);
+        lift.setDriver_Se_Button(true);
         assertArrayEquals("Test if Otto On", new double[]{800, Constants.ballPosition1}, lift.update(), 1e-8);
+        assertEquals("Testing indicator on", 1, lift.indicator, 1e-8);
         lift.setDriver_Se_Button(false);
-        double[] test = lift.update();
+        lift.driver_Se_Button();
         lift.setDriver_Se_Button(true);
         assertArrayEquals("Test if Otto Off", new double[]{0, 0}, lift.update(), 1e-8);
+        assertEquals("Testing indicator off", 0, lift.indicator, 1e-8);
     }
 
     @Test

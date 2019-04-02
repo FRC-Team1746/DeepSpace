@@ -12,6 +12,7 @@ public class liftModule {
     public boolean liftDown;
     public double driver_YR_Axis;
     public double liftPosition;
+    public int indicator;
     public double[] liftTarget;
 
     public liftModule() {
@@ -23,10 +24,11 @@ public class liftModule {
         this.driver_Se_Button = false;
         this.setp = false;
         this.sett = false;
-        this.autoOn = true;
+        this.autoOn = false;
         this.liftDown = false;
         this.driver_YR_Axis = 0;
         this.liftPosition = 0;
+        this.indicator = 0;
         this.liftTarget = new double[2]; // Structure: [TargetVelocity, TargetPosition], -1 Vel means reset, -1 Pos means no Pos Specified
         this.liftTarget[0] = 0;
         this.liftTarget[1] = 0;
@@ -42,21 +44,22 @@ public class liftModule {
             liftTarget[0] = 800;
             liftTarget[1] = liftPosition;
             
-          } else if(driver_Se_Button()) {
-            // Insert Rumble 
+          } if(driver_Se_Button()) {
+            autoOn = autoOn ? false : true;
+            indicator = autoOn ? 1 : 0;  
+          }
             if(haveBall && getLiftPosition() < Constants.ballPosition1) {
                 if(autoOn) {
                     liftPosition = Constants.ballPosition1;
                     liftTarget[0] = 800;
                     liftTarget[1] = liftPosition;
-                    autoOn = false;
                 } else {
                     liftTarget[0] = 0;
                     liftTarget[1] = 0;
-                    autoOn = true;
+                    indicator = 0;
                 }
               }
-          } else {
+           else {
             liftTarget[0] = -1; //liftRight.set(0)
             liftTarget[1] = -1;
             if (liftDown) {
@@ -64,7 +67,7 @@ public class liftModule {
               liftTarget[1] = 0;
             }
           }
-        } else if (!haveBall) {
+         } else if (!haveBall) {
           System.out.println("No ball case");
           if (driver_A_Button) {
             if (liftDown) {
@@ -160,14 +163,14 @@ public class liftModule {
       }
 
       public boolean driver_Se_Button(){
-		if(driver_Se_Button && !setp) {
-			sett = true;
-		} else {
-			sett = false;
-		}
-		setp = driver_Se_Button;
-		return sett;
-	}
+          if(driver_Se_Button && !setp) {
+            sett = true;
+          } else {
+            sett = false;
+          }
+          setp = driver_Se_Button;
+          return sett;
+	    } 
 
       public void setLiftDown(boolean state) {
           liftDown = state;
