@@ -23,12 +23,15 @@ public class liftModule {
         this.driver_Se_Button = false;
         this.setp = false;
         this.sett = false;
-        this.autoOn = false;
+        this.autoOn = true;
         this.liftDown = false;
         this.driver_YR_Axis = 0;
         this.liftPosition = 0;
         this.liftTarget = new double[2]; // Structure: [TargetVelocity, TargetPosition], -1 Vel means reset, -1 Pos means no Pos Specified
+        this.liftTarget[0] = 0;
+        this.liftTarget[1] = 0;
     }
+
 
     public double[] update() {
         if (!driver_A_Button && !driver_X_Button && !driver_Y_Button && !driver_UP_DPAD) {
@@ -50,7 +53,7 @@ public class liftModule {
                 autoOn = true;
             }
           } else {
-            liftTarget[0] = -1;
+            liftTarget[0] = -1; //liftRight.set(0)
             liftTarget[1] = -1;
             if (liftDown) {
               // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -150,6 +153,10 @@ public class liftModule {
           driver_Se_Button = state;
       }
 
+      public void setAutoOn(boolean state) {
+          autoOn = state;
+      }
+
       public boolean driver_Se_Button(){
 		if(driver_Se_Button && !setp) {
 			sett = true;
@@ -169,7 +176,7 @@ public class liftModule {
       }
 
       public double getLiftPosition() {
-          liftPosition += liftTarget[1];
+          liftPosition = 0;
           return liftPosition;
       }
     
