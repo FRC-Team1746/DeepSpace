@@ -19,6 +19,7 @@ deploy {
             // want to store a team number in this file.
             team = frc.getTeamNumber()
         }
+
     }
     artifacts {
         frcJavaArtifact('frcJava') {
@@ -38,30 +39,23 @@ deploy {
 }
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = true
+def includeDesktopSupport = false
 
 // Maven central needed for JUnit & Commons CSV
 repositories {
     maven {url "https://mvnrepository.com/artifact/org.apache.commons/commons-csv"}
     mavenCentral()
 }
-sourceSets {
-    test {
-        java {
-            srcDirs = ["src\\main\\frc\\robot\\tests"]  
-        }
-    }
-}
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12' 
-    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    testCompile 'junit:junit:4.12'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -70,4 +64,10 @@ dependencies {
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
 }

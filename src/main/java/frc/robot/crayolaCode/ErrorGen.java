@@ -1,4 +1,4 @@
-package frc.robot.auton.crayolaCode;
+package frc.robot.crayolaCode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,7 @@ public class ErrorGen {
             BufferedWriter writer = Files.newBufferedWriter(Paths.get(path));
             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("T", "Error"));
         ) {
-            for(int i=0; i<N; i++) {
+            for(int i=0; i<=N; i++) {
                 String error = String.valueOf(targetSource.get()-inputSource.get());
                 csvPrinter.printRecord(String.valueOf(i), error);
             }

@@ -1,4 +1,4 @@
-package frc.robot.auton.crayolaCode;
+package frc.robot.crayolaCode;
 
 import java.util.function.Function;
 
