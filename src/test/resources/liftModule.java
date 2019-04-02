@@ -41,25 +41,27 @@ public class liftModule {
             liftPosition = getLiftPosition() - driver_YR_Axis * 2.5 * Constants.liftEncoderPerInch;
             liftTarget[0] = 800;
             liftTarget[1] = liftPosition;
-          } else if(haveBall && driver_Se_Button() && getLiftPosition() < Constants.ballPosition1) {
-            if(autoOn) {
-                liftPosition = Constants.ballPosition1;
-                liftTarget[0] = 800;
-                liftTarget[1] = liftPosition;
-                autoOn = false;
-            } else {
-                liftTarget[0] = 0;
-                liftTarget[1] = 0;
-                autoOn = true;
-            }
+            
+          } else if(driver_Se_Button()) {
+            // Insert Rumble 
+            if(haveBall && getLiftPosition() < Constants.ballPosition1) {
+                if(autoOn) {
+                    liftPosition = Constants.ballPosition1;
+                    liftTarget[0] = 800;
+                    liftTarget[1] = liftPosition;
+                    autoOn = false;
+                } else {
+                    liftTarget[0] = 0;
+                    liftTarget[1] = 0;
+                    autoOn = true;
+                }
+              }
           } else {
             liftTarget[0] = -1; //liftRight.set(0)
             liftTarget[1] = -1;
             if (liftDown) {
-              // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
               liftTarget[0] = -1;
               liftTarget[1] = 0;
-
             }
           }
         } else if (!haveBall) {
