@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import java.lang.Math;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -24,7 +24,7 @@ public class Lift {
   private WPI_TalonSRX liftRight;
   private double liftPosition;
 
-  private AnalogInput liftBottom;
+  private DigitalInput liftBottom;
 
   private double feedFoward;
 
@@ -33,11 +33,11 @@ public class Lift {
     eConstants = new ElectricalConstants();
     liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
     liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
-    liftBottom = new AnalogInput(eConstants.LIFT_BOTTOM); // Positive = Up
+    liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM); // Positive = Up
     controls = Controls;
     ball = Ball;
     hatch = Hatch;
-    feedFoward = 0.075;
+    feedFoward = 0.25;
 
     liftLeft.follow(liftRight);
     /* first choose the sensor */
@@ -100,12 +100,12 @@ public class Lift {
         // System.out.println("CASE HIT");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      } else if(ball.haveBall() && getLiftPosition() < Constants.ballPosition1) {
-        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition1;
+      // } else if(ball.haveBall() && getLiftPosition() < Constants.ballPosition1) {
+      //   liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
+      //   liftPosition = Constants.ballPosition1;
       } else {
-        liftRight.set(0);
-        if (liftDown()) {
+        // liftRight.set(0);
+        if (!liftBottom.get() && liftPosition == 0) {
           // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           resetEncoder();
           liftPosition = 0;
@@ -114,7 +114,7 @@ public class Lift {
     } else if (!ball.haveBall()) {
       System.out.println("No ball case");
       if (controls.driver_A_Button()) {
-        if (liftDown()) {
+        if (!liftBottom.get()) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
         } else if (getLiftPosition() <= Constants.liftEncoderPosition0) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
@@ -137,7 +137,7 @@ public class Lift {
       System.out.println("Ball Case");
       if (controls.driver_X_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPositionCargo;
+        liftPosition = Constants.ballPosition1;
         System.out.println("X Pressed Read");
       } else if (controls.driver_Y_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
@@ -145,10 +145,14 @@ public class Lift {
         System.out.println("Y Pressed Read");
       } else if(controls.driver_UP_DPAD()){
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition3;
+        liftPosition = Constants.ballPositionCargo;
         System.out.println("UP DPAD Pressed Read");
-      } else if (controls.driver_A_Button()) {
-        if (liftDown()) {
+      } else if(controls.driver_DOWN_DPAD()){
+        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
+        liftPosition = Constants.ballPosition3;
+        System.out.println("DOWN DPAD Pressed Read");
+      }else if (controls.driver_A_Button()) {
+        if (!liftBottom.get()) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
         } else if (getLiftPosition() <= Constants.liftEncoderPosition0) {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
@@ -159,7 +163,7 @@ public class Lift {
         }
         System.out.println("A Pressed Read");
       }
-    } else if (liftDown()) {
+    } else if (!liftBottom.get() && liftPosition == 0) {
       System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       resetEncoder();
       liftPosition = 0;
@@ -177,11 +181,11 @@ public class Lift {
   }
 
   public boolean liftDown() {
-    return liftBottom.getVoltage() > 1.3; //< for the practice bot
+    return liftBottom.get(); //< for the practice bot
   }
 
-  public double getSensor() {
-    return liftBottom.getVoltage();
+  public boolean getSensor() {
+    return liftBottom.get();
   }
 
   // public void setElevator(double ticks)

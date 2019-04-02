@@ -29,7 +29,7 @@ public class Ball{
 		ballRight = new VictorSPX(eConstants.BALL_RIGHT);
     ballLeft = new VictorSPX(eConstants.BALL_LEFT);
     overBumper = new WPI_TalonSRX(eConstants.OVER_BUMPER);
-    balls = new DigitalInput(eConstants.BALLS);
+    balls = new DigitalInput(eConstants.BALLS); 
     ballenoid = new Solenoid(eConstants.BALLENOID); //NO BALLENOID!
   }
 
@@ -43,22 +43,21 @@ public class Ball{
 
   public void intakeControl(double control)
   {
-    if (Math.abs(control) > 0.2)
-    {
+    if (Math.abs(control) > 0.2){
       stalling = false;
       ballLeft.set(ControlMode.PercentOutput, control); 
       ballRight.set(ControlMode.PercentOutput, -control);//left //neg pract
       overBumper.set(ControlMode.PercentOutput, control/4*3); //neg pract
-    }
-    else if(haveBall()){
+    // }else if(-control < -0.2){
+    //   ballLeft.set(ControlMode.PercentOutput, control/3*2); 
+    //   ballRight.set(ControlMode.PercentOutput, -control/3*2);
+    //   overBumper.set(ControlMode.PercentOutput, 0);
+    }else if(haveBall()){
       stalling = true;
       ballLeft.set(ControlMode.PercentOutput, 0.07);
       ballRight.set(ControlMode.PercentOutput, -0.07); //neg pract
       overBumper.set(ControlMode.PercentOutput, 0); // as of 3/24/2019 the practice robot has the right ball intake wired to what the over the bumber is supposed to be connected to (the talon) thus they are reversed --see next-->
-    }          // after wireing is fixed set over the bumber stalling to 0
-                
-    else
-    {
+    }else{
       stalling = false;
       ballLeft.set(ControlMode.PercentOutput, 0);
       ballRight.set(ControlMode.PercentOutput, 0);

@@ -41,7 +41,7 @@ public class ElectricalConstants {
 	public int DIO2 = 2; 
 	public int BALLS = 3;
 	public int COMPRESSOR = 4;
-	public int DIO5 = 5;
+	public int DIO5LB = 5;
 	public int DIO6 = 6;
 	public int DIO7 = 7;
 	public int DIO8 = 8;

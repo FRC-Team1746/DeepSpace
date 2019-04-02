@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
     // NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
     // System.out.println("Above The iffff isTargetValid: " + vision.isTargetValid());
     vision.lightOnButtonPress(controls.driver_B_Button());
+    vision.PipelineOnPress(controls.driver_B_Button());
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
     TeleopDrive.setSteer(vision.GenerateSteer());
@@ -76,19 +77,15 @@ public class Robot extends TimedRobot {
     }
     // System.out.println(vision.getXOffset());
     // System.out.println("below it isTargetValid: " + vision.isTargetValid());
-    if(controls.driver_B_Button()) {
-      // System.out.println("B button pressed");
-    }
-
 
     System.out.println("Lift Encoders: " + lift.getLiftPosition());
     pneumatics.update();
     lift.update();
     intake.update();
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
-    System.out.println("Lift Sensor: " + lift.liftDown());
+    // System.out.println("Lift Sensor: " + lift.liftDown());
     // System.out.println("Lift Sensor Value:" + lift.getSensor());
-    // System.out.println("Ball Sensor: " + ball.haveBall());
+    System.out.println("Ball Sensor: " + ball.haveBall());
   }
 
   @Override

@@ -10,14 +10,14 @@ public class Hatch{
 
   private DoubleSolenoid hatchenoid1;
   private DoubleSolenoid hatchenoid2;
-  private DigitalInput hatch1;
+  // private DigitalInput hatch1;
 
    
 
 
  public Hatch(){
   eConstants = new ElectricalConstants();
-  hatch1 = new DigitalInput(eConstants.HATCH1);
+  // hatch1 = new DigitalInput(eConstants.HATCH1);
   hatchenoid1 = new DoubleSolenoid(eConstants.HATCHENOID11, eConstants.HATCHENOID12);
   hatchenoid2 = new DoubleSolenoid(eConstants.HATCHENOID21, eConstants.HATCHENOID22);
 
@@ -41,9 +41,9 @@ public class Hatch{
   hatchenoid1.set(DoubleSolenoid.Value.kForward);
  }
 
- public boolean getSensor1() { // Inverted Left
-   return !hatch1.get();
- }
+//  public boolean getSensor1() { // Inverted Left
+//    return !hatch1.get();
+//  }
 
 
 }

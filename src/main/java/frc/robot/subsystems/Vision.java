@@ -29,7 +29,7 @@ public class Vision {
   double Drive_K = 0.0;  // tune. Constant for generating drive speed from vision
   double Drive_D = 0;  
   double Steer_K = 0.07;  // tune. Constant for generating turn speed from vision
-  double Steer_D = 0.25;
+  double Steer_D = 0.2;
   double Skew_P = 0.0;
   double txError = 0;
   double skewError = 0;
