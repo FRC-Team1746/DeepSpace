@@ -142,6 +142,11 @@ public class Vision {
       return false;
     }
   }
+
+  
+  public void getRawSkew() {
+    System.out.println(skew); 
+  }
   
   public double getXOffset() {
     return xOffset;

@@ -3,7 +3,7 @@ package frc.robot.constants;
 public class Constants {
 	public static final double liftEncoderPerInch = 100; //Practice Bot: 120
 	public static final double liftBottomFromFloor = 4.375; // Inches
-	public static final double liftEncoderPosition0 = 0;
+	public static final double liftEncoderPosition0 = liftEncoderPerInch/2;
 	public static final double hatchPosition2 = liftEncoderPerInch * ((33-liftBottomFromFloor)/3);//28 inches 788 Ticks (w/out dividing by 3 - 2835 Ticks)
 	public static final double hatchPosition3 = liftEncoderPerInch * ((60-liftBottomFromFloor)/3);//56 inches 2065 Ticks (w/out dividing by 3 - 6195 Ticks)
 	public static final double ballPosition1 = liftEncoderPerInch * ((24-liftBottomFromFloor)/3); // 22 inches 705 Ticks (w/out dividing by 3 - 2115 Ticks)

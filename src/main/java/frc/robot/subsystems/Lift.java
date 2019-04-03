@@ -110,7 +110,7 @@ public class Lift {
         liftPosition = Constants.ballPosition1;
       } else {
         // liftRight.set(0);
-        if (!liftBottom.get() && liftPosition == 0) {
+        if (!liftBottom.get()) {
           // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           resetEncoder();
           liftPosition = 0;
@@ -125,7 +125,7 @@ public class Lift {
           liftRight.configMotionCruiseVelocity(0, Constants.kTimeoutMs);
           liftPosition = 0;
         } else {
-          liftRight.configMotionCruiseVelocity(175, Constants.kTimeoutMs);
+          liftRight.configMotionCruiseVelocity(132, Constants.kTimeoutMs);
           liftPosition = Constants.liftEncoderPosition0;
         }
         System.out.println("A Pressed Read");
@@ -168,7 +168,7 @@ public class Lift {
         }
         System.out.println("A Pressed Read");
       }
-    } else if (!liftBottom.get() && liftPosition == 0) {
+    } else if (!liftBottom.get()) {
       System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       resetEncoder();
       liftPosition = 0;

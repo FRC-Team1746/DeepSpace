@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Above The iffff isTargetValid: " + vision.isTargetValid());
     vision.lightOnButtonPress(controls.driver_B_Button());
     vision.PipelineOnPress(controls.driver_B_Button());
+    vision.getRawSkew();
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
     TeleopDrive.setSteer(vision.GenerateSteer());
