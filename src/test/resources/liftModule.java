@@ -1,3 +1,4 @@
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 
 // Purpose of this class? Actually have a "lift" which is unit-testable >:}
@@ -9,10 +10,10 @@ public class liftModule {
     public boolean driver_Y_Button;
     public boolean driver_Se_Button;
     public boolean setp, sett, autoOn;
-    public boolean liftDown, ledIndicator;
+    public boolean liftDown, ledIndicator, rumble;
     public double driver_YR_Axis;
     public double liftPosition;
-    public int indicator;
+    public int indicator, timer, rumbleTimer;
     public double[] liftTarget;
 
     public liftModule() {
@@ -24,6 +25,8 @@ public class liftModule {
         this.driver_Se_Button = false;
         this.setp = false;
         this.sett = false;
+        this.timer = 0; 
+        this.rumbleTimer = 0;
         this.ledIndicator = false;
         this.autoOn = false;
         this.liftDown = false;
@@ -47,16 +50,23 @@ public class liftModule {
             
           } if(driver_Se_Button()) {
             autoOn = autoOn ? false : true;
-            indicator = autoOn ? 1 : 0;  
-          } if(haveBall && getLiftPosition() < Constants.ballPosition1 && autoOn) {
+            rumble = true;
+            if(rumbleTimer++ >= 30) {
+              rumbleTimer = 0;
+              rumble = false;
+            }
+          } if(haveBall && getLiftPosition() < Constants.ballPosition1) {
                 if(autoOn) {
                     liftPosition = Constants.ballPosition1;
                     liftTarget[0] = 800;
                     liftTarget[1] = liftPosition;
                 }
           } if(autoOn && !haveBall) {
-            liftTarget[0] = ledIndicator ? 1 : 0;
-            liftTarget[1] = -1;
+            ledIndicator = true;
+            if(timer++ >= 50) {
+              timer = 0;
+              ledIndicator = false;
+            }
           }
            else {
             liftTarget[0] = -1; //liftRight.set(0)
@@ -163,6 +173,14 @@ public class liftModule {
 
       public void setLedIndicator(boolean state) {
           ledIndicator = state;
+      }
+
+      public void setRumbleTimer(int seconds) {
+        rumbleTimer = seconds;
+      }
+
+      public void setTimer(int seconds) {
+        timer = seconds;
       }
 
       public boolean driver_Se_Button(){

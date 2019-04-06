@@ -11,17 +11,19 @@ public class Intake{
   Hatch hatch;
   Ball ball;
   Lift lift;
+  Climb climb;
 
   boolean ballUp; 
   boolean hatchUp;
   boolean rivet;
   //#endregion
   
-  public Intake(Controls Controls, Lift Lift, Ball Ball, Hatch Hatch){
+  public Intake(Controls Controls, Lift Lift, Ball Ball, Hatch Hatch, Climb Climb){
     controls = Controls;
     lift = Lift;
     hatch = Hatch;
     ball = Ball;
+    climb = Climb;
     rivet = true;
     hatchUp = true;
     ballUp = true;
@@ -31,22 +33,26 @@ public class Intake{
     // System.out.println("Intake Update");
     if(controls.driver_RB_Button()){
       if(rivet){
-       hatch.rivetIn();
-       rivet = false;
+       //Is rivet in engaged or disengaged?
+        hatch.rivetIn();
+        rivet = false;
       }
       else{
        hatch.rivetOut();
        rivet = true;
       }
     }else if(controls.driver_St_Button()){
+      System.out.println("OTB was activated");
       System.out.println("Over The Bumper");
       System.out.println("BALLUP: " + ballUp);
       if(ballUp){
         ball.armDown();
-         ballUp = false;
+        System.out.println("Arm Down");
+        ballUp = false;
       }
       else{
         ball.armUp();
+        System.out.println("Arm Up");
         ballUp = true;
       }
     }
@@ -62,7 +68,10 @@ public class Intake{
       }
     }else if(lift.getLiftPosition() > (Constants.ballPosition1 - 60)){
       ball.armUp();
+      System.out.println("Ball Has Come up due to lift");
       ballUp = true;
+    }else if(controls.driver_RIGHT_DPAD()){
+      climb.engageClimb();
     }
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
   

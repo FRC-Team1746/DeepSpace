@@ -10,6 +10,7 @@ public class Robot extends TimedRobot {
   Intake intake;
   Ball ball;
   Hatch hatch;
+  Climb climb;
   Pneumatics pneumatics;
   Vision vision;
 
@@ -20,7 +21,8 @@ public class Robot extends TimedRobot {
     hatch = new Hatch();
     ball = new Ball();
     lift = new Lift(controls, ball, hatch);
-    intake = new Intake(controls, lift, ball, hatch);
+    climb = new Climb();
+    intake = new Intake(controls, lift, ball, hatch, climb);
     pneumatics = new Pneumatics();
     vision = new Vision();
   }
@@ -28,7 +30,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-		// TeleopDrive.setRampRate(.5);
     TeleopDrive.setBrakeMode(true);
     lift.setBrakeMode(true);
   }
@@ -46,7 +47,6 @@ public class Robot extends TimedRobot {
       TeleopDrive.teleopArcadeDrive();
     }
 
-    intake.update();
     pneumatics.update();
     lift.update();
     intake.update();
@@ -54,39 +54,30 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-		// TeleopDrive.setRampRate(.5);
     TeleopDrive.setBrakeMode(true);
-    // TeleopDrive.resetEncoders();
     lift.setBrakeMode(true);
   }
 
   @Override
   public void teleopPeriodic() {
-    // NEEDS TO BE AN UPDATE METHOD WITHIN VISION CLASS GarbanzoBean
-    // System.out.println("Above The iffff isTargetValid: " + vision.isTargetValid());
     vision.lightOnButtonPress(controls.driver_B_Button());
     vision.PipelineOnPress(controls.driver_B_Button());
-    vision.getRawSkew();
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
     TeleopDrive.setSteer(vision.GenerateSteer());
-    // System.out.println(vision.getXOffset());
     }
     else {
-      // System.out.println("Fetch Update Vision: " + vision.fetchUpdate());
       TeleopDrive.teleopArcadeDrive();
     }
-    // System.out.println(vision.getXOffset());
-    // System.out.println("below it isTargetValid: " + vision.isTargetValid());
 
-    System.out.println("Lift Encoders: " + lift.getLiftPosition());
     pneumatics.update();
     lift.update();
     intake.update();
+    System.out.println("Lift Encoders: " + lift.getLiftPosition());
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     // System.out.println("Lift Sensor: " + lift.liftDown());
     // System.out.println("Lift Sensor Value:" + lift.getSensor());
-    System.out.println("Ball Sensor: " + ball.haveBall());
+    // System.out.println("Ball Sensor: " + ball.haveBall());
   }
 
   @Override

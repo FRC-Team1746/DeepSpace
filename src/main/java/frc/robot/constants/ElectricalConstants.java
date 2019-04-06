@@ -51,7 +51,7 @@ public class ElectricalConstants {
 	
 	//PCM
 	public int BALLENOID = 0; 
-	public int PCM1 = 1;
+	public int CLIMBENOID = 1;
 	public int PCM2 = 2;
 	public int PCM5 = 5;
 	public int HATCHENOID21 = 4; //lefttopup(out)
@@ -61,7 +61,7 @@ public class ElectricalConstants {
 	
 	//Relay
 	public int POWER = 0;
-	public int relay1 = 1;
+	public int LED = 1;
 	public int relay2 = 2;
 	public int relay3 = 3;
 	

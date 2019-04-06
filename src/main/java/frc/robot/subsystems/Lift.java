@@ -5,6 +5,9 @@ import java.lang.Math;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
+
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -22,11 +25,12 @@ public class Lift {
 
   private VictorSPX liftLeft;
   private WPI_TalonSRX liftRight;
-  private double liftPosition;
-  private boolean autoOn;
-
   private DigitalInput liftBottom;
+  private Relay led;
 
+  private double liftPosition;
+  private int ledTimer = 0, rumbleTimer = 0;
+  private boolean autoOn;
   private double feedFoward;
 
   public Lift(Controls Controls, Ball Ball, Hatch Hatch) {
@@ -35,10 +39,11 @@ public class Lift {
     liftLeft = new VictorSPX(eConstants.ELEVATOR_VICTOR);
     liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
     liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM); // Positive = Up
+    led = new Relay(eConstants.LED);
     controls = Controls;
     ball = Ball;
     hatch = Hatch;
-    feedFoward = 0.25;
+    feedFoward = 0.2;
     autoOn = false;
 
     liftLeft.follow(liftRight);
@@ -96,31 +101,45 @@ public class Lift {
   }
 
   public void update() {
-    if (!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button() && !controls.driver_UP_DPAD()) {
-      // System.out.println("Manual Case/DeAct");
+    if (!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button() && !controls.driver_UP_DPAD() && !controls.driver_DOWN_DPAD()) {
+      System.out.println("Manual Case/DeAct");
       if (controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15) {
-        // System.out.println("CASE HIT");
+        System.out.println("Y AXIS CASE");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      } if(controls.driver_Se_Button()) {
-        controls.setRumble(0.3);
-        autoOn = autoOn ? false : true;
-        controls.setRumble(0);
-      } if(!ball.haveBall() && autoOn) {
-        controls.setRumble(0.33);
-      }
-       if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
-        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition1;
+      // } if(controls.driver_Se_Button()) {
+      //   autoOn = autoOn ? false : true;
+      //   controls.setRumble(0.33);
+      //   if(rumbleTimer++ >= 30) {
+      //     rumbleTimer = 0;
+      //     controls.setRumble(0);
+      //   }
+      // } 
+      //   if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
+      //   liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
+      //   liftPosition = Constants.ballPosition1;
       } else {
-        // liftRight.set(0);
+        liftRight.set(0);
         if (!liftBottom.get()) {
-          // System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           resetEncoder();
           liftPosition = 0;
         }
-      }
+        // if(autoOn && !ball.haveBall()) {
+        //   led.set(Value.kForward);
+        //   if(ledTimer++ >= 50) {
+        //     ledTimer = 0;
+        //     led.set(Value.kReverse);
+        //   }
+        // }
+        if(ball.haveBall()){
+          led.set(Value.kForward);
+        }else if(!ball.haveBall()){
+          led.set(Value.kReverse);
+        }      
+     }
     } else if (!ball.haveBall()) {
+      led.set(Value.kReverse);
       System.out.println("No ball case");
       if (controls.driver_A_Button()) {
         if (!liftBottom.get()) {
@@ -143,6 +162,7 @@ public class Lift {
         System.out.println("Y Pressed Read");
       }
     } else if (ball.haveBall()) {
+      led.set(Value.kForward);
       System.out.println("Ball Case");
       if (controls.driver_X_Button()) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
@@ -178,8 +198,10 @@ public class Lift {
       liftPosition = 0;
     }
     if(liftPosition == 0){
+      System.out.println("Lift position is zero");
       liftRight.set(ControlMode.MotionMagic, liftPosition);
     }else{
+      System.out.println("Lift Position NOOONNN zero");
       liftRight.set(ControlMode.MotionMagic, liftPosition, DemandType.ArbitraryFeedForward, feedFoward);
     }
     
