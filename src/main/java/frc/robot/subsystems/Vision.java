@@ -28,7 +28,9 @@ public class Vision {
   // double Drive_D = 0.18;     // tune. Constant for generating drive speed from area errors in vision
   double Drive_K = 0.0;  // tune. Constant for generating drive speed from vision
   double Drive_D = 0;  
-  double Steer_K = 0.07;  // tune. Constant for generating turn speed from vision
+  // double Steer_K = 0.075;  // tune. Constant for generating turn speed from vision. (OG) P: 0.07 D: 0.2
+  // double Steer_D = 0.3;
+  double Steer_K = 0.07;  // tune. Constant for generating turn speed from vision. (OG) P: 0.07 D: 0.2
   double Steer_D = 0.2;
   double Skew_P = 0.0;
   double txError = 0;

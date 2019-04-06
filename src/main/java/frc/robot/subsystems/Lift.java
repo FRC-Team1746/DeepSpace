@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import java.lang.Math;
+// import java.lang.Math;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -101,21 +101,20 @@ public class Lift {
 
   public void update() {
     if (!controls.driver_A_Button() && !controls.driver_X_Button() && !controls.driver_Y_Button() && !controls.driver_UP_DPAD() && !controls.driver_DOWN_DPAD()) {
-      System.out.println("Manual Case/DeAct");
       if (controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15) {
-        System.out.println("Y AXIS CASE");
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
       // } if(controls.driver_Se_Button()) {
       //   autoOn = autoOn ? false : true;
-      // } if(autoOn) controls.setRumble();
-      //  else if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
+      // } if(autoOn) {
+      //   controls.setRumble(0.33);
+      // }
+      //  if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
       //   liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
       //   liftPosition = Constants.ballPosition1;
       } else {
         liftRight.set(0);
         if (!liftBottom.get()) {
-          System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           resetEncoder();
           liftPosition = 0;
         }
@@ -180,15 +179,12 @@ public class Lift {
         System.out.println("A Pressed Read");
       }
     } else if (!liftBottom.get()) {
-      System.out.println("RESET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       resetEncoder();
       liftPosition = 0;
     }
     if(liftPosition == 0){
-      System.out.println("Lift position is zero");
       liftRight.set(ControlMode.MotionMagic, liftPosition);
     }else{
-      System.out.println("Lift Position NOOONNN zero");
       liftRight.set(ControlMode.MotionMagic, liftPosition, DemandType.ArbitraryFeedForward, feedFoward);
     }
     

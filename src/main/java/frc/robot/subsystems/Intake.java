@@ -30,7 +30,6 @@ public class Intake{
   }
 
   public void update(){
-    // System.out.println("Intake Update");
     if(controls.driver_RB_Button()){
       if(rivet){
        //Is rivet in engaged or disengaged?
@@ -42,22 +41,16 @@ public class Intake{
        rivet = true;
       }
     }else if(controls.driver_St_Button()){
-      System.out.println("OTB was activated");
-      System.out.println("Over The Bumper");
-      System.out.println("BALLUP: " + ballUp);
       if(ballUp){
         ball.armDown();
-        System.out.println("Arm Down");
         ballUp = false;
       }
       else{
         ball.armUp();
-        System.out.println("Arm Up");
         ballUp = true;
       }
     }
     else if(controls.driver_LB_Button()){
-      System.out.println("Pivot Has Been Hit");
       if(hatchUp){
         hatch.pivotDown();
         hatchUp = false;

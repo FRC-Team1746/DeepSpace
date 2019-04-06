@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    controls.setRumble(0);
     super.disabledPeriodic();
   }
 

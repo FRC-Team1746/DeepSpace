@@ -18,8 +18,8 @@ public class Ball{
   private Solenoid ballenoid;
   private DigitalInput balls;
 
-  private int ballSenseCounter = 0;
-  private boolean haveBall = false;
+  // private int ballSenseCounter = 0;
+  // private boolean haveBall = false;
 
   private boolean stalling;
   
@@ -43,16 +43,13 @@ public class Ball{
 
   public void intakeControl(double control)
   {
-    System.out.println("CONTROL VALUE: " + control);
     if (Math.abs(control) > 0.2){
       stalling = false;
-      System.out.println("Intake");
       ballLeft.set(ControlMode.PercentOutput, control); 
       ballRight.set(ControlMode.PercentOutput, -control);//left //neg pract
       overBumper.set(ControlMode.PercentOutput, control/4*3); //neg pract
     }else if(control < -0.2){
       stalling = false;
-      System.out.println("Outtake");
       ballLeft.set(ControlMode.PercentOutput, control/10*2); 
       ballRight.set(ControlMode.PercentOutput, -control/10*2);
       overBumper.set(ControlMode.PercentOutput, control/10*2);

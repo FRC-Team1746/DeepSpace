@@ -182,9 +182,9 @@ public class Controls {
 		}
 	}
 
-	public void setRumble() {
-		xbox_driver.setRumble(RumbleType.kLeftRumble, 0.33);
-		xbox_driver.setRumble(RumbleType.kRightRumble, 0.33);
+	public void setRumble(double value) {
+		xbox_driver.setRumble(RumbleType.kLeftRumble, value);
+		xbox_driver.setRumble(RumbleType.kRightRumble, value);
 	}
 }
 
