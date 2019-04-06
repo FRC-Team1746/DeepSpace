@@ -103,9 +103,13 @@ public class Lift {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
       } if(controls.driver_Se_Button()) {
+        controls.setRumble(0.3);
         autoOn = autoOn ? false : true;
-      } if(autoOn) controls.setRumble();
-       else if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
+        controls.setRumble(0);
+      } if(!ball.haveBall() && autoOn) {
+        controls.setRumble(0.33);
+      }
+       if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = Constants.ballPosition1;
       } else {

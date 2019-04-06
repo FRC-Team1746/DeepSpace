@@ -9,7 +9,7 @@ public class liftModule {
     public boolean driver_Y_Button;
     public boolean driver_Se_Button;
     public boolean setp, sett, autoOn;
-    public boolean liftDown;
+    public boolean liftDown, ledIndicator;
     public double driver_YR_Axis;
     public double liftPosition;
     public int indicator;
@@ -24,6 +24,7 @@ public class liftModule {
         this.driver_Se_Button = false;
         this.setp = false;
         this.sett = false;
+        this.ledIndicator = false;
         this.autoOn = false;
         this.liftDown = false;
         this.driver_YR_Axis = 0;
@@ -47,14 +48,16 @@ public class liftModule {
           } if(driver_Se_Button()) {
             autoOn = autoOn ? false : true;
             indicator = autoOn ? 1 : 0;  
-          }
-            if(haveBall && getLiftPosition() < Constants.ballPosition1 && autoOn) {
+          } if(haveBall && getLiftPosition() < Constants.ballPosition1 && autoOn) {
                 if(autoOn) {
                     liftPosition = Constants.ballPosition1;
                     liftTarget[0] = 800;
                     liftTarget[1] = liftPosition;
                 }
-              }
+          } if(autoOn && !haveBall) {
+            liftTarget[0] = ledIndicator ? 1 : 0;
+            liftTarget[1] = -1;
+          }
            else {
             liftTarget[0] = -1; //liftRight.set(0)
             liftTarget[1] = -1;
@@ -156,6 +159,10 @@ public class liftModule {
 
       public void setAutoOn(boolean state) {
           autoOn = state;
+      }
+
+      public void setLedIndicator(boolean state) {
+          ledIndicator = state;
       }
 
       public boolean driver_Se_Button(){
