@@ -29,6 +29,7 @@ public class Lift {
   private Relay led;
 
   private double liftPosition;
+  private int ledTimer = 0, rumbleTimer = 0;
   private boolean autoOn;
   private double feedFoward;
 
@@ -106,10 +107,13 @@ public class Lift {
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
       // } if(controls.driver_Se_Button()) {
       //   autoOn = autoOn ? false : true;
-      // } if(autoOn) {
       //   controls.setRumble(0.33);
-      // }
-      //  if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
+      //   if(rumbleTimer++ >= 30) {
+      //     rumbleTimer = 0;
+      //     controls.setRumble(0);
+      //   }
+      // } 
+      //   if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
       //   liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
       //   liftPosition = Constants.ballPosition1;
       } else {
@@ -118,12 +122,19 @@ public class Lift {
           resetEncoder();
           liftPosition = 0;
         }
+        // if(autoOn && !ball.haveBall()) {
+        //   led.set(Value.kForward);
+        //   if(ledTimer++ >= 50) {
+        //     ledTimer = 0;
+        //     led.set(Value.kReverse);
+        //   }
+        // }
         if(ball.haveBall()){
-          led.set(Value.kForward);;
+          led.set(Value.kForward);
         }else if(!ball.haveBall()){
           led.set(Value.kReverse);
-        }
-      }
+        }      
+     }
     } else if (!ball.haveBall()) {
       led.set(Value.kReverse);
       System.out.println("No ball case");
