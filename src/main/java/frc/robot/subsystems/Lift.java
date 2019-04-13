@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 // import java.lang.Math;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -22,6 +26,9 @@ public class Lift {
   Controls controls;
   Ball ball;
   Hatch hatch;
+  NetworkTableInstance inst;
+  NetworkTable table;
+  NetworkTableEntry isAutoOn;
 
   private VictorSPX liftLeft;
   private WPI_TalonSRX liftRight;
@@ -29,7 +36,9 @@ public class Lift {
   private Relay led;
 
   private double liftPosition;
-  private int ledTimer = 0, rumbleTimer = 0;
+  private int ledTimer;
+  private int rumbleTimer;
+  private int ledOffTimer;
   private boolean autoOn;
   private double feedFoward;
 
@@ -40,10 +49,18 @@ public class Lift {
     liftRight = new WPI_TalonSRX(eConstants.ELEVATOR_TALON); // Positive = Up
     liftBottom = new DigitalInput(eConstants.LIFT_BOTTOM); // Positive = Up
     led = new Relay(eConstants.LED);
+    inst = NetworkTableInstance.getDefault();
+    table = inst.getTable("automationToggle");
+    isAutoOn = table.getEntry("ballAutomation");
+
+
     controls = Controls;
     ball = Ball;
     hatch = Hatch;
     feedFoward = 0.2;
+    ledTimer = 0;
+    rumbleTimer = 0;
+    ledOffTimer = 0;
     autoOn = false;
 
     liftLeft.follow(liftRight);
@@ -105,28 +122,56 @@ public class Lift {
       if (controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      // } if(controls.driver_Se_Button()) {
-      //   autoOn = autoOn ? false : true;
-      //   controls.setRumble(0.33);
-      //   if(rumbleTimer++ >= 30) {
-      //     rumbleTimer = 0;
-      //     controls.setRumble(0);
-      //   }
-      // } 
-      //   if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
-      //   liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-      //   liftPosition = Constants.ballPosition1;
-      } else {
+      }else if((getLiftPosition() <= 100)){
+        System.out.println("DROPPPPPPPPPPPPPPPPP");
+        if(getLiftPosition() <= 10){
+          liftRight.configMotionCruiseVelocity(100, Constants.kTimeoutMs);
+
+        }else{
+          liftRight.configMotionCruiseVelocity(50, Constants.kTimeoutMs);
+        }
+        liftPosition = 0;
+        if (!liftBottom.get()) {
+          resetEncoder();
+          liftPosition = 0;
+        }      
+      }/*if(controls.driver_Se_Button()) {
+        autoOn = autoOn ? false : true;
+        System.out.println("AutomationToggled");
+        if(autoOn) {
+          isAutoOn.setString("ENABLED!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        } else {
+          isAutoOn.setString("");
+        }
+      }*/ /*if(autoOn) {
+          rumbleTimer++;
+          if(rumbleTimer >= 30) {
+            System.out.println("Rumble Timer: " + rumbleTimer);
+            rumbleTimer = 0;
+            controls.setRumble(0);
+          } else {
+            controls.setRumble(0.33);
+          }
+      } */
+      /*if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
+        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
+        liftPosition = Constants.ballPosition1;
+      }*/ else {
         liftRight.set(0);
         if (!liftBottom.get()) {
           resetEncoder();
           liftPosition = 0;
         }
         // if(autoOn && !ball.haveBall()) {
+        //   System.out.println("Toggle LEDs");
         //   led.set(Value.kForward);
-        //   if(ledTimer++ >= 50) {
-        //     ledTimer = 0;
+        //   if(ledTimer++ >= 100) {
+        //     System.out.println("Timer 0");
         //     led.set(Value.kReverse);
+        //     if(ledOffTimer++ >= 100) {
+        //       ledOffTimer = 0;
+        //       ledTimer = 0;
+        //     }
         //   }
         // }
         if(ball.haveBall()){

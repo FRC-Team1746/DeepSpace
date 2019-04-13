@@ -1,21 +1,29 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.ElectricalConstants;
-import frc.robot.constants.Controls;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.constants.Constants;
-import edu.wpi.first.wpilibj.Solenoid;
 
 public class Climb{
   ElectricalConstants eConstants;
   
-  private Solenoid climbenoid;
-  
+  private WPI_VictorSPX leftSuck;
+  private WPI_VictorSPX rightSuck;
+  private WPI_VictorSPX leftLift;
+  private WPI_VictorSPX rightLift;
+
   public Climb(){
-    climbenoid = new Solenoid(1);
+    // leftSuck = new WPI_VictorSPX(eConstants.SUCK_LEFT);
+    // rightSuck = new WPI_VictorSPX(eConstants.SUCK_LEFT);
+    // leftLift = new WPI_VictorSPX(eConstants.LIFT_LEFT);
+    // rightLift = new WPI_VictorSPX(eConstants.LIFT_RIGHT);
   }
 
-  public void engageClimb(){
-    climbenoid.set(true);
+  public void suck(){
+  }
+
+  public void lift(){
+
   }
 }
 

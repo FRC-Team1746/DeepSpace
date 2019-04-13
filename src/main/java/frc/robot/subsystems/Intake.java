@@ -40,6 +40,12 @@ public class Intake{
        hatch.rivetOut();
        rivet = true;
       }
+    // }else if(hatch.getSensor1()){
+    //   if(rivet){
+    //     hatch.rivetIn();
+    //   }else if(!rivet){
+    //     hatch.rivetOut();
+    //   }
     }else if(controls.driver_St_Button()){
       if(ballUp){
         ball.armDown();
@@ -63,8 +69,6 @@ public class Intake{
       ball.armUp();
       System.out.println("Ball Has Come up due to lift");
       ballUp = true;
-    }else if(controls.driver_RIGHT_DPAD()){
-      climb.engageClimb();
     }
     ball.intakeControl(controls.driver_L_Trigger() - controls.driver_R_Trigger());
   

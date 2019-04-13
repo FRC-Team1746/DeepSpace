@@ -22,6 +22,11 @@ public class ElectricalConstants {
 	public int OVER_BUMPER = 40;
 	public int BALL_LEFT = 42; //pract 41
 	public int BALL_RIGHT = 41; //pract 42
+
+	public int SUCK_RIGHT = 60;
+	public int SUCK_LEFT = 61;
+	public int LIFT_RIGHT = 62;
+	public int LIFT_LEFT = 63;
 	
 	// MoreBoard
 	public int EMPTY1 = 10;

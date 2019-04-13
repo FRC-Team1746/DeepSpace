@@ -182,6 +182,14 @@ public class Controls {
 		}
 	}
 
+	public boolean SUCK_Button(){
+		return xbox_driver.getRawButton(0);
+	}
+
+	public boolean LIFT_Button(){
+		return xbox_oper.getRawButton(1);
+	}
+
 	public void setRumble(double value) {
 		xbox_driver.setRumble(RumbleType.kLeftRumble, value);
 		xbox_driver.setRumble(RumbleType.kRightRumble, value);
