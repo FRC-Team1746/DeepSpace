@@ -185,17 +185,17 @@ public class Controls {
 	}
 
 	public boolean SUCK_Button(){
-		if(xbox_oper.getRawButton(1) && !lsp) {
+		if(xbox_oper.getRawButton(2) && !lsp) {
 			lst = true;
 		} else {
 			lst = false;
 		}
-		lsp = xbox_oper.getRawButton(1);
+		lsp = xbox_oper.getRawButton(2);
 		return lst;
 	}
 
 	public boolean LIFT_Button(){
-		return xbox_oper.getRawButton(2);
+		return xbox_oper.getRawButton(1);
 	}
 
 	public void setRumble(double value) {
