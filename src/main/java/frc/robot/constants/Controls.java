@@ -21,6 +21,8 @@ public class Controls {
 	boolean stp = false;
 	boolean sett = false;
 	boolean setp = false;
+	boolean lst = false;
+	boolean lsp = false;
 	NetworkTableEntry autoBallOn;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
@@ -183,11 +185,17 @@ public class Controls {
 	}
 
 	public boolean SUCK_Button(){
-		return xbox_driver.getRawButton(0);
+		if(xbox_oper.getRawButton(1) && !lsp) {
+			lst = true;
+		} else {
+			lst = false;
+		}
+		lsp = xbox_oper.getRawButton(1);
+		return lst;
 	}
 
 	public boolean LIFT_Button(){
-		return xbox_oper.getRawButton(1);
+		return xbox_oper.getRawButton(2);
 	}
 
 	public void setRumble(double value) {

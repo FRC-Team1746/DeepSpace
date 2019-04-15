@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
     hatch = new Hatch();
     ball = new Ball();
     lift = new Lift(controls, ball, hatch);
-    climb = new Climb();
+    climb = new Climb(controls);
     intake = new Intake(controls, lift, ball, hatch, climb);
     pneumatics = new Pneumatics();
     vision = new Vision();
@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
     pneumatics.update();
     lift.update();
     intake.update();
+    climb.update();
     System.out.println("Lift Encoders: " + lift.getLiftPosition());
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     // System.out.println("Lift Sensor: " + lift.liftDown());
