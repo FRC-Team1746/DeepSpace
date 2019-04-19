@@ -40,12 +40,6 @@ public class Intake{
        hatch.rivetOut();
        rivet = true;
       }
-    // }else if(hatch.getSensor1()){
-    //   if(rivet){
-    //     hatch.rivetIn();
-    //   }else if(!rivet){
-    //     hatch.rivetOut();
-    //   }
     }else if(controls.driver_St_Button()){
       if(ballUp){
         ball.armDown();

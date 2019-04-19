@@ -20,6 +20,8 @@ public class Vision {
   double tvert;        // Vertical sidelength of the rough bounding box (0 - 320 pixels)
   double getpipe;      // True active pipeline index of the camera (0 .. 9)
   double camtran;      // Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
+
+  boolean lightOn = true;
       // below group is used for generating drive and steer from vision
   double LimelightDriveCommand;
   double LimelightDriveMax = 0.4;
@@ -30,7 +32,7 @@ public class Vision {
   double Drive_D = 0;  
   // double Steer_K = 0.075;  // tune. Constant for generating turn speed from vision. (OG) P: 0.07 D: 0.2
   // double Steer_D = 0.3;
-  double Steer_K = 0.07;  // tune. Constant for generating turn speed from vision. (OG) P: 0.07 D: 0.2
+  double Steer_K = 0.06;  // tune. Constant for generating turn speed from vision. (OG) P: 0.07 D: 0.2
   double Steer_D = 0.2;
   double Skew_P = 0.0;
   double txError = 0;
@@ -241,11 +243,27 @@ public class Vision {
     }
   }
 
-  public void lightOnButtonPress(boolean button) {
+  public void turnOnLight(boolean button) {
     if (button && (getLedMode() > 0.5)) {
       setLedMode(0);
     // } else if (!button && getLedMode() < 0.5) {
     //   setLedMode(1);
+    }
+  }
+
+  public void lightToggle(boolean button) {
+    if(button) {
+      if(lightOn) {
+        lightOn = false;
+      } else {
+        lightOn = true;
+      }
+    }
+    if(lightOn && (getLedMode() > 0.5)) {
+      setLedMode(0);
+    } 
+    else if(!lightOn && (getLedMode() < 0.5)) {
+      setLedMode(1);
     }
   }
 

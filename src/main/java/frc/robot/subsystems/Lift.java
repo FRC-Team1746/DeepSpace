@@ -122,58 +122,12 @@ public class Lift {
       if (controls.driver_YR_Axis() > .15 || controls.driver_YR_Axis() < -.15) {
         liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
         liftPosition = getLiftPosition() - controls.driver_YR_Axis() * 2.5 * Constants.liftEncoderPerInch;
-      }else if((getLiftPosition() <= 100)){
-        System.out.println("DROPPPPPPPPPPPPPPPPP");
-        if(getLiftPosition() <= 10){
-          liftRight.configMotionCruiseVelocity(100, Constants.kTimeoutMs);
-
-        }else{
-          liftRight.configMotionCruiseVelocity(50, Constants.kTimeoutMs);
-        }
-        liftPosition = 0;
-        if (!liftBottom.get()) {
-          resetEncoder();
-          liftPosition = 0;
-        }      
-      }/*if(controls.driver_Se_Button()) {
-        autoOn = autoOn ? false : true;
-        System.out.println("AutomationToggled");
-        if(autoOn) {
-          isAutoOn.setString("ENABLED!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        } else {
-          isAutoOn.setString("");
-        }
-      }*/ /*if(autoOn) {
-          rumbleTimer++;
-          if(rumbleTimer >= 30) {
-            System.out.println("Rumble Timer: " + rumbleTimer);
-            rumbleTimer = 0;
-            controls.setRumble(0);
-          } else {
-            controls.setRumble(0.33);
-          }
-      } */
-      /*if(ball.haveBall() && autoOn && getLiftPosition() < Constants.ballPosition1) {
-        liftRight.configMotionCruiseVelocity(800, Constants.kTimeoutMs);
-        liftPosition = Constants.ballPosition1;
-      }*/ else {
+      }else {
         liftRight.set(0);
         if (!liftBottom.get()) {
           resetEncoder();
           liftPosition = 0;
         }
-        // if(autoOn && !ball.haveBall()) {
-        //   System.out.println("Toggle LEDs");
-        //   led.set(Value.kForward);
-        //   if(ledTimer++ >= 100) {
-        //     System.out.println("Timer 0");
-        //     led.set(Value.kReverse);
-        //     if(ledOffTimer++ >= 100) {
-        //       ledOffTimer = 0;
-        //       ledTimer = 0;
-        //     }
-        //   }
-        // }
         if(ball.haveBall()){
           led.set(Value.kForward);
         }else if(!ball.haveBall()){
@@ -235,6 +189,7 @@ public class Lift {
         System.out.println("A Pressed Read");
       }
     } else if (!liftBottom.get()) {
+      // liftRight.set(0);
       resetEncoder();
       liftPosition = 0;
     }

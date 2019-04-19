@@ -13,6 +13,7 @@ public class Controls {
 	double y_axisSquared;
 	double x_axis;
 	double y_axis;
+	double yo_axis;
 	boolean lbt = false;
 	boolean lbp = false;
 	boolean rbt = false;
@@ -23,6 +24,10 @@ public class Controls {
 	boolean setp = false;
 	boolean lst = false;
 	boolean lsp = false;
+	boolean ast = false;
+	boolean abt = false;
+	boolean bst = false;
+	boolean bpt = false;
 	NetworkTableEntry autoBallOn;
 	Joystick xbox_driver;
 	Joystick xbox_oper;
@@ -66,6 +71,15 @@ public class Controls {
 		// 	}
 		// 	return y_axisSquared;
 		// }
+	}
+
+	public double oper_YL_Axis(){
+		yo_axis = xbox_oper.getRawAxis(1);
+		if(Math.abs(yo_axis) < .1){
+			yo_axis = 0;
+			return yo_axis;
+		}
+		return yo_axis;
 	}
 
 	public double driver_XR_Axis(){
@@ -196,6 +210,26 @@ public class Controls {
 
 	public boolean LIFT_Button(){
 		return xbox_oper.getRawButton(1);
+	}
+
+	public boolean oper_A_Button() {
+		if(xbox_oper.getRawButton(1) && !bpt) {
+			ast = true;
+		} else {
+			ast = false;
+		}
+		abt = xbox_oper.getRawButton(1);
+		return ast;
+	}
+
+	public boolean oper_B_Button() {
+		if(xbox_oper.getRawButton(2) && !bpt) {
+			bst = true;
+		} else {
+			bst = false;
+		}
+		bpt = xbox_oper.getRawButton(2);
+		return bst;
 	}
 
 	public void setRumble(double value) {

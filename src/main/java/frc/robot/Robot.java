@@ -37,7 +37,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    vision.lightOnButtonPress(controls.driver_B_Button());
+    // vision.lightToggle(controls.oper_A_Button());
+    vision.turnOnLight(controls.driver_B_Button());
     vision.PipelineOnPress(controls.driver_B_Button());
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
@@ -60,7 +61,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    vision.lightOnButtonPress(controls.driver_B_Button());
+    // vision.lightToggle(controls.oper_A_Button()); 
+    vision.turnOnLight(controls.driver_B_Button()); // as of 4/19/19 this only sets light on on everty press
     vision.PipelineOnPress(controls.driver_B_Button());
     if(controls.driver_B_Button() && vision.fetchUpdate() && vision.isTargetValid()) 
     {
@@ -72,8 +74,8 @@ public class Robot extends TimedRobot {
 
     pneumatics.update();
     lift.update();
-    intake.update();
     climb.update();
+    intake.update();
     System.out.println("Lift Encoders: " + lift.getLiftPosition());
     // System.out.println("Hatch Sensor: " + hatch.getSensor1());
     // System.out.println("Lift Sensor: " + lift.liftDown());
